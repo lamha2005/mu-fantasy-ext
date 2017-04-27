@@ -1,0 +1,74 @@
+apply plugin: 'java'
+
+sourceCompatibility = 1.7
+targetCompatibility = 1.7
+
+repositories {
+    mavenCentral()
+    maven { url "http://repo.spring.io/snapshot" }
+}
+
+repositories {
+   flatDir {
+       dirs 'lib'
+   }
+}
+
+dependencies {
+    compile name: 'commons-beanutils-1.8.3'
+    compile name: 'commons-collections-3.2.1'
+    compile name: 'commons-lang-2.6'
+    compile name: 'commons-logging-1.2'
+    compile name: 'creants-2x-v1'
+    compile name: 'ezmorph-1.0.6'
+    compile name: 'jersey-client-1.19.3'
+    compile name: 'jersey-core-1.19.3'
+    compile name: 'json-lib-2.4-jdk15'
+    compile name: 'jsr311-api-1.1.1'
+    compile name: 'log4j-1.2.17'
+    compile name: 'log4j-api-2.0'
+    compile name: 'log4j-core-2.0'
+    compile name: 'netty-all-4.1.9.Final'
+}
+
+compileJava.options.encoding = 'UTF-8'
+
+tasks.withType(JavaCompile) {
+    options.encoding = 'UTF-8'
+}
+
+task copySrc(type: Copy){
+    from "src"
+	exclude "main/java"
+	exclude "test"
+    into "$buildDir/libs/src"
+}
+
+task copyCmd(type: Copy) {
+    from "run.bat"
+    into "$buildDir/libs"
+}
+
+task copyConfig(type: Copy) {
+    from "configs"
+    into "$buildDir/libs/configs"
+}
+
+task copyLibs(type: Copy){
+	from configurations.runtime
+    into "$buildDir/libs/lib"
+}
+
+//build đầy đủ
+task fatBuild(type: Copy, dependsOn: ["jar", "copySrc", "copyConfig", "copyCmd", "copyLibs"]) {
+	description 'Build jar, copy web source, config and run bath file'
+}
+
+//build bản nhẹ chỉ có src
+task("litBuild", type: Copy, dependsOn: "copySrc") {
+	description 'Copy web source'
+    from configurations.runtime
+    into "$buildDir/libs/lib"
+}
+
+
