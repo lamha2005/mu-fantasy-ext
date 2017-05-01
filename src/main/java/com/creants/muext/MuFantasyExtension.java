@@ -4,6 +4,8 @@ import com.creants.creants_2x.core.QAntEventType;
 import com.creants.creants_2x.core.extension.QAntExtension;
 import com.creants.creants_2x.core.util.QAntTracer;
 import com.creants.muext.controllers.ChatRequestHandler;
+import com.creants.muext.controllers.CreateRoomRequestHandler;
+import com.creants.muext.controllers.JoinGameRequestHandler;
 import com.creants.muext.controllers.JoinZoneEventHandler;
 import com.creants.muext.controllers.LoginEventHandler;
 import com.creants.muext.controllers.LogoutEventHandler;
@@ -21,13 +23,14 @@ public class MuFantasyExtension extends QAntExtension {
 		QAntTracer.debug(this.getClass(), "========================= MU STARTED =========================");
 	}
 
-
 	private void addEventRequestHandler() {
 		addEventHandler(QAntEventType.USER_LOGIN, LoginEventHandler.class);
 		addEventHandler(QAntEventType.USER_LOGOUT, LogoutEventHandler.class);
 		addEventHandler(QAntEventType.USER_JOIN_ZONE, JoinZoneEventHandler.class);
 
 		addRequestHandler("cmd_chat", ChatRequestHandler.class);
+		addRequestHandler("cmd_join_game", JoinGameRequestHandler.class);
+		addRequestHandler("cmd_create_room", CreateRoomRequestHandler.class);
 	}
 
 }

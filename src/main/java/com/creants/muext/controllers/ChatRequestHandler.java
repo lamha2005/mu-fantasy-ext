@@ -12,7 +12,8 @@ public class ChatRequestHandler extends BaseClientRequestHandler {
 
 	@Override
 	public void handleClientRequest(QAntUser user, IQAntObject params) {
-
+		String message = params.getUtfString("msg");
+		System.out.println("=====================> " + message);
 	}
 
 }
