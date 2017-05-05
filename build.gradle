@@ -30,6 +30,9 @@ dependencies {
     compile name: 'log4j-core-2.0'
     compile name: 'netty-all-4.1.9.Final'
     compile 'com.couchbase.client:java-client:2.3.6'
+    compile("org.springframework.boot:spring-boot-starter-web:1.4.2.RELEASE")
+    compile 'org.springframework.data:spring-data-mongodb:1.9.6.RELEASE'
+    
 }
 
 compileJava.options.encoding = 'UTF-8'
