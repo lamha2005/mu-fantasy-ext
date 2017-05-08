@@ -5,8 +5,8 @@ import com.creants.creants_2x.core.extension.BaseClientRequestHandler;
 import com.creants.creants_2x.socket.gate.entities.IQAntObject;
 import com.creants.creants_2x.socket.gate.wood.QAntUser;
 import com.creants.muext.Creants2XApplication;
+import com.creants.muext.dao.GameHeroRepository;
 import com.creants.muext.om.UserInfo;
-import com.creants.muext.repository.UserRepository;
 
 /**
  * @author LamHM
@@ -14,12 +14,12 @@ import com.creants.muext.repository.UserRepository;
  */
 @Instantiation(Instantiation.InstantiationMode.SINGLE_INSTANCE)
 public class ChatRequestHandler extends BaseClientRequestHandler {
-	private UserRepository userRepository;
+	private GameHeroRepository repository;
 
 
 	public ChatRequestHandler() {
 		System.out.println("************* CHAT REQUEST HANDLER ******************");
-		userRepository = Creants2XApplication.getBean(UserRepository.class);
+		repository = Creants2XApplication.getBean(GameHeroRepository.class);
 	}
 
 
@@ -30,9 +30,6 @@ public class ChatRequestHandler extends BaseClientRequestHandler {
 		UserInfo userInfo = new UserInfo();
 		userInfo.setId(1);
 		userInfo.setName("lamha");
-		UserInfo save = userRepository.save(userInfo);
-		System.out.println("save success");
 	}
 
 }
-

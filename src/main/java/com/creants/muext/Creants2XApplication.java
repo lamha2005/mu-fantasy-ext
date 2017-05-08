@@ -23,9 +23,9 @@ public class Creants2XApplication {
 
 
 	public static void main(String[] args) throws InterruptedException {
-		System.setProperty("log4j.configurationFile", "resources/log4j2.xml");
-		PropertyConfigurator.configure("resources/log4j.properties");
-		AppConfig.init("resources/application.properties");
+		System.setProperty("log4j.configurationFile", "config/log4j2.xml");
+		PropertyConfigurator.configure("config/log4j.properties");
+		AppConfig.init("config/application.properties");
 
 		context = SpringApplication.run(Creants2XApplication.class, args);
 		QAntServer.getInstance().start();

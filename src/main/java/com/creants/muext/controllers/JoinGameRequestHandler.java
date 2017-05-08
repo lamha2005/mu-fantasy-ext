@@ -44,7 +44,7 @@ public class JoinGameRequestHandler extends BaseClientRequestHandler {
 		} catch (JsonProcessingException e) {
 			e.printStackTrace();
 		}
-
+		
 		Response response = new Response();
 		response.setId(SystemRequest.CallExtension.getId());
 		response.setTargetController((byte) 1);
