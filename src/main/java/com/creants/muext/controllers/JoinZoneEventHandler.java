@@ -23,11 +23,9 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 public class JoinZoneEventHandler extends BaseServerEventHandler {
 	private GameHeroRepository repository;
 
-
 	public JoinZoneEventHandler() {
 		repository = Creants2XApplication.getBean(GameHeroRepository.class);
 	}
-
 
 	@Override
 	public void handleServerEvent(IQAntEvent event) throws QAntException {
@@ -49,17 +47,15 @@ public class JoinZoneEventHandler extends BaseServerEventHandler {
 			gameHero = repository.save(gameHero);
 		}
 
-		try {
-			IQAntObject params = new QAntObject();
-			ObjectMapper mapper = new ObjectMapper();
-			params.putUtfString("game_hero", mapper.writeValueAsString(gameHero));
-			sendExtResponse("join_game", params, user);
-		} catch (JsonProcessingException e) {
-			e.printStackTrace();
-		}
+		IQAntObject params = new QAntObject();
+		QAntObject newFromObject = QAntObject.newFromObject(gameHero);
+		params.putQAntObject("game_hero", newFromObject);
+		// ObjectMapper mapper = new ObjectMapper();
+		// params.putUtfString("game_hero",
+		// mapper.writeValueAsString(gameHero));
+		sendExtResponse("join_game", params, user);
 		return;
 	}
-
 
 	public void sendExtResponse(String cmdName, IQAntObject params, QAntUser recipient) {
 		IQAntObject resObj = QAntObject.newInstance();

@@ -2,11 +2,13 @@ package com.creants.muext.entities;
 
 import org.springframework.data.annotation.Id;
 
+import com.creants.creants_2x.socket.gate.protocol.serialization.SerializableQAntType;
+
 /**
  * @author LamHM
  *
  */
-public class GameHero {
+public class GameHero implements SerializableQAntType{
 	// server_id#user_id
 	@Id
 	private String id;
