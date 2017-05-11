@@ -1,6 +1,8 @@
-package com.creants.muext.entities.quest;
+package com.creants.muext.entities.world;
 
 import java.util.List;
+
+import com.creants.muext.entities.quest.Mission;
 
 /**
  * @author LamHM

@@ -9,6 +9,8 @@ import com.creants.creants_2x.QAntServer;
 import com.creants.creants_2x.core.util.AppConfig;
 
 /**
+ * http://docs.spring.io/spring-data/data-mongo/docs/current/reference/html/
+ * 
  * @author LamHM
  *
  */

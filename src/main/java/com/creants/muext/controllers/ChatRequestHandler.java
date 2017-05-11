@@ -1,5 +1,7 @@
 package com.creants.muext.controllers;
 
+import java.util.Collection;
+
 import com.creants.creants_2x.core.annotations.Instantiation;
 import com.creants.creants_2x.core.extension.BaseClientRequestHandler;
 import com.creants.creants_2x.socket.gate.entities.IQAntObject;
@@ -25,6 +27,7 @@ public class ChatRequestHandler extends BaseClientRequestHandler {
 
 	@Override
 	public void handleClientRequest(QAntUser user, IQAntObject params) {
+		Collection<QAntUser> userList = getParentExtension().getParentZone().getUserList();
 		String message = params.getUtfString("msg");
 		System.out.println("=====================> " + message);
 		UserInfo userInfo = new UserInfo();

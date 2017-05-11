@@ -5,6 +5,7 @@ import com.creants.creants_2x.core.extension.QAntExtension;
 import com.creants.creants_2x.core.util.QAntTracer;
 import com.creants.muext.controllers.ChatRequestHandler;
 import com.creants.muext.controllers.CreateRoomRequestHandler;
+import com.creants.muext.controllers.GetQuestListRequestHandler;
 import com.creants.muext.controllers.JoinGameRequestHandler;
 import com.creants.muext.controllers.JoinZoneEventHandler;
 import com.creants.muext.controllers.LoginEventHandler;
@@ -31,6 +32,7 @@ public class MuFantasyExtension extends QAntExtension {
 		addRequestHandler("cmd_chat", ChatRequestHandler.class);
 		addRequestHandler("cmd_join_game", JoinGameRequestHandler.class);
 		addRequestHandler("cmd_create_room", CreateRoomRequestHandler.class);
+		addRequestHandler("cmd_get_quests", GetQuestListRequestHandler.class);
 	}
 
 }

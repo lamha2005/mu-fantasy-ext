@@ -1,61 +1,91 @@
 package com.creants.muext.controllers;
 
+import java.util.List;
+
 import com.creants.creants_2x.core.IQAntEvent;
 import com.creants.creants_2x.core.QAntEventParam;
 import com.creants.creants_2x.core.controllers.SystemRequest;
 import com.creants.creants_2x.core.exception.QAntException;
 import com.creants.creants_2x.core.extension.BaseServerEventHandler;
+import com.creants.creants_2x.socket.gate.entities.IQAntArray;
 import com.creants.creants_2x.socket.gate.entities.IQAntObject;
+import com.creants.creants_2x.socket.gate.entities.QAntArray;
 import com.creants.creants_2x.socket.gate.entities.QAntObject;
 import com.creants.creants_2x.socket.gate.wood.QAntUser;
 import com.creants.creants_2x.socket.io.IResponse;
 import com.creants.creants_2x.socket.io.Response;
 import com.creants.muext.Creants2XApplication;
 import com.creants.muext.dao.GameHeroRepository;
+import com.creants.muext.dao.QuestStatsRepository;
 import com.creants.muext.entities.GameHero;
-import com.fasterxml.jackson.core.JsonProcessingException;
-import com.fasterxml.jackson.databind.ObjectMapper;
+import com.creants.muext.entities.quest.QuestStats;
+import com.creants.muext.services.QuestManager;
 
 /**
  * @author LamHM
  *
  */
 public class JoinZoneEventHandler extends BaseServerEventHandler {
+	private static final String SERVER_ID = "mus1";
+	private static final String HERO_NAME_PREFIX = "Mu Hero ";
 	private GameHeroRepository repository;
+	private QuestStatsRepository questStatsRepository;
+	private QuestManager questManager;
+
 
 	public JoinZoneEventHandler() {
 		repository = Creants2XApplication.getBean(GameHeroRepository.class);
+		questStatsRepository = Creants2XApplication.getBean(QuestStatsRepository.class);
+		questManager = Creants2XApplication.getBean(QuestManager.class);
 	}
+
 
 	@Override
 	public void handleServerEvent(IQAntEvent event) throws QAntException {
 		QAntUser user = (QAntUser) event.getParameter(QAntEventParam.USER);
-		String serverId = "mus1";
 		long creantsUserId = user.getCreantsUserId();
-		String id = serverId + "#" + creantsUserId;
+		String id = SERVER_ID + "#" + creantsUserId;
+
 		GameHero gameHero = repository.findOne(id);
 		if (gameHero == null) {
-			gameHero = new GameHero(serverId, creantsUserId);
-			gameHero.setName("Mu Hero " + creantsUserId);
+			gameHero = new GameHero(SERVER_ID, creantsUserId);
+			gameHero.setName(HERO_NAME_PREFIX + creantsUserId);
 			gameHero.setExp(0);
 			gameHero.setLevel(1);
 			gameHero.setSoul(0);
-			gameHero.setStatmina(60);
+			gameHero.setStamina(60);
 			gameHero.setZen(0);
 			gameHero.setVipLevel(1);
 			gameHero.setVipPoint(0);
 			gameHero = repository.save(gameHero);
+
+			questManager.registerQuestsFromHero(gameHero);
+
 		}
 
+		List<QuestStats> mainQuests = questStatsRepository.findByHeroIdAndGroupId(id, QuestManager.GROUP_MAIN_QUEST);
 		IQAntObject params = new QAntObject();
-		QAntObject newFromObject = QAntObject.newFromObject(gameHero);
-		params.putQAntObject("game_hero", newFromObject);
-		// ObjectMapper mapper = new ObjectMapper();
-		// params.putUtfString("game_hero",
-		// mapper.writeValueAsString(gameHero));
+		params.putQAntObject("game_hero", QAntObject.newFromObject(gameHero));
+
+		IQAntArray questArr = QAntArray.newInstance();
+		IQAntObject mainQuest = QAntObject.newInstance();
+		mainQuest.putInt("gid", QuestManager.GROUP_MAIN_QUEST);
+		mainQuest.putUtfString("n", "Nhiệm vụ chính");
+		mainQuest.putInt("no", mainQuests == null ? 0 : mainQuests.size());
+		questArr.addQAntObject(mainQuest);
+		IQAntObject dailyQuest = QAntObject.newInstance();
+		dailyQuest.putInt("gid", QuestManager.GROUP_DAILY_QUEST);
+		dailyQuest.putUtfString("n", "Nhiệm vụ hàng ngày");
+		dailyQuest.putInt("no", 10);
+		questArr.addQAntObject(dailyQuest);
+		params.putQAntArray("quests", questArr);
+
+		params.putInt("event_no", 10);
 		sendExtResponse("join_game", params, user);
+
 		return;
 	}
+
 
 	public void sendExtResponse(String cmdName, IQAntObject params, QAntUser recipient) {
 		IQAntObject resObj = QAntObject.newInstance();
