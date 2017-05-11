@@ -8,11 +8,13 @@ import com.creants.creants_2x.socket.gate.protocol.serialization.SerializableQAn
  * @author LamHM
  *
  */
-public class Chapter implements SerializableQAntType {
+public class Stage implements SerializableQAntType {
 	private int id;
 	private String name;
+	private boolean clear;
 	private boolean unlock;
-	private List<Stage> stages;
+	private Integer startNo;
+	private transient List<Mission> missions;
 
 
 	public int getId() {
@@ -35,13 +37,33 @@ public class Chapter implements SerializableQAntType {
 	}
 
 
-	public List<Stage> getStages() {
-		return stages;
+	public List<Mission> getMissions() {
+		return missions;
 	}
 
 
-	public void setStages(List<Stage> stages) {
-		this.stages = stages;
+	public void setMissions(List<Mission> missions) {
+		this.missions = missions;
+	}
+
+
+	public boolean isClear() {
+		return clear;
+	}
+
+
+	public void setClear(boolean clear) {
+		this.clear = clear;
+	}
+
+
+	public Integer getStartNo() {
+		return startNo;
+	}
+
+
+	public void setStartNo(Integer startNo) {
+		this.startNo = startNo;
 	}
 
 
