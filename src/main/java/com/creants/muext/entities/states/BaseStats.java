@@ -1,5 +1,6 @@
 package com.creants.muext.entities.states;
 
+import com.creants.creants_2x.socket.gate.protocol.serialization.SerializableQAntType;
 import com.fasterxml.jackson.dataformat.xml.annotation.JacksonXmlProperty;
 
 /**
@@ -8,19 +9,21 @@ import com.fasterxml.jackson.dataformat.xml.annotation.JacksonXmlProperty;
  * @author LamHM
  * 
  */
-public class BaseStats {
-	@JacksonXmlProperty(localName="PhysicAttack")
+public class BaseStats implements SerializableQAntType{
+	@JacksonXmlProperty(localName = "PhysicAttack")
 	private int atk;
-	@JacksonXmlProperty(localName="MagicPower")
+	@JacksonXmlProperty(localName = "MagicPower")
 	private int mag;
-	@JacksonXmlProperty(localName="HealthPoint")
+	@JacksonXmlProperty(localName = "HealthPoint")
 	private int hp;
-	@JacksonXmlProperty(localName="ManaPoint")
+	@JacksonXmlProperty(localName = "ManaPoint")
 	private int mp;
-	@JacksonXmlProperty(localName="Defense")
+	@JacksonXmlProperty(localName = "Defense")
 	private int def;
-	@JacksonXmlProperty(localName="MagicResistance")
+	@JacksonXmlProperty(localName = "MagicResistance")
 	private int res;
+	@JacksonXmlProperty(localName = "Speed")
+	private int spd;
 
 
 	public int getAtk() {
@@ -80,6 +83,16 @@ public class BaseStats {
 
 	public void setRes(int res) {
 		this.res = res;
+	}
+
+
+	public int getSpd() {
+		return spd;
+	}
+
+
+	public void setSpd(int spd) {
+		this.spd = spd;
 	}
 
 

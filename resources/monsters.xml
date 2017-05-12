@@ -1,0 +1,50 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<Monsters>
+	<Monster>
+		<Index>0</Index>
+		<Name>Bull Fighter</Name>
+		<Image>bull</Image>
+		<Level>6</Level>
+		<BaseStats>
+			<PhysicAttack>20</PhysicAttack>
+			<MagicPower>0</MagicPower>
+			<HealthPoint>100</HealthPoint>
+			<ManaPoint>0</ManaPoint>
+			<Defense>6</Defense>
+			<MagicResistance>10</MagicResistance>
+			<Speed>150</Speed>
+		</BaseStats>
+	</Monster>
+	<Monster>
+		<Index>1</Index>
+		<Name>Yeti</Name>
+		<Image>yeti</Image>
+		<Level>6</Level>
+		<BaseStats>
+			<PhysicAttack>20</PhysicAttack>
+			<MagicPower>0</MagicPower>
+			<HealthPoint>100</HealthPoint>
+			<ManaPoint>0</ManaPoint>
+			<Defense>6</Defense>
+			<MagicResistance>10</MagicResistance>
+			<Speed>150</Speed>
+		</BaseStats>
+	</Monster>
+	<Monster>
+		<Index>2</Index>
+		<Name>Bull Fighter</Name>
+		<Image>bull</Image>
+		<Level>6</Level>
+		<BaseStats>
+			<PhysicAttack>20</PhysicAttack>
+			<MagicPower>0</MagicPower>
+			<HealthPoint>100</HealthPoint>
+			<ManaPoint>0</ManaPoint>
+			<Defense>6</Defense>
+			<MagicResistance>10</MagicResistance>
+			<Speed>150</Speed>
+		</BaseStats>
+	</Monster>
+
+</Monsters>
+

@@ -1,5 +1,6 @@
 package com.creants.muext.entities.states;
 
+import com.creants.creants_2x.socket.gate.protocol.serialization.SerializableQAntType;
 import com.fasterxml.jackson.dataformat.xml.annotation.JacksonXmlProperty;
 
 /**
@@ -9,9 +10,7 @@ import com.fasterxml.jackson.dataformat.xml.annotation.JacksonXmlProperty;
  *
  * 
  */
-public class SubStats {
-	@JacksonXmlProperty(localName = "Speed")
-	private int spd;
+public class SubStats implements SerializableQAntType {
 	@JacksonXmlProperty(localName = "Accuracy")
 	private float acc;
 	@JacksonXmlProperty(localName = "CriticalChance")
@@ -32,16 +31,6 @@ public class SubStats {
 	private int hpreg;
 	@JacksonXmlProperty(localName = "Manaregeneration")
 	private int mpreg;
-
-
-	public int getSpd() {
-		return spd;
-	}
-
-
-	public void setSpd(int spd) {
-		this.spd = spd;
-	}
 
 
 	public int getDefpe() {

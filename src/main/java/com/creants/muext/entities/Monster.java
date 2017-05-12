@@ -1,12 +1,18 @@
 package com.creants.muext.entities;
 
+import com.fasterxml.jackson.dataformat.xml.annotation.JacksonXmlProperty;
+
 /**
  * @author LamHM
  *
  */
 public class Monster extends Character {
-	private int hp;
+	@JacksonXmlProperty(localName = "Index")
 	private int id;
+	@JacksonXmlProperty(localName = "Image")
+	private String img;
+	@JacksonXmlProperty(localName = "MonsterX2DamageChance")
+	private float damX2Change;
 
 
 	public int getId() {
@@ -19,13 +25,23 @@ public class Monster extends Character {
 	}
 
 
-	public int getHp() {
-		return hp;
+	public String getImg() {
+		return img;
 	}
 
 
-	public void setHp(int hp) {
-		this.hp = hp;
+	public void setImg(String img) {
+		this.img = img;
+	}
+
+
+	public float getDamX2Change() {
+		return damX2Change;
+	}
+
+
+	public void setDamX2Change(float damX2Change) {
+		this.damX2Change = damX2Change;
 	}
 
 }

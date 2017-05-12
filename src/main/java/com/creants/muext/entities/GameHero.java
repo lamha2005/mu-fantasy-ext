@@ -1,5 +1,7 @@
 package com.creants.muext.entities;
 
+import java.util.List;
+
 import org.springframework.data.annotation.Id;
 import org.springframework.data.mongodb.core.mapping.Document;
 
@@ -13,22 +15,22 @@ import com.creants.creants_2x.socket.gate.protocol.serialization.SerializableQAn
 public class GameHero implements SerializableQAntType {
 	// server_id#user_id
 	@Id
-	private String id;
-	private long userId;
-	private transient String serverName;
-	private String name;
-	private int level;
-	private long zen;
-	private long soul;
-	private int exp;
-	@SuppressWarnings("unused")
-	private int maxExp;
+	public String id;
+	public long userId;
+	public transient String serverName;
+	public String name;
+	public int level;
+	public long zen;
+	public long soul;
+	public int exp;
+	public int maxExp;
 
-	private int stamina;
-	private int vipLevel;
-	private int vipPoint;
-	@SuppressWarnings("unused")
-	private int maxVipPoint;
+	public int stamina;
+	public int vipLevel;
+	public int vipPoint;
+	public int maxVipPoint;
+
+	public List<HeroClass> heroes;
 
 
 	public GameHero(String serverName, long userId) {
@@ -37,6 +39,15 @@ public class GameHero implements SerializableQAntType {
 		this.id = genId();
 	}
 
+
+	public List<HeroClass> getHeroes() {
+		return heroes;
+	}
+
+
+	public void setHeroes(List<HeroClass> heroes) {
+		this.heroes = heroes;
+	}
 
 	private String genId() {
 		return serverName + "#" + userId;

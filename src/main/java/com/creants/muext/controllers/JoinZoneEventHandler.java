@@ -1,5 +1,6 @@
 package com.creants.muext.controllers;
 
+import java.util.ArrayList;
 import java.util.List;
 
 import com.creants.creants_2x.core.IQAntEvent;
@@ -18,7 +19,10 @@ import com.creants.muext.Creants2XApplication;
 import com.creants.muext.dao.GameHeroRepository;
 import com.creants.muext.dao.QuestStatsRepository;
 import com.creants.muext.entities.GameHero;
+import com.creants.muext.entities.HeroClass;
+import com.creants.muext.entities.HeroClassType;
 import com.creants.muext.entities.quest.QuestStats;
+import com.creants.muext.managers.HeroClassManager;
 import com.creants.muext.services.QuestManager;
 
 /**
@@ -31,12 +35,14 @@ public class JoinZoneEventHandler extends BaseServerEventHandler {
 	private GameHeroRepository repository;
 	private QuestStatsRepository questStatsRepository;
 	private QuestManager questManager;
+	private HeroClassManager heroManager;
 
 
 	public JoinZoneEventHandler() {
 		repository = Creants2XApplication.getBean(GameHeroRepository.class);
 		questStatsRepository = Creants2XApplication.getBean(QuestStatsRepository.class);
 		questManager = Creants2XApplication.getBean(QuestManager.class);
+		heroManager = Creants2XApplication.getBean(HeroClassManager.class);
 	}
 
 
@@ -48,18 +54,7 @@ public class JoinZoneEventHandler extends BaseServerEventHandler {
 
 		GameHero gameHero = repository.findOne(id);
 		if (gameHero == null) {
-			gameHero = new GameHero(SERVER_ID, creantsUserId);
-			gameHero.setName(HERO_NAME_PREFIX + creantsUserId);
-			gameHero.setExp(0);
-			gameHero.setLevel(1);
-			gameHero.setSoul(0);
-			gameHero.setStamina(60);
-			gameHero.setZen(0);
-			gameHero.setVipLevel(1);
-			gameHero.setVipPoint(0);
-			gameHero = repository.save(gameHero);
-
-			questManager.registerQuestsFromHero(gameHero);
+			gameHero = createNewGameHero(creantsUserId);
 
 		}
 
@@ -98,6 +93,30 @@ public class JoinZoneEventHandler extends BaseServerEventHandler {
 		response.setContent(resObj);
 		response.setRecipients(recipient.getChannel());
 		response.write();
+	}
+
+
+	private GameHero createNewGameHero(long creantsUserId) {
+		GameHero gameHero = new GameHero(SERVER_ID, creantsUserId);
+		gameHero.setName(HERO_NAME_PREFIX + creantsUserId);
+		gameHero.setExp(0);
+		gameHero.setLevel(1);
+		gameHero.setSoul(0);
+		gameHero.setStamina(60);
+		gameHero.setZen(0);
+		gameHero.setVipLevel(1);
+		gameHero.setVipPoint(0);
+
+		List<HeroClass> heroes = new ArrayList<>(3);
+		heroes.add(heroManager.getDefineHeroClass(HeroClassType.DARK_KNIGHT));
+		heroes.add(heroManager.getDefineHeroClass(HeroClassType.FAIRY_ELF));
+		heroes.add(heroManager.getDefineHeroClass(HeroClassType.DARK_WIZARD));
+		gameHero.setHeroes(heroes);
+
+		gameHero = repository.save(gameHero);
+
+		questManager.registerQuestsFromHero(gameHero);
+		return gameHero;
 	}
 
 }

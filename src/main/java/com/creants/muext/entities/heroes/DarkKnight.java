@@ -14,7 +14,5 @@ public class DarkKnight extends HeroClass {
 		id = HeroClassType.DARK_KNIGHT.id;
 		name = HeroClassType.DARK_KNIGHT.name;
 	}
-	
-	
 
 }

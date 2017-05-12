@@ -1,5 +1,6 @@
 package com.creants.muext.entities;
 
+import com.creants.creants_2x.socket.gate.protocol.serialization.SerializableQAntType;
 import com.creants.muext.entities.states.BaseStats;
 import com.creants.muext.entities.states.SubStats;
 import com.fasterxml.jackson.dataformat.xml.annotation.JacksonXmlProperty;
@@ -8,14 +9,21 @@ import com.fasterxml.jackson.dataformat.xml.annotation.JacksonXmlProperty;
  * @author LamHM
  *
  */
-public class Character {
-	protected String name;
-	protected int level;
+public class Character implements SerializableQAntType {
+	@JacksonXmlProperty(localName = "Name")
+	public String name;
+	@JacksonXmlProperty(localName = "Level")
+	public int level;
 
 	@JacksonXmlProperty(localName = "BaseStats")
-	private BaseStats baseStats;
+	private transient BaseStats baseStats;
 	@JacksonXmlProperty(localName = "SubStats")
 	private SubStats subStats;
+
+
+	public Character() {
+		level = 1;
+	}
 
 
 	public String getName() {
