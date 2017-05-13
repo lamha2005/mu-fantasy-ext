@@ -3,6 +3,7 @@ package com.creants.muext.entities;
 import java.util.List;
 
 import org.springframework.data.annotation.Id;
+import org.springframework.data.annotation.Transient;
 import org.springframework.data.mongodb.core.mapping.Document;
 
 import com.creants.creants_2x.socket.gate.protocol.serialization.SerializableQAntType;
@@ -11,7 +12,7 @@ import com.creants.creants_2x.socket.gate.protocol.serialization.SerializableQAn
  * @author LamHM
  *
  */
-@Document(collection = "heros")
+@Document(collection = "accounts")
 public class GameHero implements SerializableQAntType {
 	// server_id#user_id
 	@Id
@@ -30,6 +31,7 @@ public class GameHero implements SerializableQAntType {
 	public int vipPoint;
 	public int maxVipPoint;
 
+	@Transient
 	public List<HeroClass> heroes;
 
 
@@ -48,6 +50,7 @@ public class GameHero implements SerializableQAntType {
 	public void setHeroes(List<HeroClass> heroes) {
 		this.heroes = heroes;
 	}
+
 
 	private String genId() {
 		return serverName + "#" + userId;

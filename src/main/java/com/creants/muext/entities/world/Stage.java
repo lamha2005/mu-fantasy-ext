@@ -9,12 +9,12 @@ import com.creants.creants_2x.socket.gate.protocol.serialization.SerializableQAn
  *
  */
 public class Stage implements SerializableQAntType {
-	private int id;
-	private String name;
-	private boolean clear;
-	private boolean unlock;
-	private Integer startNo;
-	private transient List<Mission> missions;
+	public int id;
+	public String name;
+	public boolean clear;
+	public boolean unlock;
+	public Integer startNo;
+	public transient List<Mission> missions;
 
 
 	public int getId() {

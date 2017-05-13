@@ -11,25 +11,25 @@ import com.fasterxml.jackson.dataformat.xml.annotation.JacksonXmlProperty;
  * 
  */
 public class SubStats implements SerializableQAntType {
-	@JacksonXmlProperty(localName = "Accuracy")
+	@JacksonXmlProperty(localName = "Accuracy", isAttribute = true)
 	private float acc;
-	@JacksonXmlProperty(localName = "CriticalChance")
+	@JacksonXmlProperty(localName = "CriticalChance", isAttribute = true)
 	private float critch;
-	@JacksonXmlProperty(localName = "DefenseensePenetration")
+	@JacksonXmlProperty(localName = "DefenseensePenetration", isAttribute = true)
 	private int defpe;
-	@JacksonXmlProperty(localName = "DefenseenseIgnore")
+	@JacksonXmlProperty(localName = "DefenseenseIgnore", isAttribute = true)
 	private float defig;
-	@JacksonXmlProperty(localName = "MagicResistanceistancePenetration")
+	@JacksonXmlProperty(localName = "MagicResistanceistancePenetration", isAttribute = true)
 	private int respen;
-	@JacksonXmlProperty(localName = "MagicResistanceistanceIgnore")
+	@JacksonXmlProperty(localName = "MagicResistanceistanceIgnore", isAttribute = true)
 	private float resign;
-	@JacksonXmlProperty(localName = "ManaBreak")
+	@JacksonXmlProperty(localName = "ManaBreak", isAttribute = true)
 	private int manabrk;
-	@JacksonXmlProperty(localName = "LifeSteal")
+	@JacksonXmlProperty(localName = "LifeSteal", isAttribute = true)
 	private float lifestl;
-	@JacksonXmlProperty(localName = "HealthRegeneration")
+	@JacksonXmlProperty(localName = "HealthRegeneration", isAttribute = true)
 	private int hpreg;
-	@JacksonXmlProperty(localName = "Manaregeneration")
+	@JacksonXmlProperty(localName = "Manaregeneration", isAttribute = true)
 	private int mpreg;
 
 

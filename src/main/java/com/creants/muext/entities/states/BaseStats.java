@@ -9,20 +9,20 @@ import com.fasterxml.jackson.dataformat.xml.annotation.JacksonXmlProperty;
  * @author LamHM
  * 
  */
-public class BaseStats implements SerializableQAntType{
-	@JacksonXmlProperty(localName = "PhysicAttack")
+public class BaseStats implements SerializableQAntType {
+	@JacksonXmlProperty(localName = "PhysicAttack", isAttribute = true)
 	private int atk;
-	@JacksonXmlProperty(localName = "MagicPower")
+	@JacksonXmlProperty(localName = "MagicPower", isAttribute = true)
 	private int mag;
-	@JacksonXmlProperty(localName = "HealthPoint")
+	@JacksonXmlProperty(localName = "HealthPoint", isAttribute = true)
 	private int hp;
-	@JacksonXmlProperty(localName = "ManaPoint")
+	@JacksonXmlProperty(localName = "ManaPoint", isAttribute = true)
 	private int mp;
-	@JacksonXmlProperty(localName = "Defense")
+	@JacksonXmlProperty(localName = "Defense", isAttribute = true)
 	private int def;
-	@JacksonXmlProperty(localName = "MagicResistance")
+	@JacksonXmlProperty(localName = "MagicResistance", isAttribute = true)
 	private int res;
-	@JacksonXmlProperty(localName = "Speed")
+	@JacksonXmlProperty(localName = "Speed", isAttribute = true)
 	private int spd;
 
 

@@ -9,8 +9,10 @@ import javax.xml.stream.XMLInputFactory;
 import javax.xml.stream.XMLStreamReader;
 
 import org.springframework.beans.factory.InitializingBean;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import com.creants.muext.dao.SequenceRepository;
 import com.creants.muext.entities.HeroClass;
 import com.creants.muext.entities.HeroClassType;
 import com.creants.muext.entities.Monster;
@@ -25,15 +27,21 @@ import com.fasterxml.jackson.dataformat.xml.XmlMapper;
  */
 @Service
 public class HeroClassManager implements InitializingBean {
+	public static final String HERO_ID_SEQ = "hero_id";
 	private static final String HEROES_CONFIG = "resources/heroes.xml";
 	private static final String MONSTERS_CONFIG = "resources/monsters.xml";
 	private static final XMLInputFactory f = XMLInputFactory.newFactory();
+
+	@Autowired
+	private SequenceRepository sequenceRepository;
+
 	private Map<Integer, HeroClass> heroes;
 	private Map<Integer, Monster> monsters;
 
 
 	@Override
 	public void afterPropertiesSet() throws Exception {
+		sequenceRepository.createSequenceDocument(HERO_ID_SEQ);
 		loadHeroes();
 		loadMonsters();
 	}
@@ -50,7 +58,7 @@ public class HeroClassManager implements InitializingBean {
 			while (sr.hasNext()) {
 				try {
 					monster = mapper.readValue(sr, Monster.class);
-					monsters.put(monster.getId(), monster);
+					monsters.put(monster.getIndex(), monster);
 				} catch (NoSuchElementException e) {
 
 				}
@@ -60,6 +68,11 @@ public class HeroClassManager implements InitializingBean {
 		} catch (Exception e) {
 			e.printStackTrace();
 		}
+	}
+
+
+	public long getNextHeroId() {
+		return sequenceRepository.getNextSequenceId(HERO_ID_SEQ);
 	}
 
 
@@ -83,7 +96,7 @@ public class HeroClassManager implements InitializingBean {
 
 
 	public void initHero(HeroClass hero) {
-		heroes.put(hero.getId(), hero);
+		heroes.put(hero.getIndex(), hero);
 	}
 
 
@@ -94,7 +107,7 @@ public class HeroClassManager implements InitializingBean {
 
 	private void initHero(HeroClass... heroes) {
 		for (HeroClass t : heroes) {
-			this.heroes.put(t.getId(), t);
+			this.heroes.put(t.getIndex(), t);
 		}
 	}
 
@@ -102,6 +115,14 @@ public class HeroClassManager implements InitializingBean {
 	@SuppressWarnings("unchecked")
 	public <T extends HeroClass> T getDefineHeroClass(HeroClassType heroClass) {
 		return (T) heroes.get(heroClass.id);
+	}
+
+
+	public HeroClass createNewHero(String gameHeroId, HeroClassType heroClass) {
+		HeroClass defineHeroClass = getDefineHeroClass(heroClass);
+		defineHeroClass.setId(getNextHeroId());
+		defineHeroClass.setGameHeroId(gameHeroId);
+		return defineHeroClass;
 	}
 
 

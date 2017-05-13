@@ -27,6 +27,7 @@ import com.creants.muext.entities.quest.TaskType;
  */
 @Service
 public class QuestManager implements InitializingBean {
+	public static final String QUEST_ID_SEQ = "quest_id";
 	public static final int GROUP_MAIN_QUEST = 1;
 	public static final int GROUP_DAILY_QUEST = 2;
 	@Autowired
@@ -45,7 +46,7 @@ public class QuestManager implements InitializingBean {
 	public void afterPropertiesSet() throws Exception {
 		monsterInQuest = new HashMap<Integer, Set<Integer>>();
 		// Chỉ tạo lần đầu khi deploy hệ thống
-//		sequenceRepository.createSequenceDocument("qid");
+		sequenceRepository.createSequenceDocument(QUEST_ID_SEQ);
 	}
 
 
@@ -98,7 +99,7 @@ public class QuestManager implements InitializingBean {
 		for (int i = 0; i < 5; i++) {
 			QuestStats quest = new QuestStats();
 			quest.setHeroId(gameHero.getId());
-			quest.setId(sequenceRepository.getNextSequenceId("qid"));
+			quest.setId(sequenceRepository.getNextSequenceId(QUEST_ID_SEQ));
 			quest.setGroupId(GROUP_MAIN_QUEST);
 			quest.setCreateTime(System.currentTimeMillis());
 			quest.setTaskType(TaskType.MonsterKill.getId());

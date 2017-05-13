@@ -1,5 +1,8 @@
 package com.creants.muext.entities;
 
+import org.springframework.data.annotation.Transient;
+import org.springframework.data.mongodb.core.mapping.Document;
+
 import com.creants.muext.entities.states.AdditionLevelUpStats;
 import com.creants.muext.entities.states.AdditionStats;
 import com.creants.muext.entities.states.BaseStats;
@@ -9,8 +12,11 @@ import com.fasterxml.jackson.dataformat.xml.annotation.JacksonXmlProperty;
  * @author LamHM
  *
  */
+@Document(collection = "heroes")
 public abstract class HeroClass extends Character {
-	public int id;
+	@JacksonXmlProperty(localName = "Index", isAttribute = true)
+	public int index;
+	public long id;
 	public int exp;
 	public int rank;
 
@@ -21,14 +27,21 @@ public abstract class HeroClass extends Character {
 	public int def;
 	public int res;
 	public int spd;
+	public transient String gameHeroId;
 
 	private AdditionStats additionStats;
 	@JacksonXmlProperty(localName = "LevelUpStats")
+	@Transient
 	private AdditionLevelUpStats levelUpStats;
 
 
 	public HeroClass() {
 		init();
+	}
+
+
+	public void setId(long id) {
+		this.id = id;
 	}
 
 
@@ -50,7 +63,27 @@ public abstract class HeroClass extends Character {
 	}
 
 
-	public int getId() {
+	public String getGameHeroId() {
+		return gameHeroId;
+	}
+
+
+	public void setGameHeroId(String gameHeroId) {
+		this.gameHeroId = gameHeroId;
+	}
+
+
+	public int getIndex() {
+		return index;
+	}
+
+
+	public void setIndex(int index) {
+		this.index = index;
+	}
+
+
+	public long getId() {
 		return id;
 	}
 
@@ -163,7 +196,6 @@ public abstract class HeroClass extends Character {
 		def = (int) (getBaseStats().getDef() + (levelUp - 1) * levelUpStats.getDef());
 		res = (int) (getBaseStats().getRes() + (levelUp - 1) * levelUpStats.getRes());
 		spd = (int) (getBaseStats().getSpd() + (levelUp - 1) * levelUpStats.getSpd());
-
 	}
 
 }

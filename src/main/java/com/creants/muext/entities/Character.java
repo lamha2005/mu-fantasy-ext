@@ -1,5 +1,7 @@
 package com.creants.muext.entities;
 
+import org.springframework.data.annotation.Transient;
+
 import com.creants.creants_2x.socket.gate.protocol.serialization.SerializableQAntType;
 import com.creants.muext.entities.states.BaseStats;
 import com.creants.muext.entities.states.SubStats;
@@ -16,6 +18,7 @@ public class Character implements SerializableQAntType {
 	public int level;
 
 	@JacksonXmlProperty(localName = "BaseStats")
+	@Transient
 	private transient BaseStats baseStats;
 	@JacksonXmlProperty(localName = "SubStats")
 	private SubStats subStats;

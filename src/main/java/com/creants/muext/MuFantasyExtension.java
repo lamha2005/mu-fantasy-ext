@@ -34,5 +34,5 @@ public class MuFantasyExtension extends QAntExtension {
 		addRequestHandler("cmd_create_room", CreateRoomRequestHandler.class);
 		addRequestHandler("cmd_get_quests", GetQuestListRequestHandler.class);
 	}
-
+	
 }

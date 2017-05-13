@@ -1,116 +1,19 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<Heroes>
-	<DarkKnight>
-		<BaseStats>
-			<PhysicAttack>60</PhysicAttack>
-			<MagicPower>10</MagicPower>
-			<HealthPoint>150</HealthPoint>
-			<ManaPoint>50</ManaPoint>
-			<Defense>30</Defense>
-			<MagicResistance>10</MagicResistance>
-			<Speed>20</Speed>
-		</BaseStats>
-		<SubStats>
-			<Accuracy>0.05</Accuracy>
-			<CriticalChance>0.1</CriticalChance>
-			<DefenseensePenetration>10</DefenseensePenetration>
-			<DefenseenseIgnore>0.05</DefenseenseIgnore>
-			<MagicResistanceistancePenetration>10</MagicResistanceistancePenetration>
-			<MagicResistanceistanceIgnore>0.05</MagicResistanceistanceIgnore>
-			<ManaBreak>6</ManaBreak>
-			<LifeSteal>0.03</LifeSteal>
-			<HealthRegeneration>20</HealthRegeneration>
-			<Manaregeneration>25</Manaregeneration>
-		</SubStats>
-		<LevelUpStats>
-			<LvUpATK>7</LvUpATK>
-			<LvUpMAG>1</LvUpMAG>
-			<LvUpHP>5</LvUpHP>
-			<LvUpMP>0.5</LvUpMP>
-			<LvUpDEF>1</LvUpDEF>
-			<LvUpRES>0.2</LvUpRES>
-			<LvUpSPD>0.5</LvUpSPD>
-			<LvUpACC>0</LvUpACC>
-			<LvUpCritCH>0</LvUpCritCH>
-			<LvUpHPReg>0.5</LvUpHPReg>
-			<LvUpMPReg>0.1</LvUpMPReg>
-		</LevelUpStats>
+<HeroeList>
+	<DarkKnight Index="10" Name="Dark Knight">
+		<BaseStats PhysicAttack="60" MagicPower="10" HealthPoint="150" ManaPoint="50" Defense="30" MagicResistance="10" Speed="20"/>
+		<SubStats Accuracy="0.05" CriticalChance="0.1" DefenseensePenetration="10" DefenseenseIgnore="0.05" MagicResistanceistancePenetration="10" MagicResistanceistanceIgnore="0.05" ManaBreak="6" LifeSteal="0.03" HealthRegeneration="20" Manaregeneration="25"/>
+		<LevelUpStats LvUpATK="7" LvUpMAG="1" LvUpHP="5" LvUpMP="0.5" LvUpDEF="1" LvUpRES="0.2" LvUpSPD="0.5" LvUpACC="0" LvUpCritCH="0" LvUpHPReg="0.5" LvUpMPReg="0.1"/>
 	</DarkKnight>
-
-	<DarkWizard>
-		<BaseStats>
-			<PhysicAttack>10</PhysicAttack>
-			<MagicPower>60</MagicPower>
-			<HealthPoint>100</HealthPoint>
-			<ManaPoint>100</ManaPoint>
-			<Defense>20</Defense>
-			<MagicResistance>10</MagicResistance>
-			<Speed>30</Speed>
-		</BaseStats>
-		<SubStats>
-			<Accuracy>0.05</Accuracy>
-			<CriticalChance>0.1</CriticalChance>
-			<DefenseensePenetration>10</DefenseensePenetration>
-			<DefenseenseIgnore>0.05</DefenseenseIgnore>
-			<MagicResistanceistancePenetration>10
-			</MagicResistanceistancePenetration>
-			<MagicResistanceistanceIgnore>0.05</MagicResistanceistanceIgnore>
-			<ManaBreak>6</ManaBreak>
-			<LifeSteal>0.03</LifeSteal>
-			<HealthRegeneration>20</HealthRegeneration>
-			<Manaregeneration>25</Manaregeneration>
-		</SubStats>
-		<LevelUpStats>
-			<LvUpATK>1</LvUpATK>
-			<LvUpMAG>7</LvUpMAG>
-			<LvUpHP>2</LvUpHP>
-			<LvUpMP>4</LvUpMP>
-			<LvUpDEF>0.2</LvUpDEF>
-			<LvUpRES>1</LvUpRES>
-			<LvUpSPD>0.75</LvUpSPD>
-			<LvUpACC>0</LvUpACC>
-			<LvUpCritCH>0</LvUpCritCH>
-			<LvUpHPReg>0.1</LvUpHPReg>
-			<LvUpMPReg>0.7</LvUpMPReg>
-		</LevelUpStats>
+	<DarkWizard Index="20" Name="Dark Wizard">
+		<BaseStats PhysicAttack="10" MagicPower="60" HealthPoint="100" ManaPoint="100" Defense="20" MagicResistance="10" Speed="30"/>
+		<SubStats Accuracy="0.05" CriticalChance="0.1" DefenseensePenetration="10" DefenseenseIgnore="0.05" MagicResistanceistancePenetration="10" MagicResistanceistanceIgnore="0.05" ManaBreak="6" LifeSteal="0.03" HealthRegeneration="20" Manaregeneration="25"/>
+		<LevelUpStats LvUpATK="1" LvUpMAG="7" LvUpHP="2" LvUpMP="4" LvUpDEF="0.2" LvUpRES="1" LvUpSPD="0.75" LvUpACC="0" LvUpCritCH="0" LvUpHPReg="0.1" LvUpMPReg="0.7"/>
 	</DarkWizard>
-
-	<FairyElf>
-		<BaseStats>
-			<PhysicAttack>35</PhysicAttack>
-			<MagicPower>35</MagicPower>
-			<HealthPoint>90</HealthPoint>
-			<ManaPoint>110</ManaPoint>
-			<Defense>30</Defense>
-			<MagicResistance>10</MagicResistance>
-			<Speed>15</Speed>
-		</BaseStats>
-		<SubStats>
-			<Accuracy>0.05</Accuracy>
-			<CriticalChance>0.1</CriticalChance>
-			<DefenseensePenetration>10</DefenseensePenetration>
-			<DefenseenseIgnore>0.05</DefenseenseIgnore>
-			<MagicResistanceistancePenetration>10
-			</MagicResistanceistancePenetration>
-			<MagicResistanceistanceIgnore>0.05</MagicResistanceistanceIgnore>
-			<ManaBreak>6</ManaBreak>
-			<LifeSteal>0.03</LifeSteal>
-			<HealthRegeneration>20</HealthRegeneration>
-			<Manaregeneration>25</Manaregeneration>
-		</SubStats>
-		<LevelUpStats>
-			<LvUpATK>3</LvUpATK>
-			<LvUpMAG>5</LvUpMAG>
-			<LvUpHP>3</LvUpHP>
-			<LvUpMP>3</LvUpMP>
-			<LvUpDEF>0.5</LvUpDEF>
-			<LvUpRES>0.8</LvUpRES>
-			<LvUpSPD>1</LvUpSPD>
-			<LvUpACC>0</LvUpACC>
-			<LvUpCritCH>0</LvUpCritCH>
-			<LvUpHPReg>0.3</LvUpHPReg>
-			<LvUpMPReg>0.3</LvUpMPReg>
-		</LevelUpStats>
-	</FairyElf>
-</Heroes>
+	<DarkWizard Index="30" Name="Dark Wizard">
+		<BaseStats PhysicAttack="35" MagicPower="35" HealthPoint="90" ManaPoint="110" Defense="30" MagicResistance="10" Speed="15"/>
+		<SubStats Accuracy="0.05" CriticalChance="0.1" DefenseensePenetration="10" DefenseenseIgnore="0.05" MagicResistanceistancePenetration="10" MagicResistanceistanceIgnore="0.05" ManaBreak="6" LifeSteal="0.03" HealthRegeneration="20" Manaregeneration="25"/>
+		<LevelUpStats LvUpATK="3" LvUpMAG="5" LvUpHP="3" LvUpMP="3" LvUpDEF="0.5" LvUpRES="0.8" LvUpSPD="1" LvUpACC="0" LvUpCritCH="0" LvUpHPReg="0.3" LvUpMPReg="0.3"/>
+	</DarkWizard>
+</HeroeList>
 

@@ -17,6 +17,7 @@ import com.creants.creants_2x.socket.io.IResponse;
 import com.creants.creants_2x.socket.io.Response;
 import com.creants.muext.Creants2XApplication;
 import com.creants.muext.dao.GameHeroRepository;
+import com.creants.muext.dao.HeroRepository;
 import com.creants.muext.dao.QuestStatsRepository;
 import com.creants.muext.entities.GameHero;
 import com.creants.muext.entities.HeroClass;
@@ -33,6 +34,7 @@ public class JoinZoneEventHandler extends BaseServerEventHandler {
 	private static final String SERVER_ID = "mus1";
 	private static final String HERO_NAME_PREFIX = "Mu Hero ";
 	private GameHeroRepository repository;
+	private HeroRepository heroRepository;
 	private QuestStatsRepository questStatsRepository;
 	private QuestManager questManager;
 	private HeroClassManager heroManager;
@@ -43,6 +45,7 @@ public class JoinZoneEventHandler extends BaseServerEventHandler {
 		questStatsRepository = Creants2XApplication.getBean(QuestStatsRepository.class);
 		questManager = Creants2XApplication.getBean(QuestManager.class);
 		heroManager = Creants2XApplication.getBean(HeroClassManager.class);
+		heroRepository = Creants2XApplication.getBean(HeroRepository.class);
 	}
 
 
@@ -108,11 +111,12 @@ public class JoinZoneEventHandler extends BaseServerEventHandler {
 		gameHero.setVipPoint(0);
 
 		List<HeroClass> heroes = new ArrayList<>(3);
-		heroes.add(heroManager.getDefineHeroClass(HeroClassType.DARK_KNIGHT));
-		heroes.add(heroManager.getDefineHeroClass(HeroClassType.FAIRY_ELF));
-		heroes.add(heroManager.getDefineHeroClass(HeroClassType.DARK_WIZARD));
+		heroes.add(heroManager.createNewHero(gameHero.getId(), HeroClassType.DARK_KNIGHT));
+		heroes.add(heroManager.createNewHero(gameHero.getId(), HeroClassType.FAIRY_ELF));
+		heroes.add(heroManager.createNewHero(gameHero.getId(), HeroClassType.DARK_WIZARD));
 		gameHero.setHeroes(heroes);
 
+		heroRepository.save(heroes);
 		gameHero = repository.save(gameHero);
 
 		questManager.registerQuestsFromHero(gameHero);

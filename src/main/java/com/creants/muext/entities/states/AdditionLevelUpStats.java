@@ -7,27 +7,27 @@ import com.fasterxml.jackson.dataformat.xml.annotation.JacksonXmlProperty;
  *
  */
 public class AdditionLevelUpStats {
-	@JacksonXmlProperty(localName = "LvUpATK")
+	@JacksonXmlProperty(localName = "LvUpATK", isAttribute=true)
 	private int atk;
-	@JacksonXmlProperty(localName = "LvUpMAG")
+	@JacksonXmlProperty(localName = "LvUpMAG", isAttribute=true)
 	private int mag;
-	@JacksonXmlProperty(localName = "LvUpHP")
+	@JacksonXmlProperty(localName = "LvUpHP", isAttribute=true)
 	private int hp;
-	@JacksonXmlProperty(localName = "LvUpMP")
+	@JacksonXmlProperty(localName = "LvUpMP", isAttribute=true)
 	private float mp;
-	@JacksonXmlProperty(localName = "LvUpDEF")
+	@JacksonXmlProperty(localName = "LvUpDEF", isAttribute=true)
 	private float def;
-	@JacksonXmlProperty(localName = "LvUpRES")
+	@JacksonXmlProperty(localName = "LvUpRES", isAttribute=true)
 	private float res;
-	@JacksonXmlProperty(localName = "LvUpSPD")
+	@JacksonXmlProperty(localName = "LvUpSPD", isAttribute=true)
 	private float spd;
-	@JacksonXmlProperty(localName = "LvUpACC")
+	@JacksonXmlProperty(localName = "LvUpACC", isAttribute=true)
 	private float acc;
-	@JacksonXmlProperty(localName = "LvUpCritCH")
+	@JacksonXmlProperty(localName = "LvUpCritCH", isAttribute=true)
 	private float critch;
-	@JacksonXmlProperty(localName = "LvUpHPReg")
+	@JacksonXmlProperty(localName = "LvUpHPReg", isAttribute=true)
 	private float hpreg;
-	@JacksonXmlProperty(localName = "LvUpMPReg")
+	@JacksonXmlProperty(localName = "LvUpMPReg", isAttribute=true)
 	private float mpreg;
 
 
