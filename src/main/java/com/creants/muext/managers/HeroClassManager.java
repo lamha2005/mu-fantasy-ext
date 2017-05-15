@@ -10,6 +10,7 @@ import javax.xml.stream.XMLStreamReader;
 
 import org.springframework.beans.factory.InitializingBean;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
 
 import com.creants.muext.dao.SequenceRepository;
@@ -34,6 +35,8 @@ public class HeroClassManager implements InitializingBean {
 
 	@Autowired
 	private SequenceRepository sequenceRepository;
+	@Value("${firstDeploy}")
+	private boolean firstDeploy;
 
 	private Map<Integer, HeroClass> heroes;
 	private Map<Integer, Monster> monsters;
@@ -41,7 +44,9 @@ public class HeroClassManager implements InitializingBean {
 
 	@Override
 	public void afterPropertiesSet() throws Exception {
-		sequenceRepository.createSequenceDocument(HERO_ID_SEQ);
+		if (firstDeploy) {
+			sequenceRepository.createSequenceDocument(HERO_ID_SEQ);
+		}
 		loadHeroes();
 		loadMonsters();
 	}

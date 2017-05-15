@@ -8,46 +8,46 @@ import java.util.NoSuchElementException;
 import javax.xml.stream.XMLInputFactory;
 import javax.xml.stream.XMLStreamReader;
 
-import com.creants.muext.entities.Monster;
+import com.creants.muext.entities.world.Mission;
 import com.fasterxml.jackson.dataformat.xml.XmlMapper;
 
 /**
  * @author LamHM
  *
  */
-public class MonsterConfig {
-	private static final String MONSTERS_CONFIG = "resources/monsters.xml";
+public class WorldConfig {
+	private static final String MISSIONS_CONFIG = "resources/missions.xml";
 	private static final XMLInputFactory f = XMLInputFactory.newFactory();
+	private static WorldConfig instance;
+	private Map<Integer, Mission> missions;
 
-	private static MonsterConfig instance;
-	private Map<Integer, Monster> monsters;
 
-
-	public static MonsterConfig getInstance() {
+	public static WorldConfig getInstance() {
 		if (instance == null) {
-			instance = new MonsterConfig();
+			instance = new WorldConfig();
 		}
+
 		return instance;
 	}
 
 
-	private MonsterConfig() {
-		loadMonsters();
+	private WorldConfig() {
+		loadMission();
 	}
 
 
-	private void loadMonsters() {
+	public void loadMission() {
 		try {
-			monsters = new HashMap<>();
-			XMLStreamReader sr = f.createXMLStreamReader(new FileInputStream(MONSTERS_CONFIG));
+			missions = new HashMap<>();
+			XMLStreamReader sr = f.createXMLStreamReader(new FileInputStream(MISSIONS_CONFIG));
 			XmlMapper mapper = new XmlMapper();
 			sr.next(); // to point to <Monsters>
 			sr.next();
-			Monster monster = null;
+			Mission mission = null;
 			while (sr.hasNext()) {
 				try {
-					monster = mapper.readValue(sr, Monster.class);
-					monsters.put(monster.getIndex(), monster);
+					mission = mapper.readValue(sr, Mission.class);
+					missions.put(mission.getIndex(), mission);
 				} catch (NoSuchElementException e) {
 
 				}
@@ -61,8 +61,8 @@ public class MonsterConfig {
 	}
 
 
-	public Monster getMonster(int index) {
-		return monsters.get(index);
+	public Mission getMission(int index) {
+		return missions.get(index);
 	}
 
 }

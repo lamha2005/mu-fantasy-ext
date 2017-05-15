@@ -58,7 +58,9 @@ public class JoinZoneEventHandler extends BaseServerEventHandler {
 		GameHero gameHero = repository.findOne(id);
 		if (gameHero == null) {
 			gameHero = createNewGameHero(creantsUserId);
-
+		}else{
+			List<HeroClass> heroes = heroRepository.findHeroesByGameHeroId(id);
+			gameHero.setHeroes(heroes);
 		}
 
 		List<QuestStats> mainQuests = questStatsRepository.findByHeroIdAndGroupId(id, QuestManager.GROUP_MAIN_QUEST);

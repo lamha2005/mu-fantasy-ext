@@ -9,6 +9,7 @@ import java.util.Set;
 
 import org.springframework.beans.factory.InitializingBean;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
 
 import com.creants.muext.dao.GameHeroRepository;
@@ -40,13 +41,18 @@ public class QuestManager implements InitializingBean {
 	@Autowired
 	private SequenceRepository sequenceRepository;
 
+	@Value("${firstDeploy}")
+	private boolean firstDeploy;
+
 	private Map<Integer, Set<Integer>> monsterInQuest;
 
 
 	public void afterPropertiesSet() throws Exception {
 		monsterInQuest = new HashMap<Integer, Set<Integer>>();
 		// Chỉ tạo lần đầu khi deploy hệ thống
-		sequenceRepository.createSequenceDocument(QUEST_ID_SEQ);
+		if (firstDeploy) {
+			sequenceRepository.createSequenceDocument(QUEST_ID_SEQ);
+		}
 	}
 
 

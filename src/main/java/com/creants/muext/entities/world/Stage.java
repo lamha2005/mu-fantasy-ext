@@ -9,21 +9,32 @@ import com.creants.creants_2x.socket.gate.protocol.serialization.SerializableQAn
  *
  */
 public class Stage implements SerializableQAntType {
-	public int id;
+	public int index;
+	public int chapterIndex;
 	public String name;
 	public boolean clear;
 	public boolean unlock;
 	public Integer startNo;
 	public transient List<Mission> missions;
+	
 
-
-	public int getId() {
-		return id;
+	public int getChapterIndex() {
+		return chapterIndex;
 	}
 
 
-	public void setId(int id) {
-		this.id = id;
+	public void setChapterIndex(int chapterIndex) {
+		this.chapterIndex = chapterIndex;
+	}
+
+
+	public int getIndex() {
+		return index;
+	}
+
+
+	public void setIndex(int index) {
+		this.index = index;
 	}
 
 

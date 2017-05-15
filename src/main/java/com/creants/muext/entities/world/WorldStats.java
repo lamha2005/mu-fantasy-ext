@@ -74,7 +74,7 @@ public class WorldStats {
 		int stageId = getStageId(missionId);
 		List<Mission> missions = stagesMap.get(stageId);
 		for (Mission mission : missions) {
-			if (mission.getId() == missionId)
+			if (mission.getIndex() == missionId)
 				return true;
 		}
 

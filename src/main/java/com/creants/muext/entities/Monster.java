@@ -1,14 +1,20 @@
 package com.creants.muext.entities;
 
+import com.creants.creants_2x.socket.gate.protocol.serialization.SerializableQAntType;
 import com.fasterxml.jackson.dataformat.xml.annotation.JacksonXmlProperty;
 
 /**
  * @author LamHM
  *
  */
-public class Monster {
+public class Monster implements SerializableQAntType {
+	/**
+	 * id của monster trong trận đấu
+	 */
+	public int id;
+
 	@JacksonXmlProperty(localName = "Index", isAttribute = true)
-	private int index;
+	public int index;
 
 	@JacksonXmlProperty(localName = "Name", isAttribute = true)
 	public String name;
@@ -16,21 +22,31 @@ public class Monster {
 	public int level;
 
 	@JacksonXmlProperty(localName = "Image", isAttribute = true)
-	private String img;
+	public String img;
 	@JacksonXmlProperty(localName = "MonsterX2DamageChance", isAttribute = true)
-	private float damX2Change;
+	public float damX2Change;
 
 	@JacksonXmlProperty(localName = "Dam", isAttribute = true)
-	private int dam;
+	public int dam;
 	@JacksonXmlProperty(localName = "HealthPoint", isAttribute = true)
-	private int hp;
+	public int hp;
 	@JacksonXmlProperty(localName = "Defense", isAttribute = true)
-	private int def;
+	public int def;
 
 	@JacksonXmlProperty(localName = "MagicResistance", isAttribute = true)
-	private int res;
+	public int res;
 	@JacksonXmlProperty(localName = "Speed", isAttribute = true)
-	private int spd;
+	public int spd;
+
+
+	public int getId() {
+		return id;
+	}
+
+
+	public void setId(int id) {
+		this.id = id;
+	}
 
 
 	public int getIndex() {
@@ -82,4 +98,13 @@ public class Monster {
 		return spd;
 	}
 
+
+	public int[] genCritRate() {
+		
+		return null;
+	}
+	
+	public int[] genX2Dam(){
+		return null;
+	}
 }

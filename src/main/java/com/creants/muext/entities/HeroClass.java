@@ -1,6 +1,10 @@
 package com.creants.muext.entities;
 
+import java.util.Random;
+
+import org.springframework.data.annotation.Id;
 import org.springframework.data.annotation.Transient;
+import org.springframework.data.mongodb.core.index.Indexed;
 import org.springframework.data.mongodb.core.mapping.Document;
 
 import com.creants.muext.entities.states.AdditionLevelUpStats;
@@ -16,6 +20,7 @@ import com.fasterxml.jackson.dataformat.xml.annotation.JacksonXmlProperty;
 public abstract class HeroClass extends Character {
 	@JacksonXmlProperty(localName = "Index", isAttribute = true)
 	public int index;
+	@Id
 	public long id;
 	public int exp;
 	public int rank;
@@ -27,6 +32,7 @@ public abstract class HeroClass extends Character {
 	public int def;
 	public int res;
 	public int spd;
+	@Indexed
 	public transient String gameHeroId;
 
 	private AdditionStats additionStats;
@@ -196,6 +202,37 @@ public abstract class HeroClass extends Character {
 		def = (int) (getBaseStats().getDef() + (levelUp - 1) * levelUpStats.getDef());
 		res = (int) (getBaseStats().getRes() + (levelUp - 1) * levelUpStats.getRes());
 		spd = (int) (getBaseStats().getSpd() + (levelUp - 1) * levelUpStats.getSpd());
+	}
+
+
+	public int[] genCrit(int roundNo) {
+		Random rd = new Random();
+		int attackNo = roundNo * 20;
+		float critRate = getSubStats().getCritch();
+		int[] result = new int[attackNo];
+		for (int i = 0; i < attackNo; i++) {
+			int nextInt = rd.nextInt(100);
+			if (nextInt == 1) {
+				
+			}
+		}
+
+		return null;
+	}
+	
+	public static void main(String[] args) {
+		Random rd = new Random();
+		int attackNo = 3 * 20;
+		float critRate = (float) 0.05;
+		System.out.println(critRate);
+		int[] result = new int[attackNo];
+		for (int i = 0; i < attackNo; i++) {
+			int nextInt = rd.nextInt(100);
+			System.out.println(nextInt);
+			if (nextInt == 1) {
+				
+			}
+		}
 	}
 
 }
