@@ -1,6 +1,8 @@
 package com.creants.muext.config;
 
+import java.io.File;
 import java.io.FileInputStream;
+import java.util.Collection;
 import java.util.HashMap;
 import java.util.Map;
 import java.util.NoSuchElementException;
@@ -9,6 +11,7 @@ import javax.xml.stream.XMLInputFactory;
 import javax.xml.stream.XMLStreamReader;
 
 import com.creants.muext.entities.Monster;
+import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.dataformat.xml.XmlMapper;
 
 /**
@@ -61,8 +64,33 @@ public class MonsterConfig {
 	}
 
 
-	public Monster getMonster(int index) {
-		return monsters.get(index);
+	public Monster getMonster(int resourceId) {
+		return monsters.get(resourceId);
+	}
+
+
+	public Collection<Monster> getMonsters() {
+		return monsters.values();
+	}
+
+
+	public Monster createMonster(int index) {
+		return new Monster(getMonster(index));
+	}
+
+
+	public void writeToJsonFile() {
+		try {
+			ObjectMapper mapper = new ObjectMapper();
+			mapper.writeValue(new File("export/monsters.json"), getMonsters());
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
+	}
+
+
+	public static void main(String[] args) {
+		MonsterConfig.getInstance().writeToJsonFile();
 	}
 
 }

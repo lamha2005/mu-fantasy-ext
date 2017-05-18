@@ -1,9 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <StageList>
-	<Stage Index="0" Chapter="Chapter 1 - World Of MU" ChapterBG="c1.png" BattleBG="noria.png" StaminaCost="5" MonsterIndex="1,1,1#2,1,3#1,2,4" FirstTimeReward="1" ZenReward="1000" UnlockFunction="150" ParentID="1" StageFather="" StageCleared="0"/>
-	<Stage Index="1" Chapter="Chapter 1 - World Of MU" ChapterBG="c1.png" BattleBG="noria.png" StaminaCost="5" MonsterIndex="1,1,1#2,1,3#1,2,4" FirstTimeReward="1" ZenReward="1000" UnlockFunction="150" ParentID="1" StageFather="" StageCleared="0"/>
-	<Stage Index="2" Chapter="Chapter 1 - World Of MU" ChapterBG="c1.png" BattleBG="noria.png" StaminaCost="5" MonsterIndex="1,1,1#2,1,3#1,2,4" FirstTimeReward="1" ZenReward="1000" UnlockFunction="150" ParentID="1" StageFather="" StageCleared="0"/>
-	<Stage Index="3" Chapter="Chapter 1 - World Of MU" ChapterBG="c1.png" BattleBG="noria.png" StaminaCost="5" MonsterIndex="1,1,1#2,1,3#1,2,4" FirstTimeReward="1" ZenReward="1000" UnlockFunction="150" ParentID="1" StageFather="" StageCleared="0"/>
-	<Stage Index="4" Chapter="Chapter 1 - World Of MU" ChapterBG="c1.png" BattleBG="noria.png" StaminaCost="5" MonsterIndex="1,1,1#2,1,3#1,2,4" FirstTimeReward="1" ZenReward="1000" UnlockFunction="150" ParentID="1" StageFather="" StageCleared="0"/>
+	<Stage StageIndex="0" ChapterIndex="0" Name="Đầm lầy chết" Image="c1.png"/>
+	<Stage StageIndex="1" ChapterIndex="0" Name="Kẻ 2 mang" Image="c1.png"/>
+	<Stage StageIndex="2" ChapterIndex="0" Name="Băng cướp Gobin" Image="c1.png"/>
 </StageList>
 

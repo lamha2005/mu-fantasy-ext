@@ -16,7 +16,7 @@ public class Stage implements SerializableQAntType {
 	public boolean unlock;
 	public Integer startNo;
 	public transient List<Mission> missions;
-	
+
 
 	public int getChapterIndex() {
 		return chapterIndex;
@@ -25,6 +25,16 @@ public class Stage implements SerializableQAntType {
 
 	public void setChapterIndex(int chapterIndex) {
 		this.chapterIndex = chapterIndex;
+	}
+
+
+	public boolean checkClear() {
+		for (Mission mission : missions) {
+			if (!mission.isClear())
+				return false;
+		}
+		clear = true;
+		return true;
 	}
 
 

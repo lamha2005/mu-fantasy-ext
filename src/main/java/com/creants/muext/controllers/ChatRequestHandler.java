@@ -6,8 +6,6 @@ import com.creants.creants_2x.core.annotations.Instantiation;
 import com.creants.creants_2x.core.extension.BaseClientRequestHandler;
 import com.creants.creants_2x.socket.gate.entities.IQAntObject;
 import com.creants.creants_2x.socket.gate.wood.QAntUser;
-import com.creants.muext.Creants2XApplication;
-import com.creants.muext.dao.GameHeroRepository;
 import com.creants.muext.om.UserInfo;
 
 /**
@@ -16,12 +14,9 @@ import com.creants.muext.om.UserInfo;
  */
 @Instantiation(Instantiation.InstantiationMode.SINGLE_INSTANCE)
 public class ChatRequestHandler extends BaseClientRequestHandler {
-	private GameHeroRepository repository;
-
 
 	public ChatRequestHandler() {
 		System.out.println("************* CHAT REQUEST HANDLER ******************");
-		repository = Creants2XApplication.getBean(GameHeroRepository.class);
 	}
 
 

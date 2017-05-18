@@ -1,6 +1,7 @@
 package com.creants.muext.managers;
 
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.List;
 import java.util.Map;
 import java.util.concurrent.ConcurrentHashMap;
@@ -8,11 +9,18 @@ import java.util.concurrent.ConcurrentHashMap;
 import org.springframework.beans.factory.InitializingBean;
 import org.springframework.stereotype.Service;
 
+import com.creants.creants_2x.socket.gate.entities.IQAntArray;
 import com.creants.creants_2x.socket.gate.entities.IQAntObject;
+import com.creants.creants_2x.socket.gate.entities.QAntArray;
 import com.creants.muext.config.MonsterConfig;
 import com.creants.muext.entities.GameHero;
 import com.creants.muext.entities.Monster;
+import com.creants.muext.entities.world.Mission;
 
+/**
+ * @author LamHM
+ *
+ */
 @Service
 public class MatchManager implements InitializingBean {
 	private MonsterConfig monsterConfig;
@@ -33,7 +41,7 @@ public class MatchManager implements InitializingBean {
 		int monsterId = 0;
 		for (Integer[] indexes : monsterIndex) {
 			for (int i = 0; i < indexes.length; i++) {
-				Monster monster = monsterConfig.getMonster(indexes[i]);
+				Monster monster = monsterConfig.createMonster(indexes[i]);
 				monster.setId(monsterId);
 				monsters.add(monster);
 				monsterId++;
@@ -44,8 +52,30 @@ public class MatchManager implements InitializingBean {
 	}
 
 
-	public IQAntObject getMatch(int matchId) {
-		return matchMap.get(matchId);
+	public IQAntArray getRounds(Mission mission, List<Monster> monsterList) {
+		IQAntArray rounds = QAntArray.newInstance();
+		List<Integer[]> roundList = mission.getRoundList();
+		int count = 0;
+		for (Integer[] integers : roundList) {
+			Integer[] round = new Integer[integers.length];
+			for (int i = 0; i < integers.length; i++) {
+				round[i] = count;
+				count++;
+			}
+			rounds.addIntArray(Arrays.asList(round));
+		}
+
+		return rounds;
+	}
+
+
+	public IQAntObject getMatch(String gameHeroId) {
+		return matchMap.get(gameHeroId);
+	}
+
+
+	public void newMatch(String gameHeroId, IQAntObject matchInfo) {
+		matchMap.put(gameHeroId, matchInfo);
 	}
 
 

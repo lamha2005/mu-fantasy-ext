@@ -18,6 +18,8 @@ public class Mission implements SerializableQAntType {
 	@JacksonXmlProperty(localName = "StageIndex", isAttribute = true)
 	public int stageIndex;
 
+	public int maxFarm;
+
 	@JacksonXmlProperty(localName = "Name", isAttribute = true)
 	public transient String name;
 	@JacksonXmlProperty(localName = "StaminaCost", isAttribute = true)
@@ -31,6 +33,21 @@ public class Mission implements SerializableQAntType {
 	public int reward1Index;
 	@JacksonXmlProperty(localName = "ZenReward", isAttribute = true)
 	public int reward2Index;
+
+
+	public Mission() {
+		maxFarm = 3;
+	}
+
+
+	public int getMaxFarm() {
+		return maxFarm;
+	}
+
+
+	public void setMaxFarm(int maxFarm) {
+		this.maxFarm = maxFarm;
+	}
 
 
 	public int getStageIndex() {

@@ -1,5 +1,7 @@
 package com.creants.muext.entities;
 
+import java.util.ArrayList;
+import java.util.List;
 import java.util.Random;
 
 import org.springframework.data.annotation.Id;
@@ -7,6 +9,7 @@ import org.springframework.data.annotation.Transient;
 import org.springframework.data.mongodb.core.index.Indexed;
 import org.springframework.data.mongodb.core.mapping.Document;
 
+import com.creants.muext.config.GameConfig;
 import com.creants.muext.entities.states.AdditionLevelUpStats;
 import com.creants.muext.entities.states.AdditionStats;
 import com.creants.muext.entities.states.BaseStats;
@@ -205,34 +208,36 @@ public abstract class HeroClass extends Character {
 	}
 
 
-	public int[] genCrit(int roundNo) {
+	public byte[] genCrit(int roundNo) {
 		Random rd = new Random();
 		int attackNo = roundNo * 20;
-		float critRate = getSubStats().getCritch();
-		int[] result = new int[attackNo];
-		for (int i = 0; i < attackNo; i++) {
-			int nextInt = rd.nextInt(100);
-			if (nextInt == 1) {
-				
+
+		int chance = (int) (getSubStats().getCritch() * 100);
+		float critRate = GameConfig.getInstance().getCritRate(chance);
+		List<Byte> critList = new ArrayList<Byte>();
+		int count = 1;
+		for (Byte i = 0; i < attackNo; i++) {
+			int rate = (int) (critRate * count);
+			count++;
+			if (rate >= 100) {
+				critList.add(i);
+				count = 1;
+				continue;
+			}
+
+			boolean b = (rd.nextInt(100 - rate) + 1) == 1;
+			if (b) {
+				critList.add(i);
+				count = 1;
 			}
 		}
 
-		return null;
-	}
-	
-	public static void main(String[] args) {
-		Random rd = new Random();
-		int attackNo = 3 * 20;
-		float critRate = (float) 0.05;
-		System.out.println(critRate);
-		int[] result = new int[attackNo];
-		for (int i = 0; i < attackNo; i++) {
-			int nextInt = rd.nextInt(100);
-			System.out.println(nextInt);
-			if (nextInt == 1) {
-				
-			}
+		byte[] result = new byte[critList.size()];
+		for (int i = 0; i < critList.size(); i++) {
+			result[i] = critList.get(i);
 		}
+
+		return result;
 	}
 
 }

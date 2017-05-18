@@ -2,9 +2,6 @@ package com.creants.muext.controllers;
 
 import java.util.List;
 
-import org.springframework.beans.factory.annotation.Autowired;
-
-import com.creants.creants_2x.core.annotations.Instantiation;
 import com.creants.creants_2x.core.controllers.SystemRequest;
 import com.creants.creants_2x.core.extension.BaseClientRequestHandler;
 import com.creants.creants_2x.socket.gate.entities.IQAntArray;
@@ -15,46 +12,46 @@ import com.creants.creants_2x.socket.gate.wood.QAntUser;
 import com.creants.creants_2x.socket.io.IResponse;
 import com.creants.creants_2x.socket.io.Response;
 import com.creants.muext.Creants2XApplication;
-import com.creants.muext.dao.QuestStatsRepository;
-import com.creants.muext.entities.quest.QuestStats;
-import com.creants.muext.services.QuestManager;
+import com.creants.muext.dao.WorldStatsRepository;
+import com.creants.muext.entities.world.Mission;
+import com.creants.muext.entities.world.WorldStats;
 import com.creants.muext.util.UserHelper;
 
 /**
- * @author LamHM
- *
+ * Tham khảo trả về response thế nào SFSResponseApi
+ * 
+ * @author LamHa
  */
-@Instantiation(Instantiation.InstantiationMode.SINGLE_INSTANCE)
-public class GetQuestListRequestHandler extends BaseClientRequestHandler {
-
-	@Autowired
-	private QuestStatsRepository questStateRepository;
+public class ViewStageRequestHandler extends BaseClientRequestHandler {
+	private WorldStatsRepository worldRepository;
 
 
-	public GetQuestListRequestHandler() {
-		questStateRepository = Creants2XApplication.getBean(QuestStatsRepository.class);
+	public ViewStageRequestHandler() {
+		worldRepository = Creants2XApplication.getBean(WorldStatsRepository.class);
 	}
 
 
 	@Override
 	public void handleClientRequest(QAntUser user, IQAntObject params) {
-		Integer groupId = params.getInt("gid");
-		if (groupId == null) {
-			groupId = QuestManager.GROUP_MAIN_QUEST;
+		Integer stageId = params.getInt("stgid");
+		if (stageId == null) {
+			// TODO throw exception
+			return;
 		}
 
 		String gameHeroId = UserHelper.getGameHeroId(user);
-		List<QuestStats> quests = questStateRepository.getQuests(gameHeroId, groupId, false);
+		WorldStats worldStats = worldRepository.findOne(gameHeroId);
 
-		IQAntArray questArr = QAntArray.newInstance();
-		for (QuestStats questStats : quests) {
-			questArr.addQAntObject(QAntObject.newFromObject(questStats));
+		List<Mission> missions = worldStats.getMissions(stageId);
+
+		params = QAntObject.newInstance();
+		IQAntArray missionArr = QAntArray.newInstance();
+		for (Mission mission : missions) {
+			missionArr.addQAntObject(QAntObject.newFromObject(mission));
 		}
-
-		params = new QAntObject();
-		params.putQAntArray("quests", questArr);
-		params.putInt("gid", groupId);
-		sendExtResponse("cmd_get_quests", params, user);
+		params.putQAntArray("missions", missionArr);
+		params.putInt("stgid", stageId);
+		sendExtResponse("cmd_view_stage", params, user);
 	}
 
 

@@ -5,6 +5,7 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
+import org.springframework.data.annotation.Id;
 import org.springframework.data.mongodb.core.mapping.Document;
 
 /**
@@ -13,8 +14,15 @@ import org.springframework.data.mongodb.core.mapping.Document;
  */
 @Document(collection = "world_stats")
 public class WorldStats {
+	@Id
 	private String heroId;
+	/**
+	 * StageId
+	 */
 	private Map<Integer, List<Mission>> stagesMap;
+	/**
+	 * ChapterId
+	 */
 	private Map<Integer, List<Stage>> chapterMap;
 
 
@@ -56,6 +64,11 @@ public class WorldStats {
 
 	public List<Stage> getStates(int chapterId) {
 		return chapterMap.get(chapterId);
+	}
+
+
+	public List<Mission> getMissions(int stageId) {
+		return stagesMap.get(stageId);
 	}
 
 

@@ -1,7 +1,9 @@
 package com.creants.muext.controllers;
 
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 import com.creants.creants_2x.core.IQAntEvent;
 import com.creants.creants_2x.core.QAntEventParam;
@@ -16,13 +18,18 @@ import com.creants.creants_2x.socket.gate.wood.QAntUser;
 import com.creants.creants_2x.socket.io.IResponse;
 import com.creants.creants_2x.socket.io.Response;
 import com.creants.muext.Creants2XApplication;
+import com.creants.muext.config.WorldConfig;
 import com.creants.muext.dao.GameHeroRepository;
 import com.creants.muext.dao.HeroRepository;
 import com.creants.muext.dao.QuestStatsRepository;
+import com.creants.muext.dao.WorldStatsRepository;
 import com.creants.muext.entities.GameHero;
 import com.creants.muext.entities.HeroClass;
 import com.creants.muext.entities.HeroClassType;
 import com.creants.muext.entities.quest.QuestStats;
+import com.creants.muext.entities.world.Mission;
+import com.creants.muext.entities.world.Stage;
+import com.creants.muext.entities.world.WorldStats;
 import com.creants.muext.managers.HeroClassManager;
 import com.creants.muext.services.QuestManager;
 
@@ -38,6 +45,7 @@ public class JoinZoneEventHandler extends BaseServerEventHandler {
 	private QuestStatsRepository questStatsRepository;
 	private QuestManager questManager;
 	private HeroClassManager heroManager;
+	private WorldStatsRepository worldRepository;
 
 
 	public JoinZoneEventHandler() {
@@ -46,6 +54,7 @@ public class JoinZoneEventHandler extends BaseServerEventHandler {
 		questManager = Creants2XApplication.getBean(QuestManager.class);
 		heroManager = Creants2XApplication.getBean(HeroClassManager.class);
 		heroRepository = Creants2XApplication.getBean(HeroRepository.class);
+		worldRepository = Creants2XApplication.getBean(WorldStatsRepository.class);
 	}
 
 
@@ -53,17 +62,19 @@ public class JoinZoneEventHandler extends BaseServerEventHandler {
 	public void handleServerEvent(IQAntEvent event) throws QAntException {
 		QAntUser user = (QAntUser) event.getParameter(QAntEventParam.USER);
 		long creantsUserId = user.getCreantsUserId();
-		String id = SERVER_ID + "#" + creantsUserId;
+		String gameHeroId = SERVER_ID + "#" + creantsUserId;
+		user.setProperty("GAME_HERO_ID", gameHeroId);
 
-		GameHero gameHero = repository.findOne(id);
+		GameHero gameHero = repository.findOne(gameHeroId);
 		if (gameHero == null) {
 			gameHero = createNewGameHero(creantsUserId);
-		}else{
-			List<HeroClass> heroes = heroRepository.findHeroesByGameHeroId(id);
+		} else {
+			List<HeroClass> heroes = heroRepository.findHeroesByGameHeroId(gameHeroId);
 			gameHero.setHeroes(heroes);
 		}
 
-		List<QuestStats> mainQuests = questStatsRepository.findByHeroIdAndGroupId(id, QuestManager.GROUP_MAIN_QUEST);
+		List<QuestStats> mainQuests = questStatsRepository.findByHeroIdAndGroupId(gameHeroId,
+				QuestManager.GROUP_MAIN_QUEST);
 		IQAntObject params = new QAntObject();
 		params.putQAntObject("game_hero", QAntObject.newFromObject(gameHero));
 
@@ -112,16 +123,43 @@ public class JoinZoneEventHandler extends BaseServerEventHandler {
 		gameHero.setVipLevel(1);
 		gameHero.setVipPoint(0);
 
+		// cho trước 3 nhân vật
 		List<HeroClass> heroes = new ArrayList<>(3);
 		heroes.add(heroManager.createNewHero(gameHero.getId(), HeroClassType.DARK_KNIGHT));
 		heroes.add(heroManager.createNewHero(gameHero.getId(), HeroClassType.FAIRY_ELF));
 		heroes.add(heroManager.createNewHero(gameHero.getId(), HeroClassType.DARK_WIZARD));
 		gameHero.setHeroes(heroes);
-
 		heroRepository.save(heroes);
-		gameHero = repository.save(gameHero);
 
+		gameHero = repository.save(gameHero);
+		// tạo nhiệm vụ cho hero
 		questManager.registerQuestsFromHero(gameHero);
+
+		// mở world, chapter, stage, mission
+		int chapterIndex = 0;
+		int stageIndex = 0;
+		WorldStats worldStats = new WorldStats();
+		worldStats.setHeroId(gameHero.getId());
+		Map<Integer, List<Stage>> chapterMap = new HashMap<>();
+		List<Stage> stages = new ArrayList<>();
+		Stage stage = new Stage();
+		stage.setClear(false);
+		stage.setChapterIndex(chapterIndex);
+		stage.setIndex(stageIndex);
+		stage.setStartNo(0);
+		stage.setUnlock(false);
+		stage.setName("Rừng xà nu");
+		stages.add(stage);
+		chapterMap.put(chapterIndex, stages);
+		worldStats.setChapterMap(chapterMap);
+
+		Map<Integer, List<Mission>> stageMap = new HashMap<>();
+		List<Mission> missions = new ArrayList<>();
+		missions.add(WorldConfig.getInstance().getMission(0));
+		stageMap.put(stageIndex, missions);
+		worldStats.setStagesMap(stageMap);
+		worldRepository.save(worldStats);
+
 		return gameHero;
 	}
 
