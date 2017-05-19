@@ -18,12 +18,12 @@ import com.creants.muext.util.UserHelper;
  * 
  * @author LamHa
  */
-public class MissionFinishRequestHandler extends BaseClientRequestHandler {
+public class StageFinishRequestHandler extends BaseClientRequestHandler {
 	private MatchManager matchManager;
 	private GameHeroRepository repository;
 
 
-	public MissionFinishRequestHandler() {
+	public StageFinishRequestHandler() {
 		matchManager = Creants2XApplication.getBean(MatchManager.class);
 		repository = Creants2XApplication.getBean(GameHeroRepository.class);
 	}
@@ -31,23 +31,24 @@ public class MissionFinishRequestHandler extends BaseClientRequestHandler {
 
 	@Override
 	public void handleClientRequest(QAntUser user, IQAntObject params) {
-		// Integer missionId = params.getInt("msid");
+		String gameHeroId = UserHelper.getGameHeroId(user);
 		Boolean isWin = params.getBool("win");
 		params = QAntObject.newInstance();
-		params.putByte("result", (byte) 1);
+		params.putByte("result", (byte) ((isWin != null && isWin) ? 1 : 0));
 		if (!isWin) {
+			matchManager.removeMatch(gameHeroId);
 			sendExtResponse("cmd_mission_finish", params, user);
 			return;
 		}
 
-		String gameHeroId = UserHelper.getGameHeroId(user);
 		IQAntObject match = matchManager.getMatch(gameHeroId);
+		matchManager.removeMatch(gameHeroId);
 
 		GameHero gameHero = repository.findOne(gameHeroId);
 		IQAntObject reward = match.getQAntObject("reward");
 		processReward(reward, gameHero);
 		params.putQAntObject("game_hero", QAntObject.newFromObject(gameHero));
-		sendExtResponse("cmd_mission_finish", params, user);
+		sendExtResponse("cmd_stage_finish", params, user);
 	}
 
 
@@ -73,6 +74,7 @@ public class MissionFinishRequestHandler extends BaseClientRequestHandler {
 			while (gameHero.getExp() > gameHero.getMaxExp()) {
 				gameHero.setExp(gameHero.getExp() - gameHero.getMaxExp());
 				gameHero.setLevel(gameHero.getLevel() + 1);
+				gameHero.setMaxExp(gameHero.getLevel() * 10000);
 			}
 		}
 

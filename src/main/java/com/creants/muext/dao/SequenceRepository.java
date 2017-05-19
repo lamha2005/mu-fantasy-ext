@@ -9,4 +9,7 @@ public interface SequenceRepository {
 
 
 	void createSequenceDocument(String documentName);
+
+
+	long setDefaultValue(String documentName, long value);
 }

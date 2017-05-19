@@ -1,7 +1,5 @@
 package com.creants.muext.entities.world;
 
-import java.util.List;
-
 import com.creants.creants_2x.socket.gate.protocol.serialization.SerializableQAntType;
 
 /**
@@ -9,19 +7,29 @@ import com.creants.creants_2x.socket.gate.protocol.serialization.SerializableQAn
  *
  */
 public class Chapter implements SerializableQAntType {
-	private int id;
+	private int index;
 	private String name;
+	private String bg;
 	private boolean unlock;
-	private List<Stage> stages;
 
 
-	public int getId() {
-		return id;
+	public int getIndex() {
+		return index;
 	}
 
 
-	public void setId(int id) {
-		this.id = id;
+	public void setIndex(int index) {
+		this.index = index;
+	}
+
+
+	public String getBg() {
+		return bg;
+	}
+
+
+	public void setBg(String bg) {
+		this.bg = bg;
 	}
 
 
@@ -32,16 +40,6 @@ public class Chapter implements SerializableQAntType {
 
 	public void setName(String name) {
 		this.name = name;
-	}
-
-
-	public List<Stage> getStages() {
-		return stages;
-	}
-
-
-	public void setStages(List<Stage> stages) {
-		this.stages = stages;
 	}
 
 

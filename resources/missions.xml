@@ -1,7 +1,0 @@
-<?xml version="1.0" encoding="UTF-8"?>
-<MissionList>
-	<Mission Index="0" StageIndex="0" Name="World Of MU" StaminaCost="5" MonsterIndex="1,1,1#2,1,3#1,2,4" FirstTimeReward="1" ZenReward="1000"/>
-	<Mission Index="1" StageIndex="0" Name="World Of MU" StaminaCost="5" MonsterIndex="1,1,1#2,1,3#1,2,4" FirstTimeReward="1" ZenReward="1000"/>
-	<Mission Index="2" StageIndex="0" Name="World Of MU" StaminaCost="5" MonsterIndex="1,1,1#2,1,3#1,2,4" FirstTimeReward="1" ZenReward="1000"/>
-</MissionList>
-

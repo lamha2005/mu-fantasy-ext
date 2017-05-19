@@ -12,13 +12,13 @@ import com.creants.creants_2x.socket.gate.wood.QAntUser;
 import com.creants.creants_2x.socket.io.IResponse;
 import com.creants.creants_2x.socket.io.Response;
 import com.creants.muext.Creants2XApplication;
-import com.creants.muext.config.WorldConfig;
+import com.creants.muext.config.StageConfig;
 import com.creants.muext.dao.GameHeroRepository;
 import com.creants.muext.dao.HeroRepository;
 import com.creants.muext.entities.GameHero;
 import com.creants.muext.entities.HeroClass;
 import com.creants.muext.entities.Monster;
-import com.creants.muext.entities.world.Mission;
+import com.creants.muext.entities.world.Stage;
 import com.creants.muext.managers.MatchManager;
 import com.creants.muext.util.UserHelper;
 
@@ -27,13 +27,14 @@ import com.creants.muext.util.UserHelper;
  * 
  * @author LamHa
  */
-public class MissionRequestHandler extends BaseClientRequestHandler {
+public class StageRequestHandler extends BaseClientRequestHandler {
+	private static final String STAGE_INDEX = "stgid";
 	private MatchManager matchManager;
 	private HeroRepository heroRepository;
 	private GameHeroRepository repository;
 
 
-	public MissionRequestHandler() {
+	public StageRequestHandler() {
 		matchManager = Creants2XApplication.getBean(MatchManager.class);
 		heroRepository = Creants2XApplication.getBean(HeroRepository.class);
 		repository = Creants2XApplication.getBean(GameHeroRepository.class);
@@ -43,28 +44,31 @@ public class MissionRequestHandler extends BaseClientRequestHandler {
 	@Override
 	public void handleClientRequest(QAntUser user, IQAntObject params) {
 		String gameHeroId = UserHelper.getGameHeroId(user);
-		int missionIndex = params.getInt("msid");
-		Mission mission = WorldConfig.getInstance().getMission(missionIndex);
-		if (mission == null) {
+		int stageIndex = params.getInt(STAGE_INDEX);
+		Stage stage = StageConfig.getInstance().getStage(stageIndex);
+		if (stage == null) {
 			// TODO throw exception
 			return;
 		}
 
 		GameHero gameHero = repository.findOne(gameHeroId);
-		gameHero.setStamina(gameHero.getStamina() - mission.getStaminaCost());
+		gameHero.setStamina(gameHero.getStamina() - stage.getStaminaCost());
 		repository.save(gameHero);
 
-		List<Integer[]> roundList = mission.getRoundList();
+		List<Integer[]> roundList = stage.getRoundList();
 		List<Monster> monsterList = matchManager.getMonsterList(roundList);
 
 		int roundNo = roundList.size();
 		params = QAntObject.newInstance();
-		params.putInt("msid", missionIndex);
-		params.putQAntArray("round", matchManager.getRounds(mission, monsterList));
+		params.putInt(STAGE_INDEX, stageIndex);
+		params.putQAntArray("round", matchManager.getRounds(stage, monsterList));
 
 		IQAntArray monsters = QAntArray.newInstance();
 		for (Monster monster : monsterList) {
-			monsters.addQAntObject(QAntObject.newFromObject(monster));
+			IQAntObject obj = QAntObject.newInstance();
+			obj.putInt("id", monster.getId());
+			obj.putInt("index", monster.getIndex());
+			monsters.addQAntObject(obj);
 		}
 		params.putQAntArray("monsters", monsters);
 
@@ -78,7 +82,7 @@ public class MissionRequestHandler extends BaseClientRequestHandler {
 		for (Monster monster : monsterList) {
 			IQAntObject obj = QAntObject.newInstance();
 			obj.putInt("id", monster.getId());
-			obj.putByteArray("x2", monster.genX2Dam(roundNo));
+			obj.putByteArray("crit", monster.genX2Dam(roundNo));
 			monsterArr.addQAntObject(obj);
 		}
 		script.putQAntArray("monsters", monsterArr);
@@ -95,6 +99,8 @@ public class MissionRequestHandler extends BaseClientRequestHandler {
 
 		params.putQAntObject("script", script);
 		sendExtResponse("cmd_mission", params, user);
+
+		matchManager.newMatch(gameHeroId, params);
 	}
 
 

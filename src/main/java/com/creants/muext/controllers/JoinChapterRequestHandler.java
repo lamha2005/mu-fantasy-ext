@@ -12,9 +12,9 @@ import com.creants.creants_2x.socket.gate.wood.QAntUser;
 import com.creants.creants_2x.socket.io.IResponse;
 import com.creants.creants_2x.socket.io.Response;
 import com.creants.muext.Creants2XApplication;
-import com.creants.muext.dao.WorldStatsRepository;
+import com.creants.muext.dao.HeroStageRepository;
+import com.creants.muext.entities.world.HeroStage;
 import com.creants.muext.entities.world.Stage;
-import com.creants.muext.entities.world.WorldStats;
 import com.creants.muext.util.UserHelper;
 
 /**
@@ -23,11 +23,11 @@ import com.creants.muext.util.UserHelper;
  * @author LamHa
  */
 public class JoinChapterRequestHandler extends BaseClientRequestHandler {
-	private WorldStatsRepository worldRepository;
+	private HeroStageRepository stageRepository;
 
 
 	public JoinChapterRequestHandler() {
-		worldRepository = Creants2XApplication.getBean(WorldStatsRepository.class);
+		stageRepository = Creants2XApplication.getBean(HeroStageRepository.class);
 	}
 
 
@@ -40,15 +40,14 @@ public class JoinChapterRequestHandler extends BaseClientRequestHandler {
 		}
 
 		String gameHeroId = UserHelper.getGameHeroId(user);
-		WorldStats worldStats = worldRepository.findOne(gameHeroId);
-		List<Stage> states = worldStats.getStates(chapterId);
+		List<HeroStage> stages = stageRepository.findStages(gameHeroId, chapterId);
 
 		params = QAntObject.newInstance();
-		IQAntArray stages = QAntArray.newInstance();
-		for (Stage stage : states) {
-			stages.addQAntObject(QAntObject.newFromObject(stage));
+		IQAntArray stageArr = QAntArray.newInstance();
+		for (Stage stage : stages) {
+			stageArr.addQAntObject(QAntObject.newFromObject(stage));
 		}
-		params.putQAntArray("stages", stages);
+		params.putQAntArray("stages", stageArr);
 		params.putInt("cid", chapterId);
 		sendExtResponse("cmd_join_chapter", params, user);
 	}

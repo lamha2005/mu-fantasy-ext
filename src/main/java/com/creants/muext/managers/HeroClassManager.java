@@ -3,7 +3,6 @@ package com.creants.muext.managers;
 import java.io.FileInputStream;
 import java.util.HashMap;
 import java.util.Map;
-import java.util.NoSuchElementException;
 
 import javax.xml.stream.XMLInputFactory;
 import javax.xml.stream.XMLStreamReader;
@@ -30,7 +29,6 @@ import com.fasterxml.jackson.dataformat.xml.XmlMapper;
 public class HeroClassManager implements InitializingBean {
 	public static final String HERO_ID_SEQ = "hero_id";
 	private static final String HEROES_CONFIG = "resources/heroes.xml";
-	private static final String MONSTERS_CONFIG = "resources/monsters.xml";
 	private static final XMLInputFactory f = XMLInputFactory.newFactory();
 
 	@Autowired
@@ -46,33 +44,10 @@ public class HeroClassManager implements InitializingBean {
 	public void afterPropertiesSet() throws Exception {
 		if (firstDeploy) {
 			sequenceRepository.createSequenceDocument(HERO_ID_SEQ);
+			sequenceRepository.setDefaultValue(HERO_ID_SEQ, 1000);
+			sequenceRepository.createSequenceDocument("hero_stage_id");
 		}
 		loadHeroes();
-		loadMonsters();
-	}
-
-
-	private void loadMonsters() {
-		try {
-			monsters = new HashMap<>();
-			XMLStreamReader sr = f.createXMLStreamReader(new FileInputStream(MONSTERS_CONFIG));
-			XmlMapper mapper = new XmlMapper();
-			sr.next(); // to point to <Monsters>
-			sr.next();
-			Monster monster = null;
-			while (sr.hasNext()) {
-				try {
-					monster = mapper.readValue(sr, Monster.class);
-					monsters.put(monster.getIndex(), monster);
-				} catch (NoSuchElementException e) {
-
-				}
-			}
-
-			sr.close();
-		} catch (Exception e) {
-			e.printStackTrace();
-		}
 	}
 
 

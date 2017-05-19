@@ -51,4 +51,21 @@ public class SequenceRepositoryImpl implements SequenceRepository {
 		return sequenceId.getSeq();
 	}
 
+
+	@Override
+	public long setDefaultValue(String documentName, long value) {
+		// get sequence id
+		Query query = new Query(Criteria.where("_id").is(documentName));
+
+		// increase sequence id by 1
+		Update update = new Update().set("seq", value);
+
+		// return new increased id
+		FindAndModifyOptions options = new FindAndModifyOptions().returnNew(true);
+
+		// this is the magic happened
+		SequenceId sequenceId = mongoOperations.findAndModify(query, update, options, SequenceId.class);
+		return sequenceId.getSeq();
+	}
+
 }

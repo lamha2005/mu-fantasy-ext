@@ -58,7 +58,12 @@ public class GameHero implements SerializableQAntType {
 
 
 	public int getMaxExp() {
-		return level * 10000;
+		return maxExp;
+	}
+
+
+	public void setMaxExp(int maxExp) {
+		this.maxExp = maxExp;
 	}
 
 
@@ -174,6 +179,11 @@ public class GameHero implements SerializableQAntType {
 
 	public void setVipPoint(int vipPoint) {
 		this.vipPoint = vipPoint;
+	}
+
+
+	public void setMaxVipPoint(int maxVipPoint) {
+		this.maxVipPoint = maxVipPoint;
 	}
 
 }

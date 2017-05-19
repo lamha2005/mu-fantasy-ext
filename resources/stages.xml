@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <StageList>
-	<Stage StageIndex="0" ChapterIndex="0" Name="Đầm lầy chết" Image="c1.png"/>
-	<Stage StageIndex="1" ChapterIndex="0" Name="Kẻ 2 mang" Image="c1.png"/>
-	<Stage StageIndex="2" ChapterIndex="0" Name="Băng cướp Gobin" Image="c1.png"/>
+	<Stage ChapterIndex="0" ChapterName="Chapter 1 - World Of MU" ChapterBG="c1.png" StageIndex="100" StageName="" BattleBG="noria.png" StaminaCost="5" MonsterIndex="1,2,3#2,1,4,3#2,1,4,3" FirstTimeReward="1" ZenReward="1000" UnlockFuntion="FALSE"/>
+	<Stage ChapterIndex="0" ChapterName="Chapter 1 - World Of MU" ChapterBG="c1.png" StageIndex="101" StageName="" BattleBG="noria.png" StaminaCost="5" MonsterIndex="1,2,3#2,1,4,3#2,1,4,3" FirstTimeReward="1" ZenReward="1000" UnlockFuntion="FALSE"/>
+	<Stage ChapterIndex="0" ChapterName="Chapter 1 - World Of MU" ChapterBG="c1.png" StageIndex="102" StageName="" BattleBG="noria.png" StaminaCost="5" MonsterIndex="1,2,3#2,1,4,3#2,1,4,3" FirstTimeReward="1" ZenReward="1000" UnlockFuntion="FALSE"/>
 </StageList>
 

@@ -15,7 +15,7 @@ import com.creants.creants_2x.socket.gate.entities.QAntArray;
 import com.creants.muext.config.MonsterConfig;
 import com.creants.muext.entities.GameHero;
 import com.creants.muext.entities.Monster;
-import com.creants.muext.entities.world.Mission;
+import com.creants.muext.entities.world.Stage;
 
 /**
  * @author LamHM
@@ -52,9 +52,9 @@ public class MatchManager implements InitializingBean {
 	}
 
 
-	public IQAntArray getRounds(Mission mission, List<Monster> monsterList) {
+	public IQAntArray getRounds(Stage stage, List<Monster> monsterList) {
 		IQAntArray rounds = QAntArray.newInstance();
-		List<Integer[]> roundList = mission.getRoundList();
+		List<Integer[]> roundList = stage.getRoundList();
 		int count = 0;
 		for (Integer[] integers : roundList) {
 			Integer[] round = new Integer[integers.length];

@@ -1,9 +1,7 @@
 package com.creants.muext.controllers;
 
 import java.util.ArrayList;
-import java.util.HashMap;
 import java.util.List;
-import java.util.Map;
 
 import com.creants.creants_2x.core.IQAntEvent;
 import com.creants.creants_2x.core.QAntEventParam;
@@ -18,18 +16,17 @@ import com.creants.creants_2x.socket.gate.wood.QAntUser;
 import com.creants.creants_2x.socket.io.IResponse;
 import com.creants.creants_2x.socket.io.Response;
 import com.creants.muext.Creants2XApplication;
-import com.creants.muext.config.WorldConfig;
+import com.creants.muext.config.StageConfig;
 import com.creants.muext.dao.GameHeroRepository;
 import com.creants.muext.dao.HeroRepository;
+import com.creants.muext.dao.HeroStageRepository;
 import com.creants.muext.dao.QuestStatsRepository;
-import com.creants.muext.dao.WorldStatsRepository;
+import com.creants.muext.dao.SequenceRepository;
 import com.creants.muext.entities.GameHero;
 import com.creants.muext.entities.HeroClass;
 import com.creants.muext.entities.HeroClassType;
 import com.creants.muext.entities.quest.QuestStats;
-import com.creants.muext.entities.world.Mission;
-import com.creants.muext.entities.world.Stage;
-import com.creants.muext.entities.world.WorldStats;
+import com.creants.muext.entities.world.HeroStage;
 import com.creants.muext.managers.HeroClassManager;
 import com.creants.muext.services.QuestManager;
 
@@ -45,7 +42,8 @@ public class JoinZoneEventHandler extends BaseServerEventHandler {
 	private QuestStatsRepository questStatsRepository;
 	private QuestManager questManager;
 	private HeroClassManager heroManager;
-	private WorldStatsRepository worldRepository;
+	private SequenceRepository sequenceRepository;
+	private HeroStageRepository stageRepository;
 
 
 	public JoinZoneEventHandler() {
@@ -54,7 +52,8 @@ public class JoinZoneEventHandler extends BaseServerEventHandler {
 		questManager = Creants2XApplication.getBean(QuestManager.class);
 		heroManager = Creants2XApplication.getBean(HeroClassManager.class);
 		heroRepository = Creants2XApplication.getBean(HeroRepository.class);
-		worldRepository = Creants2XApplication.getBean(WorldStatsRepository.class);
+		sequenceRepository = Creants2XApplication.getBean(SequenceRepository.class);
+		stageRepository = Creants2XApplication.getBean(HeroStageRepository.class);
 	}
 
 
@@ -117,11 +116,13 @@ public class JoinZoneEventHandler extends BaseServerEventHandler {
 		gameHero.setName(HERO_NAME_PREFIX + creantsUserId);
 		gameHero.setExp(0);
 		gameHero.setLevel(1);
-		gameHero.setSoul(0);
-		gameHero.setStamina(60);
-		gameHero.setZen(0);
+		gameHero.setSoul(10);
+		gameHero.setStamina(120);
+		gameHero.setZen(20000);
+		gameHero.setMaxExp(10000);
 		gameHero.setVipLevel(1);
 		gameHero.setVipPoint(0);
+		gameHero.setMaxVipPoint(100);
 
 		// cho trước 3 nhân vật
 		List<HeroClass> heroes = new ArrayList<>(3);
@@ -136,30 +137,11 @@ public class JoinZoneEventHandler extends BaseServerEventHandler {
 		questManager.registerQuestsFromHero(gameHero);
 
 		// mở world, chapter, stage, mission
-		int chapterIndex = 0;
-		int stageIndex = 0;
-		WorldStats worldStats = new WorldStats();
-		worldStats.setHeroId(gameHero.getId());
-		Map<Integer, List<Stage>> chapterMap = new HashMap<>();
-		List<Stage> stages = new ArrayList<>();
-		Stage stage = new Stage();
-		stage.setClear(false);
-		stage.setChapterIndex(chapterIndex);
-		stage.setIndex(stageIndex);
-		stage.setStartNo(0);
-		stage.setUnlock(false);
-		stage.setName("Rừng xà nu");
-		stages.add(stage);
-		chapterMap.put(chapterIndex, stages);
-		worldStats.setChapterMap(chapterMap);
-
-		Map<Integer, List<Mission>> stageMap = new HashMap<>();
-		List<Mission> missions = new ArrayList<>();
-		missions.add(WorldConfig.getInstance().getMission(0));
-		stageMap.put(stageIndex, missions);
-		worldStats.setStagesMap(stageMap);
-		worldRepository.save(worldStats);
-
+		HeroStage heroStage = new HeroStage(StageConfig.getInstance().getStage(100));
+		heroStage.setHeroId(gameHero.getId());
+		heroStage.setId(sequenceRepository.getNextSequenceId("hero_stage_id"));
+		heroStage.setUnlock(true);
+		stageRepository.save(heroStage);
 		return gameHero;
 	}
 
