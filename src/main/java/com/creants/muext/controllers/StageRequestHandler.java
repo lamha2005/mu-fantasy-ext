@@ -28,7 +28,7 @@ import com.creants.muext.util.UserHelper;
  * @author LamHa
  */
 public class StageRequestHandler extends BaseClientRequestHandler {
-	private static final String STAGE_INDEX = "stgid";
+	public static final String STAGE_INDEX = "stgid";
 	private MatchManager matchManager;
 	private HeroRepository heroRepository;
 	private GameHeroRepository repository;

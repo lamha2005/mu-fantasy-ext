@@ -54,6 +54,7 @@ public class StageConfig {
 			while (sr.hasNext()) {
 				try {
 					stage = mapper.readValue(sr, Stage.class);
+					stage.init();
 					stages.put(stage.getIndex(), stage);
 
 					Chapter chapter = new Chapter();

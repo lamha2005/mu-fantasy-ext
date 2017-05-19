@@ -9,10 +9,10 @@ import org.springframework.data.mongodb.core.mapping.Document;
  *
  */
 @Document(collection = "hero_quests")
-public class QuestStats extends AbstractQuest {
+public class HeroQuest extends AbstractQuest {
 	@Id
 	public long id;
-	public int questId;
+	public int questIndex;
 	@Indexed
 	private transient String heroId;
 	public boolean finish;
@@ -29,13 +29,13 @@ public class QuestStats extends AbstractQuest {
 	}
 
 
-	public int getQuestId() {
-		return questId;
+	public int getQuestIndex() {
+		return questIndex;
 	}
 
 
-	public void setQuestId(int questId) {
-		this.questId = questId;
+	public void setQuestIndex(int questIndex) {
+		this.questIndex = questIndex;
 	}
 
 

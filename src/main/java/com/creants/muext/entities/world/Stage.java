@@ -1,7 +1,11 @@
 package com.creants.muext.entities.world;
 
 import java.util.ArrayList;
+import java.util.Collection;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
+import java.util.Set;
 
 import org.apache.commons.lang.StringUtils;
 
@@ -47,6 +51,16 @@ public class Stage implements SerializableQAntType {
 
 	@JacksonXmlProperty(localName = "ZenReward", isAttribute = true)
 	public transient Integer zenReward;
+
+	private transient Map<Integer, Integer> monsterCountMap;
+	private transient List<Integer[]> roundList;
+
+
+	public void init() {
+		monsterCountMap = new HashMap<>();
+		roundList = new ArrayList<>();
+		readMonsterIndex();
+	}
 
 
 	public int getIndex() {
@@ -149,20 +163,44 @@ public class Stage implements SerializableQAntType {
 	}
 
 
-	public List<Integer[]> getRoundList() {
+	private void readMonsterIndex() {
 		String[] rounds = StringUtils.split(monsterIndex, "#");
 
 		List<Integer[]> roundList = new ArrayList<>(rounds.length);
 		for (int i = 0; i < rounds.length; i++) {
 			String[] monsters = StringUtils.split(rounds[i], ",");
-			Integer[] monsterIndex = new Integer[monsters.length];
-			for (int j = 0; j < monsterIndex.length; j++) {
-				monsterIndex[j] = Integer.parseInt(monsters[j]);
+			Integer[] monsterIndexArr = new Integer[monsters.length];
+			for (int j = 0; j < monsterIndexArr.length; j++) {
+				int monsterIndex = Integer.parseInt(monsters[j]);
+				monsterIndexArr[j] = Integer.parseInt(monsters[j]);
+
+				Integer count = monsterCountMap.get(monsterIndex);
+				if (count == null) {
+					count = 1;
+				} else {
+					count++;
+				}
+				monsterCountMap.put(monsterIndex, count);
 			}
-			roundList.add(monsterIndex);
+
+			roundList.add(monsterIndexArr);
 		}
 
+		this.roundList = roundList;
+	}
+
+
+	public List<Integer[]> getRoundList() {
 		return roundList;
 	}
 
+
+	public Set<Integer> getMonsters() {
+		return monsterCountMap.keySet();
+	}
+
+
+	public Integer countMonster(int monsterIndex) {
+		return monsterCountMap.get(monsterIndex);
+	}
 }

@@ -16,7 +16,7 @@ import com.creants.creants_2x.socket.io.IResponse;
 import com.creants.creants_2x.socket.io.Response;
 import com.creants.muext.Creants2XApplication;
 import com.creants.muext.dao.QuestStatsRepository;
-import com.creants.muext.entities.quest.QuestStats;
+import com.creants.muext.entities.quest.HeroQuest;
 import com.creants.muext.services.QuestManager;
 import com.creants.muext.util.UserHelper;
 
@@ -44,10 +44,10 @@ public class GetQuestListRequestHandler extends BaseClientRequestHandler {
 		}
 
 		String gameHeroId = UserHelper.getGameHeroId(user);
-		List<QuestStats> quests = questStateRepository.getQuests(gameHeroId, groupId, false);
+		List<HeroQuest> quests = questStateRepository.getQuests(gameHeroId, groupId, false);
 
 		IQAntArray questArr = QAntArray.newInstance();
-		for (QuestStats questStats : quests) {
+		for (HeroQuest questStats : quests) {
 			questArr.addQAntObject(QAntObject.newFromObject(questStats));
 		}
 

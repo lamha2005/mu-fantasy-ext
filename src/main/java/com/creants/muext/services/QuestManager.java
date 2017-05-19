@@ -18,7 +18,7 @@ import com.creants.muext.dao.QuestStatsRepository;
 import com.creants.muext.dao.SequenceRepository;
 import com.creants.muext.entities.GameHero;
 import com.creants.muext.entities.quest.Quest;
-import com.creants.muext.entities.quest.QuestStats;
+import com.creants.muext.entities.quest.HeroQuest;
 import com.creants.muext.entities.quest.Task;
 import com.creants.muext.entities.quest.TaskType;
 
@@ -72,7 +72,7 @@ public class QuestManager implements InitializingBean {
 	 * @param monsters
 	 * @return
 	 */
-	public Set<Integer> getQuestsContainMonster(int... monsters) {
+	public Set<Integer> getQuestsContainMonster(Set<Integer> monsters) {
 		Set<Integer> quests = new HashSet<Integer>();
 		for (int monsterId : monsters) {
 			Set<Integer> set = monsterInQuest.get(monsterId);
@@ -85,8 +85,8 @@ public class QuestManager implements InitializingBean {
 	}
 
 
-	public List<QuestStats> getQuests(String heroId, int groupId) {
-		List<QuestStats> quests = questStatsRespository.findByHeroIdAndGroupId(heroId, groupId);
+	public List<HeroQuest> getQuests(String heroId, int groupId) {
+		List<HeroQuest> quests = questStatsRespository.findByHeroIdAndGroupId(heroId, groupId);
 		if (groupId == GROUP_MAIN_QUEST) {
 			GameHero hero = heroRepository.findOne(heroId);
 			int level = hero.getLevel();
@@ -101,9 +101,9 @@ public class QuestManager implements InitializingBean {
 
 
 	public void registerQuestsFromHero(GameHero gameHero) {
-		List<QuestStats> quests = new ArrayList<QuestStats>();
+		List<HeroQuest> quests = new ArrayList<HeroQuest>();
 		for (int i = 0; i < 5; i++) {
-			QuestStats quest = new QuestStats();
+			HeroQuest quest = new HeroQuest();
 			quest.setHeroId(gameHero.getId());
 			quest.setId(sequenceRepository.getNextSequenceId(QUEST_ID_SEQ));
 			quest.setGroupId(GROUP_MAIN_QUEST);

@@ -25,7 +25,7 @@ import com.creants.muext.dao.SequenceRepository;
 import com.creants.muext.entities.GameHero;
 import com.creants.muext.entities.HeroClass;
 import com.creants.muext.entities.HeroClassType;
-import com.creants.muext.entities.quest.QuestStats;
+import com.creants.muext.entities.quest.HeroQuest;
 import com.creants.muext.entities.world.HeroStage;
 import com.creants.muext.managers.HeroClassManager;
 import com.creants.muext.services.QuestManager;
@@ -72,7 +72,7 @@ public class JoinZoneEventHandler extends BaseServerEventHandler {
 			gameHero.setHeroes(heroes);
 		}
 
-		List<QuestStats> mainQuests = questStatsRepository.findByHeroIdAndGroupId(gameHeroId,
+		List<HeroQuest> mainQuests = questStatsRepository.findByHeroIdAndGroupId(gameHeroId,
 				QuestManager.GROUP_MAIN_QUEST);
 		IQAntObject params = new QAntObject();
 		params.putQAntObject("game_hero", QAntObject.newFromObject(gameHero));

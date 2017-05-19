@@ -1,5 +1,8 @@
 package com.creants.muext.controllers;
 
+import java.util.List;
+import java.util.Set;
+
 import com.creants.creants_2x.core.controllers.SystemRequest;
 import com.creants.creants_2x.core.extension.BaseClientRequestHandler;
 import com.creants.creants_2x.socket.gate.entities.IQAntObject;
@@ -8,9 +11,14 @@ import com.creants.creants_2x.socket.gate.wood.QAntUser;
 import com.creants.creants_2x.socket.io.IResponse;
 import com.creants.creants_2x.socket.io.Response;
 import com.creants.muext.Creants2XApplication;
+import com.creants.muext.config.StageConfig;
 import com.creants.muext.dao.GameHeroRepository;
+import com.creants.muext.dao.QuestStatsRepository;
 import com.creants.muext.entities.GameHero;
+import com.creants.muext.entities.quest.HeroQuest;
+import com.creants.muext.entities.world.Stage;
 import com.creants.muext.managers.MatchManager;
+import com.creants.muext.services.QuestManager;
 import com.creants.muext.util.UserHelper;
 
 /**
@@ -21,11 +29,15 @@ import com.creants.muext.util.UserHelper;
 public class StageFinishRequestHandler extends BaseClientRequestHandler {
 	private MatchManager matchManager;
 	private GameHeroRepository repository;
+	private QuestManager questManager;
+	private QuestStatsRepository questStageRepository;
 
 
 	public StageFinishRequestHandler() {
 		matchManager = Creants2XApplication.getBean(MatchManager.class);
 		repository = Creants2XApplication.getBean(GameHeroRepository.class);
+		questManager = Creants2XApplication.getBean(QuestManager.class);
+		questStageRepository = Creants2XApplication.getBean(QuestStatsRepository.class);
 	}
 
 
@@ -46,9 +58,31 @@ public class StageFinishRequestHandler extends BaseClientRequestHandler {
 
 		GameHero gameHero = repository.findOne(gameHeroId);
 		IQAntObject reward = match.getQAntObject("reward");
+
 		processReward(reward, gameHero);
 		params.putQAntObject("game_hero", QAntObject.newFromObject(gameHero));
+
+		processQuest(match.getInt(StageRequestHandler.STAGE_INDEX), gameHeroId);
+
 		sendExtResponse("cmd_stage_finish", params, user);
+	}
+
+
+	private void processQuest(int stageIndex, String gameHeroId) {
+		Stage stage = StageConfig.getInstance().getStage(stageIndex);
+		Set<Integer> questIds = questManager.getQuestsContainMonster(stage.getMonsters());
+		if (questIds == null || questIds.isEmpty()) {
+			return;
+		}
+
+		List<HeroQuest> quests = questStageRepository.getQuests(gameHeroId,
+				questIds.toArray(new Integer[questIds.size()]));
+		if (quests == null || quests.isEmpty())
+			return;
+
+		for (HeroQuest heroQuest : quests) {
+			int taskType = heroQuest.getTaskType();
+		}
 	}
 
 

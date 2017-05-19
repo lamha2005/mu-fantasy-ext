@@ -6,21 +6,21 @@ import org.springframework.data.mongodb.repository.MongoRepository;
 import org.springframework.data.mongodb.repository.Query;
 import org.springframework.stereotype.Repository;
 
-import com.creants.muext.entities.quest.QuestStats;
+import com.creants.muext.entities.quest.HeroQuest;
 
 /**
  * @author LamHM
  *
  */
 @Repository
-public interface QuestStatsRepository extends MongoRepository<QuestStats, Long> {
+public interface QuestStatsRepository extends MongoRepository<HeroQuest, Long> {
 
 	@Query("{'heroId' : ?0, 'questId' : {'$in' : ?1}}")
-	List<QuestStats> getQuests(String heroId, int[] questIds);
+	List<HeroQuest> getQuests(String heroId, Integer[] questIds);
 
 	@Query("{'heroId' : ?0, 'groupId' : ?1, 'isFinish' : ?2}")
-	List<QuestStats> getQuests(String heroId, int groupId, boolean isFinish);
+	List<HeroQuest> getQuests(String heroId, int groupId, boolean isFinish);
 	
 	
-	List<QuestStats> findByHeroIdAndGroupId(String heroId, int groupId);
+	List<HeroQuest> findByHeroIdAndGroupId(String heroId, int groupId);
 }
