@@ -46,7 +46,6 @@ public class QuestManager implements InitializingBean {
 
 	private Map<Integer, Set<Integer>> monsterInQuest;
 
-
 	public void afterPropertiesSet() throws Exception {
 		monsterInQuest = new HashMap<Integer, Set<Integer>>();
 		// Chỉ tạo lần đầu khi deploy hệ thống
@@ -55,7 +54,6 @@ public class QuestManager implements InitializingBean {
 		}
 	}
 
-
 	public void addMonsterToQuest(int monsterId, int questId) {
 		Set<Integer> list = monsterInQuest.get(monsterId);
 		if (list == null) {
@@ -63,8 +61,8 @@ public class QuestManager implements InitializingBean {
 		}
 
 		list.add(questId);
+		monsterInQuest.put(monsterId, list);
 	}
-
 
 	/**
 	 * Lấy danh sách nhiệm vụ có con quái này
@@ -84,7 +82,6 @@ public class QuestManager implements InitializingBean {
 		return quests;
 	}
 
-
 	public List<HeroQuest> getQuests(String heroId, int groupId) {
 		List<HeroQuest> quests = questStatsRespository.findByHeroIdAndGroupId(heroId, groupId);
 		if (groupId == GROUP_MAIN_QUEST) {
@@ -98,7 +95,6 @@ public class QuestManager implements InitializingBean {
 
 		return quests;
 	}
-
 
 	public void registerQuestsFromHero(GameHero gameHero) {
 		List<HeroQuest> quests = new ArrayList<HeroQuest>();

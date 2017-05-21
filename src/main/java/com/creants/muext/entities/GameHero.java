@@ -12,7 +12,7 @@ import com.creants.creants_2x.socket.gate.protocol.serialization.SerializableQAn
  * @author LamHM
  *
  */
-@Document(collection = "accounts")
+@Document(collection = "game-heroes")
 public class GameHero implements SerializableQAntType {
 	// server_id#user_id
 	@Id

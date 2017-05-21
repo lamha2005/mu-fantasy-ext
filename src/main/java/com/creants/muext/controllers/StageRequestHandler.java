@@ -98,7 +98,7 @@ public class StageRequestHandler extends BaseClientRequestHandler {
 		script.putQAntArray("heroes", heroArr);
 
 		params.putQAntObject("script", script);
-		sendExtResponse("cmd_mission", params, user);
+		sendExtResponse("cmd_join_stage", params, user);
 
 		matchManager.newMatch(gameHeroId, params);
 	}

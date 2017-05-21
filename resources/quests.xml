@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <QuestList>
-	<Quest TaskIndex="0" TaskName="Bull Hunter" TaskDescription="Hunt Bull Fighter in Loren" TaskGroup="1" TaskType="1" MonsterIndex1="0" MonsterIndex2="" TaskCount="10" TaskReward="1"/>
-	<Quest TaskIndex="1" TaskName="Yeti Hunter" TaskDescription="Hunt Yeti" TaskGroup="1" TaskType="1" MonsterIndex1="1" MonsterIndex2="3" TaskCount="10" TaskReward="1"/>
-	<Quest TaskIndex="100" TaskName="Chaos Castle Master" TaskDescription="Join and win the Chaos Castle event" TaskGroup="100" TaskType="3" MonsterIndex1="" MonsterIndex2="" TaskCount="10" TaskReward="1"/>
+	<Quest TaskIndex="0" TaskGroup="1" TaskType="1" TaskName="Bull Hunter" TaskDescription="Hunt Bull Fighter in Loren"   MonsterIndex1="0" MonsterIndex2="" TaskCount="10" TaskReward="1"/>
+	<Quest TaskIndex="1" TaskGroup="1" TaskType="1" TaskName="Yeti Hunter" TaskDescription="Hunt Yeti"   MonsterIndex1="1" MonsterIndex2="3" TaskCount="10" TaskReward="1"/>
+	<Quest TaskIndex="100" TaskGroup="100" TaskType="3" TaskName="Chaos Castle Master" TaskDescription="Join and win the Chaos Castle event"   MonsterIndex1="" MonsterIndex2="" TaskCount="10" TaskReward="1"/>
 </QuestList>
 
