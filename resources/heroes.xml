@@ -10,10 +10,10 @@
 		<SubStats Accuracy="0.05" CriticalChance="0.8" DefenseensePenetration="10" DefenseenseIgnore="0.05" MagicResistanceistancePenetration="10" MagicResistanceistanceIgnore="0.05" ManaBreak="6" LifeSteal="0.03" HealthRegeneration="20" Manaregeneration="25"/>
 		<LevelUpStats LvUpATK="1" LvUpMAG="7" LvUpHP="2" LvUpMP="4" LvUpDEF="0.2" LvUpRES="1" LvUpSPD="0.75" LvUpACC="0" LvUpCritCH="0" LvUpHPReg="0.1" LvUpMPReg="0.7"/>
 	</DarkWizard>
-	<DarkWizard Index="30" Name="Dark Wizard">
+	<FairyElf Index="30" Name="Fairy Elf">
 		<BaseStats PhysicAttack="35" MagicPower="35" HealthPoint="90" ManaPoint="110" Defense="30" MagicResistance="10" Speed="15"/>
 		<SubStats Accuracy="0.05" CriticalChance="0.8" DefenseensePenetration="10" DefenseenseIgnore="0.05" MagicResistanceistancePenetration="10" MagicResistanceistanceIgnore="0.05" ManaBreak="6" LifeSteal="0.03" HealthRegeneration="20" Manaregeneration="25"/>
 		<LevelUpStats LvUpATK="3" LvUpMAG="5" LvUpHP="3" LvUpMP="3" LvUpDEF="0.5" LvUpRES="0.8" LvUpSPD="1" LvUpACC="0" LvUpCritCH="0" LvUpHPReg="0.3" LvUpMPReg="0.3"/>
-	</DarkWizard>
+	</FairyElf>
 </HeroeList>
 

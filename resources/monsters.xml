@@ -1,9 +1,9 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <MonsterList>
-	<Monster Index="0" Name="Bull Fighter" Image="bull" Level="6" Dam="15" HealthPoint="100" Defense="6" MagicResistance="10" Speed="150" MonsterX2DamageChance="0.4"/>
-	<Monster Index="1" Name="Yeti" Image="yeti" Level="6" Dam="10" HealthPoint="100" Defense="6" MagicResistance="10" Speed="150" MonsterX2DamageChance="0.4"/>
-	<Monster Index="2" Name="Gaint" Image="gaint" Level="6" Dam="12" HealthPoint="100" Defense="6" MagicResistance="10" Speed="150" MonsterX2DamageChance="0.4"/>
+	<Monster Index="0" Name="Bull Fighter" Image="bull" Level="6" Dam="5" HealthPoint="100" Defense="6" MagicResistance="10" Speed="150" MonsterX2DamageChance="0.4"/>
+	<Monster Index="1" Name="Yeti" Image="yeti" Level="6" Dam="6" HealthPoint="100" Defense="6" MagicResistance="10" Speed="150" MonsterX2DamageChance="0.4"/>
+	<Monster Index="2" Name="Gaint" Image="gaint" Level="6" Dam="4" HealthPoint="100" Defense="6" MagicResistance="10" Speed="150" MonsterX2DamageChance="0.4"/>
 	<Monster Index="3" Name="Elite Yeti" Image="eliteyeti" Level="6" Dam="9" HealthPoint="100" Defense="6" MagicResistance="10" Speed="150" MonsterX2DamageChance="0.4"/>
-	<Monster Index="4" Name="Ice Queen" Image="icequee" Level="6" Dam="17" HealthPoint="100" Defense="6" MagicResistance="10" Speed="150" MonsterX2DamageChance="0.4"/>
+	<Monster Index="4" Name="Ice Queen" Image="icequee" Level="6" Dam="5" HealthPoint="100" Defense="6" MagicResistance="10" Speed="150" MonsterX2DamageChance="0.4"/>
 </MonsterList>
 

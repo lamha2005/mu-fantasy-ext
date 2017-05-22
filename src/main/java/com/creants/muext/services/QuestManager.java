@@ -2,9 +2,7 @@ package com.creants.muext.services;
 
 import java.util.ArrayList;
 import java.util.HashMap;
-import java.util.HashSet;
 import java.util.List;
-import java.util.Map;
 import java.util.Set;
 
 import org.springframework.beans.factory.InitializingBean;
@@ -12,13 +10,14 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
 
+import com.creants.muext.config.QuestConfig;
 import com.creants.muext.dao.GameHeroRepository;
 import com.creants.muext.dao.QuestRepository;
 import com.creants.muext.dao.QuestStatsRepository;
 import com.creants.muext.dao.SequenceRepository;
 import com.creants.muext.entities.GameHero;
-import com.creants.muext.entities.quest.Quest;
 import com.creants.muext.entities.quest.HeroQuest;
+import com.creants.muext.entities.quest.Quest;
 import com.creants.muext.entities.quest.Task;
 import com.creants.muext.entities.quest.TaskType;
 
@@ -44,25 +43,17 @@ public class QuestManager implements InitializingBean {
 	@Value("${firstDeploy}")
 	private boolean firstDeploy;
 
-	private Map<Integer, Set<Integer>> monsterInQuest;
+	private QuestConfig questConfig;
+
 
 	public void afterPropertiesSet() throws Exception {
-		monsterInQuest = new HashMap<Integer, Set<Integer>>();
+		questConfig = QuestConfig.getInstance();
 		// Chỉ tạo lần đầu khi deploy hệ thống
 		if (firstDeploy) {
 			sequenceRepository.createSequenceDocument(QUEST_ID_SEQ);
 		}
 	}
 
-	public void addMonsterToQuest(int monsterId, int questId) {
-		Set<Integer> list = monsterInQuest.get(monsterId);
-		if (list == null) {
-			list = new HashSet<Integer>();
-		}
-
-		list.add(questId);
-		monsterInQuest.put(monsterId, list);
-	}
 
 	/**
 	 * Lấy danh sách nhiệm vụ có con quái này
@@ -71,16 +62,9 @@ public class QuestManager implements InitializingBean {
 	 * @return
 	 */
 	public Set<Integer> getQuestsContainMonster(Set<Integer> monsters) {
-		Set<Integer> quests = new HashSet<Integer>();
-		for (int monsterId : monsters) {
-			Set<Integer> set = monsterInQuest.get(monsterId);
-			if (set != null && set.size() > 0) {
-				quests.addAll(set);
-			}
-		}
-
-		return quests;
+		return questConfig.getQuestsContainMonster(monsters);
 	}
+
 
 	public List<HeroQuest> getQuests(String heroId, int groupId) {
 		List<HeroQuest> quests = questStatsRespository.findByHeroIdAndGroupId(heroId, groupId);
@@ -96,11 +80,13 @@ public class QuestManager implements InitializingBean {
 		return quests;
 	}
 
+
 	public void registerQuestsFromHero(GameHero gameHero) {
 		List<HeroQuest> quests = new ArrayList<HeroQuest>();
 		for (int i = 0; i < 5; i++) {
 			HeroQuest quest = new HeroQuest();
 			quest.setHeroId(gameHero.getId());
+			quest.setQuestIndex(1);
 			quest.setId(sequenceRepository.getNextSequenceId(QUEST_ID_SEQ));
 			quest.setGroupId(GROUP_MAIN_QUEST);
 			quest.setCreateTime(System.currentTimeMillis());
@@ -109,7 +95,7 @@ public class QuestManager implements InitializingBean {
 			quest.setDesc("Hunt Bull Fighter in Loren");
 			Task task = new Task();
 			HashMap<Object, Object> properties = new HashMap<>();
-			properties.put("0", 10);
+			properties.put("1", 10);
 			properties.put("3", 10);
 			task.setProperties(properties);
 			quest.setTask(task);
