@@ -1,19 +1,20 @@
 package com.creants.muext.controllers;
 
+import java.util.ArrayList;
+import java.util.Calendar;
+import java.util.Date;
 import java.util.List;
 
+import org.apache.commons.lang.time.DateUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 
 import com.creants.creants_2x.core.annotations.Instantiation;
-import com.creants.creants_2x.core.controllers.SystemRequest;
 import com.creants.creants_2x.core.extension.BaseClientRequestHandler;
 import com.creants.creants_2x.socket.gate.entities.IQAntArray;
 import com.creants.creants_2x.socket.gate.entities.IQAntObject;
 import com.creants.creants_2x.socket.gate.entities.QAntArray;
 import com.creants.creants_2x.socket.gate.entities.QAntObject;
 import com.creants.creants_2x.socket.gate.wood.QAntUser;
-import com.creants.creants_2x.socket.io.IResponse;
-import com.creants.creants_2x.socket.io.Response;
 import com.creants.muext.Creants2XApplication;
 import com.creants.muext.dao.QuestStatsRepository;
 import com.creants.muext.entities.quest.HeroQuest;
@@ -44,7 +45,12 @@ public class GetQuestListRequestHandler extends BaseClientRequestHandler {
 		}
 
 		String gameHeroId = UserHelper.getGameHeroId(user);
-		List<HeroQuest> quests = questStateRepository.getQuests(gameHeroId, groupId, false);
+		List<HeroQuest> quests = new ArrayList<>();
+		if (groupId == QuestManager.GROUP_MAIN_QUEST) {
+			quests = questStateRepository.getQuests(gameHeroId, groupId, false);
+		} else if (groupId == QuestManager.GROUP_DAILY_QUEST) {
+			quests = questStateRepository.findDailyQuests(gameHeroId, getStartOfDateMilis(), getEndOfDateMilis());
+		}
 
 		IQAntArray questArr = QAntArray.newInstance();
 		for (HeroQuest questStats : quests) {
@@ -54,21 +60,16 @@ public class GetQuestListRequestHandler extends BaseClientRequestHandler {
 		params = new QAntObject();
 		params.putQAntArray("quests", questArr);
 		params.putInt("gid", groupId);
-		sendExtResponse("cmd_get_quests", params, user);
+		send("cmd_get_quests", params, user);
 	}
 
 
-	public void sendExtResponse(String cmdName, IQAntObject params, QAntUser recipient) {
-		IQAntObject resObj = QAntObject.newInstance();
-		resObj.putUtfString("c", cmdName);
-		resObj.putQAntObject("p", (params != null) ? params : new QAntObject());
-
-		IResponse response = new Response();
-		response.setId(SystemRequest.CallExtension.getId());
-		response.setTargetController((byte) 1);
-		response.setContent(resObj);
-		response.setRecipients(recipient.getChannel());
-		response.write();
+	private long getStartOfDateMilis() {
+		return DateUtils.truncate(new Date(), Calendar.DATE).getTime();
 	}
 
+
+	private long getEndOfDateMilis() {
+		return DateUtils.addMilliseconds(DateUtils.ceiling(new Date(), Calendar.DATE), -1).getTime();
+	}
 }

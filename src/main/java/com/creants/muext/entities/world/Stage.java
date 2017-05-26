@@ -1,7 +1,6 @@
 package com.creants.muext.entities.world;
 
 import java.util.ArrayList;
-import java.util.Collection;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -52,6 +51,9 @@ public class Stage implements SerializableQAntType {
 	@JacksonXmlProperty(localName = "ZenReward", isAttribute = true)
 	public transient Integer zenReward;
 
+	@JacksonXmlProperty(localName = "SweepTimes", isAttribute = true)
+	public int sweepTimes;
+
 	private transient Map<Integer, Integer> monsterCountMap;
 	private transient List<Integer[]> roundList;
 
@@ -70,6 +72,16 @@ public class Stage implements SerializableQAntType {
 
 	public void setIndex(int index) {
 		this.index = index;
+	}
+
+
+	public int getSweepTimes() {
+		return sweepTimes;
+	}
+
+
+	public void setSweepTimes(int sweepTimes) {
+		this.sweepTimes = sweepTimes;
 	}
 
 

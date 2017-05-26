@@ -15,17 +15,27 @@ public class HeroStage extends Stage {
 
 	public boolean clear;
 	public boolean unlock;
-	public int startNo;
+	public int starNo;
+	private transient long lastestSweepTime;
 
 
 	public HeroStage() {
-
 	}
 
 
 	public HeroStage(Stage stage) {
 		this.index = stage.getIndex();
 		this.chapterIndex = stage.getChapterIndex();
+	}
+
+
+	public long getLastestSweepTime() {
+		return lastestSweepTime;
+	}
+
+
+	public void setLastestSweepTime(long lastestSweepTime) {
+		this.lastestSweepTime = lastestSweepTime;
 	}
 
 
@@ -69,13 +79,13 @@ public class HeroStage extends Stage {
 	}
 
 
-	public int getStartNo() {
-		return startNo;
+	public int getStarNo() {
+		return starNo;
 	}
 
 
-	public void setStartNo(int startNo) {
-		this.startNo = startNo;
+	public void setStarNo(int starNo) {
+		this.starNo = starNo;
 	}
 
 }

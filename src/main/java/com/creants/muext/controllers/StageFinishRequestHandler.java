@@ -4,7 +4,6 @@ import java.util.List;
 import java.util.Map;
 import java.util.Set;
 
-import com.creants.creants_2x.core.controllers.SystemRequest;
 import com.creants.creants_2x.core.extension.BaseClientRequestHandler;
 import com.creants.creants_2x.core.util.QAntTracer;
 import com.creants.creants_2x.socket.gate.entities.IQAntArray;
@@ -12,8 +11,6 @@ import com.creants.creants_2x.socket.gate.entities.IQAntObject;
 import com.creants.creants_2x.socket.gate.entities.QAntArray;
 import com.creants.creants_2x.socket.gate.entities.QAntObject;
 import com.creants.creants_2x.socket.gate.wood.QAntUser;
-import com.creants.creants_2x.socket.io.IResponse;
-import com.creants.creants_2x.socket.io.Response;
 import com.creants.muext.Creants2XApplication;
 import com.creants.muext.config.StageConfig;
 import com.creants.muext.dao.GameHeroRepository;
@@ -62,17 +59,21 @@ public class StageFinishRequestHandler extends BaseClientRequestHandler {
 		params.putByte("result", (byte) ((isWin != null && isWin) ? 1 : 0));
 		if (!isWin) {
 			matchManager.removeMatch(gameHeroId);
-			sendExtResponse("cmd_mission_finish", params, user);
+			send("cmd_mission_finish", params, user);
 			return;
 		}
 
 		IQAntObject match = matchManager.getMatch(gameHeroId);
+		if (match == null) {
+			QAntTracer.warn(this.getClass(), "Request finish match not found!");
+			return;
+		}
 		matchManager.removeMatch(gameHeroId);
 
 		GameHero gameHero = repository.findOne(gameHeroId);
 		IQAntObject reward = match.getQAntObject("reward");
 
-		processReward(reward, gameHero);
+		processReward(user, reward, gameHero);
 		params.putQAntObject("game_hero", QAntObject.newFromObject(gameHero));
 
 		Integer stageIndex = match.getInt(StageRequestHandler.STAGE_INDEX);
@@ -85,14 +86,27 @@ public class StageFinishRequestHandler extends BaseClientRequestHandler {
 			params.putQAntArray("quests", questArr);
 		}
 
-		HeroStage heroStage = new HeroStage(StageConfig.getInstance().getStage(stageIndex + 1));
-		heroStage.setHeroId(gameHero.getId());
-		heroStage.setId(sequenceRepository.getNextSequenceId("hero_stage_id"));
-		heroStage.setUnlock(true);
-		heroStage.setStartNo(3);
-		heroStageRepository.save(heroStage);
-		params.putQAntObject("new_stage", QAntObject.newFromObject(heroStage));
-		sendExtResponse("cmd_stage_finish", params, user);
+		HeroStage stage = heroStageRepository.findStageByHeroIdAndIndex(gameHeroId, stageIndex);
+		if (!stage.isClear()) {
+			stage.setClear(true);
+			stage.setStarNo(3);
+			stage.setSweepTimes(1);
+
+			// mở 1 stage mới
+			HeroStage heroStage = new HeroStage(StageConfig.getInstance().getStage(stageIndex + 1));
+			heroStage.setHeroId(gameHero.getId());
+			heroStage.setId(sequenceRepository.getNextSequenceId("hero_stage_id"));
+			heroStage.setUnlock(true);
+			heroStageRepository.save(heroStage);
+			params.putQAntObject("new_stage", QAntObject.newFromObject(heroStage));
+		} else {
+			// TODO nếu sao lớn hơn thì cập nhật lại sao
+			stage.setSweepTimes(stage.getSweepTimes() + 1);
+		}
+
+		stage.setLastestSweepTime(System.currentTimeMillis());
+		heroStageRepository.save(stage);
+		send("cmd_stage_finish", params, user);
 	}
 
 
@@ -132,7 +146,8 @@ public class StageFinishRequestHandler extends BaseClientRequestHandler {
 						if (remainMonster > 0) {
 							properties.put(monsterIndex, remainMonster);
 						} else {
-							heroQuest.setFinish(true);
+							properties.put(monsterIndex, 0);
+							heroQuest.setClaim(true);
 						}
 					}
 				}
@@ -149,33 +164,30 @@ public class StageFinishRequestHandler extends BaseClientRequestHandler {
 	}
 
 
-	public void sendExtResponse(String cmdName, IQAntObject params, QAntUser recipient) {
-		IQAntObject resObj = QAntObject.newInstance();
-		resObj.putUtfString("c", cmdName);
-		resObj.putQAntObject("p", (params != null) ? params : new QAntObject());
-
-		IResponse response = new Response();
-		response.setId(SystemRequest.CallExtension.getId());
-		response.setTargetController((byte) 1);
-		response.setContent(resObj);
-		response.setRecipients(recipient.getChannel());
-		response.write();
-	}
-
-
-	private void processReward(IQAntObject reward, GameHero gameHero) {
+	private void processReward(QAntUser user, IQAntObject reward, GameHero gameHero) {
+		IQAntObject assets = QAntObject.newInstance();
 		Integer exp = reward.getInt("exp");
 		if (exp > 0) {
 			gameHero.setExp(gameHero.getExp() + exp);
-
+			boolean isLevelUp = false;
 			while (gameHero.getExp() > gameHero.getMaxExp()) {
 				gameHero.setExp(gameHero.getExp() - gameHero.getMaxExp());
 				gameHero.setLevel(gameHero.getLevel() + 1);
 				gameHero.setMaxExp(gameHero.getLevel() * 10000);
+				isLevelUp = true;
+			}
+
+			assets.putInt("exp", gameHero.getExp());
+			if (isLevelUp) {
+				assets.putInt("maxExp", gameHero.getMaxExp());
+				assets.putInt("level", gameHero.getLevel());
 			}
 		}
 
 		gameHero.setZen(gameHero.getZen() + reward.getInt("zen"));
+		assets.putLong("zen", gameHero.getZen());
+		send("cmd_assets_change", assets, user);
+
 		repository.save(gameHero);
 	}
 

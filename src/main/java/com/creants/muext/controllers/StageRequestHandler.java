@@ -2,15 +2,12 @@ package com.creants.muext.controllers;
 
 import java.util.List;
 
-import com.creants.creants_2x.core.controllers.SystemRequest;
 import com.creants.creants_2x.core.extension.BaseClientRequestHandler;
 import com.creants.creants_2x.socket.gate.entities.IQAntArray;
 import com.creants.creants_2x.socket.gate.entities.IQAntObject;
 import com.creants.creants_2x.socket.gate.entities.QAntArray;
 import com.creants.creants_2x.socket.gate.entities.QAntObject;
 import com.creants.creants_2x.socket.gate.wood.QAntUser;
-import com.creants.creants_2x.socket.io.IResponse;
-import com.creants.creants_2x.socket.io.Response;
 import com.creants.muext.Creants2XApplication;
 import com.creants.muext.config.StageConfig;
 import com.creants.muext.dao.GameHeroRepository;
@@ -29,6 +26,9 @@ import com.creants.muext.util.UserHelper;
  */
 public class StageRequestHandler extends BaseClientRequestHandler {
 	public static final String STAGE_INDEX = "stgid";
+	// 6 phút rehi stamina 1 lần
+	public static final int STAMINA_REHI_TIME_MILI = 60000;
+	public static final int STAMINA_REHI_VALUE = 1;
 	private MatchManager matchManager;
 	private HeroRepository heroRepository;
 	private GameHeroRepository repository;
@@ -52,8 +52,17 @@ public class StageRequestHandler extends BaseClientRequestHandler {
 		}
 
 		GameHero gameHero = repository.findOne(gameHeroId);
-		gameHero.setStamina(gameHero.getStamina() - stage.getStaminaCost());
+		rehiStamina(gameHero);
+		// trừ stamina khi vào bàn chơi
+		int stamina = gameHero.getStamina() - stage.getStaminaCost();
+		gameHero.setStamina(stamina > 0 ? stamina : 0);
+
 		repository.save(gameHero);
+
+		// gửi thông tin stamina thay đổi
+		IQAntObject assets = QAntObject.newInstance();
+		assets.putInt("stamina", stamina);
+		send("cmd_assets_change", assets, user);
 
 		List<Integer[]> roundList = stage.getRoundList();
 		List<Monster> monsterList = matchManager.getMonsterList(roundList);
@@ -98,23 +107,28 @@ public class StageRequestHandler extends BaseClientRequestHandler {
 		script.putQAntArray("heroes", heroArr);
 
 		params.putQAntObject("script", script);
-		sendExtResponse("cmd_join_stage", params, user);
+		send("cmd_join_stage", params, user);
 
 		matchManager.newMatch(gameHeroId, params);
 	}
 
 
-	public void sendExtResponse(String cmdName, IQAntObject params, QAntUser recipient) {
-		IQAntObject resObj = QAntObject.newInstance();
-		resObj.putUtfString("c", cmdName);
-		resObj.putQAntObject("p", (params != null) ? params : new QAntObject());
-
-		IResponse response = new Response();
-		response.setId(SystemRequest.CallExtension.getId());
-		response.setTargetController((byte) 1);
-		response.setContent(resObj);
-		response.setRecipients(recipient.getChannel());
-		response.write();
+	// TODO tách dùng chung
+	private void rehiStamina(GameHero gameHero) {
+		long updateTime = System.currentTimeMillis();
+		if (gameHero.getStamina() < gameHero.getMaxStamina()) {
+			long deltaTime = updateTime - gameHero.getStaUpdTime();
+			int incrStamina = (int) (deltaTime / STAMINA_REHI_TIME_MILI) * STAMINA_REHI_VALUE;
+			System.out.println("[ERROR] *********************** rehiStamina INCR STAMINA: " + incrStamina);
+			if (incrStamina > 0) {
+				int newStamina = gameHero.getStamina() + incrStamina;
+				gameHero.setStamina(newStamina > gameHero.getMaxStamina() ? gameHero.getMaxStamina() : newStamina);
+				gameHero.setStaUpdTime(updateTime);
+			}
+		} else if (gameHero.getStamina() >= gameHero.getMaxExp()) {
+			System.out.println("[DEBUG] *********************** request stage: " + updateTime);
+			gameHero.setStaUpdTime(updateTime);
+		}
 	}
 
 }

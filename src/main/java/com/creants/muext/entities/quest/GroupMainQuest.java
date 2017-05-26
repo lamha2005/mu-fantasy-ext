@@ -1,6 +1,7 @@
 package com.creants.muext.entities.quest;
 
 import com.creants.muext.services.QuestManager;
+import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 
 /**
  * Nhiệm vụ phân bổ theo level, nhiệm vụ thường
@@ -8,9 +9,10 @@ import com.creants.muext.services.QuestManager;
  * @author LamHM
  *
  */
+@JsonIgnoreProperties(value = { "minLevel", "maxLevel" })
 public class GroupMainQuest extends Quest {
 
-	private int mixLevel;
+	private int minLevel;
 
 	private int maxLevel;
 
@@ -20,13 +22,13 @@ public class GroupMainQuest extends Quest {
 	}
 
 
-	public int getMixLevel() {
-		return mixLevel;
+	public int getMinLevel() {
+		return minLevel;
 	}
 
 
-	public void setMinLevel(int mixLevel) {
-		this.mixLevel = mixLevel;
+	public void setMinLevel(int minLevel) {
+		this.minLevel = minLevel;
 	}
 
 

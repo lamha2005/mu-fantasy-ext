@@ -26,9 +26,17 @@ public interface QuestStatsRepository extends MongoRepository<HeroQuest, Long> {
 	List<HeroQuest> getQuests(String heroId, Integer[] questIds);
 
 
-	@Query("{'heroId' : ?0, 'groupId' : ?1, 'isFinish' : ?2}")
+	@Query("{'heroId' : ?0, 'groupId' : ?1, 'finish' : ?2}")
 	List<HeroQuest> getQuests(String heroId, int groupId, boolean isFinish);
 
 
 	List<HeroQuest> findByHeroIdAndGroupId(String heroId, int groupId);
+
+
+	@Query("{'heroId' : ?0, 'groupId' : 2, 'createTime' : {'$lt' : ?1}}")
+	List<HeroQuest> findDailyQuestNeedRemove(String heroId, long startOfDateMili);
+
+
+	@Query("{'heroId' : ?0, 'groupId' : 2, 'createTime' : {'$gte' : ?1, '$lte' : ?2}}")
+	List<HeroQuest> findDailyQuests(String heroId, long startOfDateMili, long endOfDateMili);
 }

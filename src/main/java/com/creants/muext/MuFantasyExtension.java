@@ -11,6 +11,7 @@ import com.creants.muext.controllers.JoinGameRequestHandler;
 import com.creants.muext.controllers.JoinZoneEventHandler;
 import com.creants.muext.controllers.LoginEventHandler;
 import com.creants.muext.controllers.LogoutEventHandler;
+import com.creants.muext.controllers.QuestClaimRequestHandler;
 import com.creants.muext.controllers.StageFinishRequestHandler;
 import com.creants.muext.controllers.StageRequestHandler;
 
@@ -40,6 +41,7 @@ public class MuFantasyExtension extends QAntExtension {
 		addRequestHandler("cmd_join_stage", StageRequestHandler.class);
 		addRequestHandler("cmd_stage_finish", StageFinishRequestHandler.class);
 		addRequestHandler("cmd_join_chapter", JoinChapterRequestHandler.class);
+		addRequestHandler("cmd_quest_claim", QuestClaimRequestHandler.class);
 	}
 
 }

@@ -2,6 +2,11 @@
 <QuestList>
 	<Quest TaskIndex="0" TaskGroup="1" TaskType="1" TaskName="Bull Hunter" TaskDescription="Hunt Bull Fighter in Loren"   MonsterIndex1="0" MonsterIndex2="" TaskCount="10" TaskReward="1"/>
 	<Quest TaskIndex="1" TaskGroup="1" TaskType="1" TaskName="Yeti Hunter" TaskDescription="Hunt Yeti"   MonsterIndex1="1" MonsterIndex2="3" TaskCount="10" TaskReward="1"/>
+	<Quest TaskIndex="2" TaskGroup="1" TaskType="1" TaskName="Bull Hunter" TaskDescription="Hunt Bull Fighter in Loren"   MonsterIndex1="0" MonsterIndex2="" TaskCount="10" TaskReward="1"/>
+	<Quest TaskIndex="3" TaskGroup="1" TaskType="1" TaskName="Yeti Hunter" TaskDescription="Hunt Yeti"   MonsterIndex1="1" MonsterIndex2="3" TaskCount="10" TaskReward="1"/>
 	<Quest TaskIndex="100" TaskGroup="100" TaskType="3" TaskName="Chaos Castle Master" TaskDescription="Join and win the Chaos Castle event"   MonsterIndex1="" MonsterIndex2="" TaskCount="10" TaskReward="1"/>
+	<Quest TaskIndex="200" TaskGroup="2" TaskType="2" TaskName="Win Campain" TaskDescription="Người cần chơi chiến thắng Campain" TaskCount="5" TaskReward="1"/>
+	<Quest TaskIndex="201" TaskGroup="2" TaskType="3" TaskName="Win Chaos" TaskDescription="Người chơi chiến thắng Chaos" TaskCount="5" TaskReward="1"/>
+	<Quest TaskIndex="300" TaskGroup="3" TaskType="8" TaskName="Online liên tục" TaskDescription="Online nhận quà giá trị" TaskCount="" TaskReward="4"/>
 </QuestList>
 

@@ -27,6 +27,8 @@ public class GameHero implements SerializableQAntType {
 	public int maxExp;
 
 	public int stamina;
+	public int maxStamina;
+	public long staUpdTime;
 	public int vipLevel;
 	public int vipPoint;
 	public int maxVipPoint;
@@ -39,6 +41,7 @@ public class GameHero implements SerializableQAntType {
 		this.serverName = serverName;
 		this.userId = userId;
 		this.id = genId();
+		maxStamina = 100;
 	}
 
 
@@ -77,8 +80,28 @@ public class GameHero implements SerializableQAntType {
 	}
 
 
+	public long getStaUpdTime() {
+		return staUpdTime;
+	}
+
+
+	public void setStaUpdTime(long staUpdTime) {
+		this.staUpdTime = staUpdTime;
+	}
+
+
 	public void setStamina(int stamina) {
 		this.stamina = stamina;
+	}
+
+
+	public int getMaxStamina() {
+		return maxStamina;
+	}
+
+
+	public void setMaxStamina(int maxStamina) {
+		this.maxStamina = maxStamina;
 	}
 
 

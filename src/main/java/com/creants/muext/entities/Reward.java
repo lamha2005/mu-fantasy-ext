@@ -1,5 +1,6 @@
 package com.creants.muext.entities;
 
+import java.util.ArrayList;
 import java.util.List;
 
 /**
@@ -7,21 +8,26 @@ import java.util.List;
  *
  */
 public class Reward {
-	private int id;
-	private long exp;
+	private int index;
+	private int exp;
 	private int soul;
 	private int zen;
 
 	private List<Item> items;
 
 
-	public int getId() {
-		return id;
+	public Reward() {
+		items = new ArrayList<>();
 	}
 
 
-	public void setId(int id) {
-		this.id = id;
+	public int getIndex() {
+		return index;
+	}
+
+
+	public void setIndex(int index) {
+		this.index = index;
 	}
 
 
@@ -45,12 +51,12 @@ public class Reward {
 	}
 
 
-	public long getExp() {
+	public int getExp() {
 		return exp;
 	}
 
 
-	public void setExp(long exp) {
+	public void setExp(int exp) {
 		this.exp = exp;
 	}
 

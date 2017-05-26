@@ -1,24 +1,28 @@
 package com.creants.muext.entities;
 
+import com.fasterxml.jackson.annotation.JsonInclude;
+import com.fasterxml.jackson.annotation.JsonInclude.Include;
+
 /**
  * @author LamHM
  *
  */
+@JsonInclude(Include.NON_NULL)
 public class Item {
-	private int id;
-	private String name;
+	private int index;
 	private int groupId;
+	private String name;
 	private String img;
 	private int no;
 
 
-	public Item() {
-		groupId = -1;
+	public int getIndex() {
+		return index;
 	}
 
 
-	public int getId() {
-		return id;
+	public void setIndex(int index) {
+		this.index = index;
 	}
 
 
@@ -29,11 +33,6 @@ public class Item {
 
 	public void setNo(int no) {
 		this.no = no;
-	}
-
-
-	public void setId(int id) {
-		this.id = id;
 	}
 
 

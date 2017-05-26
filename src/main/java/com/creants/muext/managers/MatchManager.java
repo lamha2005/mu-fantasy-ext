@@ -12,8 +12,8 @@ import org.springframework.stereotype.Service;
 import com.creants.creants_2x.socket.gate.entities.IQAntArray;
 import com.creants.creants_2x.socket.gate.entities.IQAntObject;
 import com.creants.creants_2x.socket.gate.entities.QAntArray;
+import com.creants.creants_2x.socket.gate.entities.QAntObject;
 import com.creants.muext.config.MonsterConfig;
-import com.creants.muext.entities.GameHero;
 import com.creants.muext.entities.Monster;
 import com.creants.muext.entities.world.Stage;
 
@@ -79,15 +79,16 @@ public class MatchManager implements InitializingBean {
 	}
 
 
-	public boolean finish(GameHero gameHero) {
-		IQAntObject match = matchMap.get(gameHero.getId());
-		if (match == null) {
-			return false;
+	public IQAntObject finish(String gameHeroId, IQAntObject params) {
+		IQAntObject result = QAntObject.newInstance();
+		Boolean isWin = params.getBool("win");
+		result.putByte("result", (byte) ((isWin != null && isWin) ? 1 : 0));
+		if (!isWin) {
+			removeMatch(gameHeroId);
+			return result;
 		}
 
-		// TODO check and reward
-
-		return true;
+		return result;
 	}
 
 
@@ -97,4 +98,5 @@ public class MatchManager implements InitializingBean {
 			matchMap.remove(gameHeroId);
 		}
 	}
+
 }

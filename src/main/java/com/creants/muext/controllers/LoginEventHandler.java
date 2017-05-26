@@ -24,5 +24,4 @@ public class LoginEventHandler extends BaseServerEventHandler {
 		outData.putLong("server_time", System.currentTimeMillis());
 	}
 
-	
 }

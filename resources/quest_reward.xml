@@ -1,0 +1,9 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<QuestRewardList>
+	<Reward Index="0" Exp="150" Zen="1000" Soul="" Items="index=1,no=1;index=2,no=1"/>
+	<Reward Index="1" Exp="200" Zen="2000" Soul="" Items="index=1,no=1;index=2,no=1"/>
+	<Reward Index="2" Exp="300" Zen="" Soul="" Items="index=1,no=1;index=2,no=1"/>
+	<Reward Index="3" Exp="400" Zen="" Soul="" Items="index=1,no=1;index=2,no=1"/>
+	<Reward Index="4" Exp="" Zen="" Soul="" Items="index=1,no=1;index=2,no=1"/>
+</QuestRewardList>
+

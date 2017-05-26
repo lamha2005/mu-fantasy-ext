@@ -1,11 +1,14 @@
 package com.creants.muext.controllers;
 
 import java.util.ArrayList;
+import java.util.Calendar;
+import java.util.Date;
 import java.util.List;
+
+import org.apache.commons.lang.time.DateUtils;
 
 import com.creants.creants_2x.core.IQAntEvent;
 import com.creants.creants_2x.core.QAntEventParam;
-import com.creants.creants_2x.core.controllers.SystemRequest;
 import com.creants.creants_2x.core.exception.QAntException;
 import com.creants.creants_2x.core.extension.BaseServerEventHandler;
 import com.creants.creants_2x.socket.gate.entities.IQAntArray;
@@ -13,8 +16,6 @@ import com.creants.creants_2x.socket.gate.entities.IQAntObject;
 import com.creants.creants_2x.socket.gate.entities.QAntArray;
 import com.creants.creants_2x.socket.gate.entities.QAntObject;
 import com.creants.creants_2x.socket.gate.wood.QAntUser;
-import com.creants.creants_2x.socket.io.IResponse;
-import com.creants.creants_2x.socket.io.Response;
 import com.creants.muext.Creants2XApplication;
 import com.creants.muext.config.StageConfig;
 import com.creants.muext.dao.GameHeroRepository;
@@ -29,6 +30,7 @@ import com.creants.muext.entities.quest.HeroQuest;
 import com.creants.muext.entities.world.HeroStage;
 import com.creants.muext.managers.HeroClassManager;
 import com.creants.muext.services.QuestManager;
+import com.creants.muext.util.UserHelper;
 
 /**
  * @author LamHM
@@ -37,6 +39,9 @@ import com.creants.muext.services.QuestManager;
 public class JoinZoneEventHandler extends BaseServerEventHandler {
 	private static final String SERVER_ID = "mus1";
 	private static final String HERO_NAME_PREFIX = "Mu Hero ";
+	public static final int STAMINA_REHI_TIME_MILI = 60000;
+	public static final int STAMINA_REHI_VALUE = 1;
+
 	private GameHeroRepository repository;
 	private HeroRepository heroRepository;
 	private QuestStatsRepository questStatsRepository;
@@ -62,7 +67,9 @@ public class JoinZoneEventHandler extends BaseServerEventHandler {
 		QAntUser user = (QAntUser) event.getParameter(QAntEventParam.USER);
 		long creantsUserId = user.getCreantsUserId();
 		String gameHeroId = SERVER_ID + "#" + creantsUserId;
-		user.setProperty("GAME_HERO_ID", gameHeroId);
+		long loginTime = System.currentTimeMillis();
+		UserHelper.setHeroId(user, gameHeroId);
+		UserHelper.setLoginTime(user, loginTime);
 
 		GameHero gameHero = repository.findOne(gameHeroId);
 		if (gameHero == null) {
@@ -72,42 +79,59 @@ public class JoinZoneEventHandler extends BaseServerEventHandler {
 			gameHero.setHeroes(heroes);
 		}
 
-		List<HeroQuest> mainQuests = questStatsRepository.findByHeroIdAndGroupId(gameHeroId,
-				QuestManager.GROUP_MAIN_QUEST);
+		updateStamina(user, gameHero);
+
+		// main quest
+		List<HeroQuest> mainQuests = questStatsRepository.getQuests(gameHeroId, QuestManager.GROUP_MAIN_QUEST, false);
 		IQAntObject params = new QAntObject();
 		params.putQAntObject("game_hero", QAntObject.newFromObject(gameHero));
-
 		IQAntArray questArr = QAntArray.newInstance();
 		IQAntObject mainQuest = QAntObject.newInstance();
 		mainQuest.putInt("gid", QuestManager.GROUP_MAIN_QUEST);
 		mainQuest.putUtfString("n", "Nhiệm vụ chính");
 		mainQuest.putInt("no", mainQuests == null ? 0 : mainQuests.size());
 		questArr.addQAntObject(mainQuest);
+
+		// daily quest
+		List<HeroQuest> dailyQuestList = questStatsRepository.findDailyQuests(gameHeroId, getStartOfDateMilis(),
+				getEndOfDateMilis());
+		if (dailyQuestList == null || dailyQuestList.size() <= 0) {
+			dailyQuestList = questManager.resetDailyQuest(gameHero);
+		}
+
 		IQAntObject dailyQuest = QAntObject.newInstance();
 		dailyQuest.putInt("gid", QuestManager.GROUP_DAILY_QUEST);
 		dailyQuest.putUtfString("n", "Nhiệm vụ hàng ngày");
-		dailyQuest.putInt("no", 10);
+		dailyQuest.putInt("no", dailyQuestList.size());
 		questArr.addQAntObject(dailyQuest);
 		params.putQAntArray("quests", questArr);
 
+		// event
 		params.putInt("event_no", 10);
-		sendExtResponse("join_game", params, user);
+
+		params.putLong("login_time", loginTime);
+		send("join_game", params, user);
 
 		return;
 	}
 
 
-	public void sendExtResponse(String cmdName, IQAntObject params, QAntUser recipient) {
-		IQAntObject resObj = QAntObject.newInstance();
-		resObj.putUtfString("c", cmdName);
-		resObj.putQAntObject("p", (params != null) ? params : new QAntObject());
+	private void updateStamina(QAntUser user, GameHero gameHero) {
+		long updateTime = System.currentTimeMillis();
+		if (gameHero.getStamina() < gameHero.getMaxStamina()) {
+			long deltaTime = updateTime - gameHero.getStaUpdTime();
+			int incrStamina = (int) (deltaTime / STAMINA_REHI_TIME_MILI) * STAMINA_REHI_VALUE;
 
-		IResponse response = new Response();
-		response.setId(SystemRequest.CallExtension.getId());
-		response.setTargetController((byte) 1);
-		response.setContent(resObj);
-		response.setRecipients(recipient.getChannel());
-		response.write();
+			System.out.println("[ERROR] *********************** INCR STAMINA: " + incrStamina);
+			if (incrStamina > 0) {
+				int newStamina = gameHero.getStamina() + incrStamina;
+				gameHero.setStamina(newStamina > gameHero.getMaxStamina() ? gameHero.getMaxStamina() : newStamina);
+				gameHero.setStaUpdTime(updateTime);
+			}
+		} else if (gameHero.getStamina() >= gameHero.getMaxExp()) {
+			gameHero.setStaUpdTime(updateTime);
+		}
+		repository.save(gameHero);
 	}
 
 
@@ -117,7 +141,7 @@ public class JoinZoneEventHandler extends BaseServerEventHandler {
 		gameHero.setExp(0);
 		gameHero.setLevel(1);
 		gameHero.setSoul(10);
-		gameHero.setStamina(120);
+		gameHero.setStamina(100);
 		gameHero.setZen(20000);
 		gameHero.setMaxExp(10000);
 		gameHero.setVipLevel(1);
@@ -143,6 +167,16 @@ public class JoinZoneEventHandler extends BaseServerEventHandler {
 		heroStage.setUnlock(true);
 		stageRepository.save(heroStage);
 		return gameHero;
+	}
+
+
+	private long getStartOfDateMilis() {
+		return DateUtils.truncate(new Date(), Calendar.DATE).getTime();
+	}
+
+
+	private long getEndOfDateMilis() {
+		return DateUtils.addMilliseconds(DateUtils.ceiling(new Date(), Calendar.DATE), -1).getTime();
 	}
 
 }

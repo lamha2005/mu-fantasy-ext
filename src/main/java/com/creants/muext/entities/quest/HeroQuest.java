@@ -15,8 +15,9 @@ public class HeroQuest extends AbstractQuest {
 	public int questIndex;
 	@Indexed
 	private transient String heroId;
-	public boolean finish;
-	public long createTime;
+	public transient boolean finish;
+	public transient long createTime;
+	public boolean claim;
 
 
 	public long getId() {
@@ -66,6 +67,16 @@ public class HeroQuest extends AbstractQuest {
 
 	public void setCreateTime(long createTime) {
 		this.createTime = createTime;
+	}
+
+
+	public boolean isClaim() {
+		return claim;
+	}
+
+
+	public void setClaim(boolean claim) {
+		this.claim = claim;
 	}
 
 }

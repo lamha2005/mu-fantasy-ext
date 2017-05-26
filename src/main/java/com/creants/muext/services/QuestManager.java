@@ -1,10 +1,13 @@
 package com.creants.muext.services;
 
 import java.util.ArrayList;
+import java.util.Calendar;
+import java.util.Date;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Set;
 
+import org.apache.commons.lang.time.DateUtils;
 import org.springframework.beans.factory.InitializingBean;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
@@ -103,6 +106,69 @@ public class QuestManager implements InitializingBean {
 			quests.add(quest);
 		}
 		questStatsRespository.save(quests);
+
+		registerDailyQuestFromHero(gameHero);
+	}
+
+
+	private void registerDailyQuestFromHero(GameHero gameHero) {
+		long currentTimeMillis = System.currentTimeMillis();
+		List<HeroQuest> quests = new ArrayList<HeroQuest>();
+		HeroQuest quest = new HeroQuest();
+		quest.setHeroId(gameHero.getId());
+		quest.setQuestIndex(200);
+		quest.setId(sequenceRepository.getNextSequenceId(QUEST_ID_SEQ));
+		quest.setGroupId(GROUP_DAILY_QUEST);
+		quest.setCreateTime(currentTimeMillis);
+		quest.setTaskType(TaskType.WinCampain.getId());
+		quest.setName("Win Campain");
+		quest.setDesc("Người chơi chiến thắng Campain");
+		Task task = new Task();
+		HashMap<Object, Object> properties = new HashMap<>();
+		properties.put("count", 5);
+		task.setProperties(properties);
+		quest.setTask(task);
+		quests.add(quest);
+
+		HeroQuest quest1 = new HeroQuest();
+		quest1.setHeroId(gameHero.getId());
+		quest1.setQuestIndex(201);
+		quest1.setId(sequenceRepository.getNextSequenceId(QUEST_ID_SEQ));
+		quest1.setGroupId(GROUP_DAILY_QUEST);
+		quest1.setCreateTime(currentTimeMillis);
+		quest1.setTaskType(TaskType.WinChaos.getId());
+		quest1.setName("Win Chaos");
+		quest1.setDesc("Người chơi chiến thắng Chaos");
+		Task task1 = new Task();
+		HashMap<Object, Object> properties1 = new HashMap<>();
+		properties1.put("count", 5);
+		task1.setProperties(properties);
+		quest1.setTask(task1);
+
+		quests.add(quest1);
+		questStatsRespository.save(quests);
+	}
+
+
+	public List<HeroQuest> resetDailyQuest(GameHero gameHero) {
+		List<HeroQuest> quests = questStatsRespository.findDailyQuestNeedRemove(gameHero.getId(),
+				getStartOfDateMilis());
+		long currentTimeMillis = System.currentTimeMillis();
+		for (HeroQuest heroQuest : quests) {
+			heroQuest.setCreateTime(currentTimeMillis);
+			heroQuest.setFinish(false);
+			heroQuest.setClaim(false);
+		}
+
+		questStatsRespository.save(quests);
+		// TODO trường hợp sau này có thêm/bỏ nhiệm vụ sẽ cập nhật ở đây mỗi khi
+		// user đăng nhập
+		return quests;
+	}
+
+
+	private long getStartOfDateMilis() {
+		return DateUtils.truncate(new Date(), Calendar.DATE).getTime();
 	}
 
 }

@@ -1,19 +1,17 @@
 package com.creants.muext.entities.quest;
 
 import com.creants.creants_2x.socket.gate.protocol.serialization.SerializableQAntType;
-import com.creants.muext.entities.Reward;
 
 /**
  * @author LamHM
  *
  */
 public class AbstractQuest implements SerializableQAntType {
-	public String name;
-	public String desc;
-	public int groupId;
-	public int taskType;
+	public transient String name;
+	public transient String desc;
+	public transient int groupId;
+	public transient int taskType;
 	public Task task;
-	private transient Reward reward;
 
 
 	public String getName() {
@@ -63,16 +61,6 @@ public class AbstractQuest implements SerializableQAntType {
 
 	public void setTask(Task task) {
 		this.task = task;
-	}
-
-
-	public Reward getReward() {
-		return reward;
-	}
-
-
-	public void setReward(Reward reward) {
-		this.reward = reward;
 	}
 
 }
