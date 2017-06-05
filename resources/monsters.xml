@@ -1,9 +1,34 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <MonsterList>
-	<Monster Index="0" Name="Bull Fighter" Image="bull" Level="6" Dam="5" HealthPoint="100" Defense="6" MagicResistance="10" Speed="150" MonsterX2DamageChance="0.4"/>
-	<Monster Index="1" Name="Yeti" Image="yeti" Level="6" Dam="6" HealthPoint="100" Defense="6" MagicResistance="10" Speed="150" MonsterX2DamageChance="0.4"/>
-	<Monster Index="2" Name="Gaint" Image="gaint" Level="6" Dam="4" HealthPoint="100" Defense="6" MagicResistance="10" Speed="150" MonsterX2DamageChance="0.4"/>
-	<Monster Index="3" Name="Elite Yeti" Image="eliteyeti" Level="6" Dam="9" HealthPoint="100" Defense="6" MagicResistance="10" Speed="150" MonsterX2DamageChance="0.4"/>
-	<Monster Index="4" Name="Ice Queen" Image="icequee" Level="6" Dam="5" HealthPoint="100" Defense="6" MagicResistance="10" Speed="150" MonsterX2DamageChance="0.4"/>
+	<Monster Index="0" Name="Bull Fighter" Image="bull" Level="6" Dam="2" HealthPoint="100" Defense="6" MagicResistance="10" Speed="150" MonsterX2DamageChance="0.4" Ranger="false"/>
+	<Monster Index="1" Name="Bull Fighter" Image="bull" Level="6" Dam="4" HealthPoint="120" Defense="6" MagicResistance="10" Speed="150" MonsterX2DamageChance="0.1" Ranger="false"/>
+	<Monster Index="2" Name="Bull Fighter" Image="bull" Level="6" Dam="6" HealthPoint="100" Defense="6" MagicResistance="10" Speed="150" MonsterX2DamageChance="0.4" Ranger="false"/>
+	<Monster Index="3" Name="Bull Fighter" Image="bull" Level="6" Dam="8" HealthPoint="130" Defense="6" MagicResistance="10" Speed="150" MonsterX2DamageChance="0.4" Ranger="false"/>
+	<Monster Index="4" Name="Bull Fighter" Image="bull" Level="6" Dam="10" HealthPoint="100" Defense="6" MagicResistance="10" Speed="150" MonsterX2DamageChance="0.4" Ranger="false"/>
+	<Monster Index="5" Name="Bull Fighter" Image="bull" Level="6" Dam="12" HealthPoint="140" Defense="6" MagicResistance="10" Speed="150" MonsterX2DamageChance="0.4" Ranger="false"/>
+	<Monster Index="6" Name="Yeti" Image="yeti" Level="6" Dam="6" HealthPoint="150" Defense="6" MagicResistance="10" Speed="150" MonsterX2DamageChance="0.4" Ranger="false"/>
+	<Monster Index="7" Name="Yeti" Image="yeti" Level="6" Dam="8" HealthPoint="160" Defense="6" MagicResistance="10" Speed="150" MonsterX2DamageChance="0.4" Ranger="false"/>
+	<Monster Index="8" Name="Yeti" Image="yeti" Level="6" Dam="10" HealthPoint="150" Defense="6" MagicResistance="10" Speed="150" MonsterX2DamageChance="0.4" Ranger="false"/>
+	<Monster Index="9" Name="Yeti" Image="yeti" Level="6" Dam="11" HealthPoint="160" Defense="6" MagicResistance="10" Speed="150" MonsterX2DamageChance="0.4" Ranger="false"/>
+	<Monster Index="10" Name="Yeti" Image="yeti" Level="6" Dam="12" HealthPoint="160" Defense="6" MagicResistance="10" Speed="150" MonsterX2DamageChance="0.4" Ranger="false"/>
+	<Monster Index="11" Name="Gaint" Image="gaint" Level="6" Dam="13" HealthPoint="160" Defense="6" MagicResistance="10" Speed="150" MonsterX2DamageChance="0.2" Ranger="false"/>
+	<Monster Index="12" Name="Gaint" Image="gaint" Level="6" Dam="14" HealthPoint="160" Defense="6" MagicResistance="10" Speed="150" MonsterX2DamageChance="0.2" Ranger="false"/>
+	<Monster Index="13" Name="Gaint" Image="gaint" Level="6" Dam="15" HealthPoint="180" Defense="6" MagicResistance="10" Speed="150" MonsterX2DamageChance="0.2" Ranger="false"/>
+	<Monster Index="14" Name="Gaint" Image="gaint" Level="6" Dam="6" HealthPoint="190" Defense="6" MagicResistance="10" Speed="150" MonsterX2DamageChance="0.2" Ranger="false"/>
+	<Monster Index="15" Name="Gaint" Image="gaint" Level="6" Dam="6" HealthPoint="220" Defense="6" MagicResistance="10" Speed="150" MonsterX2DamageChance="0.2" Ranger="false"/>
+	<Monster Index="16" Name="Elite Yeti" Image="eliteyeti" Level="8" Dam="24" HealthPoint="200" Defense="6" MagicResistance="10" Speed="150" MonsterX2DamageChance="0.3" Ranger="false"/>
+	<Monster Index="17" Name="Elite Yeti" Image="eliteyeti" Level="8" Dam="24" HealthPoint="250" Defense="6" MagicResistance="10" Speed="150" MonsterX2DamageChance="0.3" Ranger="false"/>
+	<Monster Index="18" Name="Elite Yeti" Image="eliteyeti" Level="8" Dam="8" HealthPoint="230" Defense="6" MagicResistance="10" Speed="150" MonsterX2DamageChance="0.3" Ranger="false"/>
+	<Monster Index="19" Name="Elite Yeti" Image="eliteyeti" Level="8" Dam="8" HealthPoint="280" Defense="6" MagicResistance="10" Speed="150" MonsterX2DamageChance="0.3" Ranger="false"/>
+	<Monster Index="20" Name="Elite Yeti" Image="eliteyeti" Level="8" Dam="8" HealthPoint="300" Defense="6" MagicResistance="10" Speed="150" MonsterX2DamageChance="0.3" Ranger="false"/>
+	<Monster Index="21" Name="Ice Queen" Image="icequee" Level="6" Dam="10" HealthPoint="310" Defense="6" MagicResistance="10" Speed="150" MonsterX2DamageChance="0.4" Ranger="true"/>
+	<Monster Index="22" Name="Ice Queen" Image="icequee" Level="6" Dam="10" HealthPoint="320" Defense="6" MagicResistance="10" Speed="150" MonsterX2DamageChance="0.4" Ranger="true"/>
+	<Monster Index="23" Name="Ice Queen" Image="icequee" Level="6" Dam="10" HealthPoint="300" Defense="6" MagicResistance="10" Speed="150" MonsterX2DamageChance="0.4" Ranger="true"/>
+	<Monster Index="24" Name="Ice Queen" Image="icequee" Level="6" Dam="10" HealthPoint="300" Defense="6" MagicResistance="10" Speed="150" MonsterX2DamageChance="0.4" Ranger="true"/>
+	<Monster Index="25" Name="Ice Queen" Image="icequee" Level="6" Dam="10" HealthPoint="340" Defense="6" MagicResistance="10" Speed="150" MonsterX2DamageChance="0.4" Ranger="true"/>
+	<Monster Index="26" Name="Ice Queen BOSS" Image="icequee" Level="16" Dam="25" HealthPoint="500" Defense="1" MagicResistance="10" Speed="150" MonsterX2DamageChance="0.2" Ranger="true"/>
+	<Monster Index="27" Name="Ice Queen BOSS" Image="icequee" Level="16" Dam="25" HealthPoint="550" Defense="1" MagicResistance="10" Speed="150" MonsterX2DamageChance="0.2" Ranger="true"/>
+	<Monster Index="28" Name="Ice Queen BOSS" Image="icequee" Level="16" Dam="25" HealthPoint="600" Defense="1" MagicResistance="10" Speed="150" MonsterX2DamageChance="0.2" Ranger="true"/>
+	<Monster Index="29" Name="Ice Queen BOSS" Image="icequee" Level="16" Dam="25" HealthPoint="650" Defense="1" MagicResistance="10" Speed="150" MonsterX2DamageChance="0.2" Ranger="true"/>
 </MonsterList>
 

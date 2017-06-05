@@ -48,7 +48,7 @@ public class StageConfig {
 			chapters = new HashMap<>();
 			XMLStreamReader sr = f.createXMLStreamReader(new FileInputStream(STAGE_CONFIG));
 			XmlMapper mapper = new XmlMapper();
-			sr.next(); // to point to <Monsters>
+			sr.next(); // to point to <Stages>
 			sr.next();
 			Stage stage = null;
 			while (sr.hasNext()) {
@@ -62,7 +62,6 @@ public class StageConfig {
 					chapter.setName(stage.getChapterName());
 					chapters.put(stage.getChapterIndex(), chapter);
 				} catch (NoSuchElementException e) {
-
 				}
 			}
 

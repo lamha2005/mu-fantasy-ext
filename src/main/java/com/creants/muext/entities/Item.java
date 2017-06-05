@@ -13,7 +13,8 @@ public class Item {
 	private int groupId;
 	private String name;
 	private String img;
-	private int no;
+	private Integer no;
+	private Integer gridIndex;
 
 
 	public int getIndex() {
@@ -26,12 +27,12 @@ public class Item {
 	}
 
 
-	public int getNo() {
+	public Integer getNo() {
 		return no;
 	}
 
 
-	public void setNo(int no) {
+	public void setNo(Integer no) {
 		this.no = no;
 	}
 
@@ -63,6 +64,16 @@ public class Item {
 
 	public void setImg(String img) {
 		this.img = img;
+	}
+
+
+	public Integer getGridIndex() {
+		return gridIndex;
+	}
+
+
+	public void setGridIndex(Integer gridIndex) {
+		this.gridIndex = gridIndex;
 	}
 
 }

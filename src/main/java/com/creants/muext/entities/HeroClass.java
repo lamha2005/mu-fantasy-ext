@@ -23,6 +23,8 @@ import com.fasterxml.jackson.dataformat.xml.annotation.JacksonXmlProperty;
 public abstract class HeroClass extends Character {
 	@JacksonXmlProperty(localName = "Index", isAttribute = true)
 	public int index;
+	@JacksonXmlProperty(localName = "Ranger", isAttribute = true)
+	public boolean ranger;
 	@Id
 	public long id;
 	public int exp;
@@ -194,6 +196,16 @@ public abstract class HeroClass extends Character {
 
 	public int getExpPoolSize() {
 		return -1;
+	}
+
+
+	public boolean isRanger() {
+		return ranger;
+	}
+
+
+	public void setRanger(boolean ranger) {
+		this.ranger = ranger;
 	}
 
 

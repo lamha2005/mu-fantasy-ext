@@ -16,7 +16,9 @@ import com.creants.muext.entities.GameHero;
 import com.creants.muext.entities.HeroClass;
 import com.creants.muext.entities.Monster;
 import com.creants.muext.entities.world.Stage;
+import com.creants.muext.exception.ErrorCode;
 import com.creants.muext.managers.MatchManager;
+import com.creants.muext.services.MessageFactory;
 import com.creants.muext.util.UserHelper;
 
 /**
@@ -25,6 +27,7 @@ import com.creants.muext.util.UserHelper;
  * @author LamHa
  */
 public class StageRequestHandler extends BaseClientRequestHandler {
+	private static final String CMD = "cmd_join_stage";
 	public static final String STAGE_INDEX = "stgid";
 	// 6 phút rehi stamina 1 lần
 	public static final int STAMINA_REHI_TIME_MILI = 60000;
@@ -47,7 +50,7 @@ public class StageRequestHandler extends BaseClientRequestHandler {
 		int stageIndex = params.getInt(STAGE_INDEX);
 		Stage stage = StageConfig.getInstance().getStage(stageIndex);
 		if (stage == null) {
-			// TODO throw exception
+			send("cmd_exception", MessageFactory.createErrorMsg(CMD, ErrorCode.STAGE_NOT_FOUND), user);
 			return;
 		}
 
@@ -107,7 +110,7 @@ public class StageRequestHandler extends BaseClientRequestHandler {
 		script.putQAntArray("heroes", heroArr);
 
 		params.putQAntObject("script", script);
-		send("cmd_join_stage", params, user);
+		send(CMD, params, user);
 
 		matchManager.newMatch(gameHeroId, params);
 	}
@@ -125,7 +128,7 @@ public class StageRequestHandler extends BaseClientRequestHandler {
 				gameHero.setStamina(newStamina > gameHero.getMaxStamina() ? gameHero.getMaxStamina() : newStamina);
 				gameHero.setStaUpdTime(updateTime);
 			}
-		} else if (gameHero.getStamina() >= gameHero.getMaxExp()) {
+		} else {
 			System.out.println("[DEBUG] *********************** request stage: " + updateTime);
 			gameHero.setStaUpdTime(updateTime);
 		}

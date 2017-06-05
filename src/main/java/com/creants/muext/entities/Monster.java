@@ -43,6 +43,9 @@ public class Monster implements SerializableQAntType {
 	@JacksonXmlProperty(localName = "Speed", isAttribute = true)
 	public int spd;
 
+	@JacksonXmlProperty(localName = "Ranger", isAttribute = true)
+	public boolean ranger;
+
 
 	public Monster() {
 
@@ -173,6 +176,16 @@ public class Monster implements SerializableQAntType {
 
 	public String getName() {
 		return name;
+	}
+
+
+	public boolean isRanger() {
+		return ranger;
+	}
+
+
+	public void setRanger(boolean ranger) {
+		this.ranger = ranger;
 	}
 
 

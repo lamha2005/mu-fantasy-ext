@@ -170,7 +170,7 @@ public class StageFinishRequestHandler extends BaseClientRequestHandler {
 		if (exp > 0) {
 			gameHero.setExp(gameHero.getExp() + exp);
 			boolean isLevelUp = false;
-			while (gameHero.getExp() > gameHero.getMaxExp()) {
+			while (gameHero.getExp() >= gameHero.getMaxExp()) {
 				gameHero.setExp(gameHero.getExp() - gameHero.getMaxExp());
 				gameHero.setLevel(gameHero.getLevel() + 1);
 				gameHero.setMaxExp(gameHero.getLevel() * 10000);

@@ -2,6 +2,7 @@ package com.creants.muext.controllers;
 
 import java.util.ArrayList;
 import java.util.Calendar;
+import java.util.Collections;
 import java.util.Date;
 import java.util.List;
 
@@ -11,6 +12,7 @@ import com.creants.creants_2x.core.IQAntEvent;
 import com.creants.creants_2x.core.QAntEventParam;
 import com.creants.creants_2x.core.exception.QAntException;
 import com.creants.creants_2x.core.extension.BaseServerEventHandler;
+import com.creants.creants_2x.core.util.QAntTracer;
 import com.creants.creants_2x.socket.gate.entities.IQAntArray;
 import com.creants.creants_2x.socket.gate.entities.IQAntObject;
 import com.creants.creants_2x.socket.gate.entities.QAntArray;
@@ -76,6 +78,11 @@ public class JoinZoneEventHandler extends BaseServerEventHandler {
 			gameHero = createNewGameHero(creantsUserId);
 		} else {
 			List<HeroClass> heroes = heroRepository.findHeroesByGameHeroId(gameHeroId);
+			for (HeroClass heroClass : heroes) {
+				heroClass.setRanger(!(heroClass.getIndex() == 10));
+			}
+			heroRepository.save(heroes);
+			Collections.reverse(heroes);
 			gameHero.setHeroes(heroes);
 		}
 
@@ -148,11 +155,12 @@ public class JoinZoneEventHandler extends BaseServerEventHandler {
 		gameHero.setVipPoint(0);
 		gameHero.setMaxVipPoint(100);
 
+		QAntTracer.debug(this.getClass(), "Create new hero: " + gameHero.getId());
+
 		// cho trước 3 nhân vật
-		List<HeroClass> heroes = new ArrayList<>(3);
+		List<HeroClass> heroes = new ArrayList<>(2);
 		heroes.add(heroManager.createNewHero(gameHero.getId(), HeroClassType.DARK_KNIGHT));
 		heroes.add(heroManager.createNewHero(gameHero.getId(), HeroClassType.FAIRY_ELF));
-		heroes.add(heroManager.createNewHero(gameHero.getId(), HeroClassType.DARK_WIZARD));
 		gameHero.setHeroes(heroes);
 		heroRepository.save(heroes);
 
