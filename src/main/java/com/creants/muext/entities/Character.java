@@ -2,7 +2,7 @@ package com.creants.muext.entities;
 
 import org.springframework.data.annotation.Transient;
 
-import com.creants.creants_2x.socket.gate.protocol.serialization.SerializableQAntType;
+import com.creants.muext.entities.states.AdditionLevelUpStats;
 import com.creants.muext.entities.states.BaseStats;
 import com.creants.muext.entities.states.SubStats;
 import com.fasterxml.jackson.dataformat.xml.annotation.JacksonXmlProperty;
@@ -11,21 +11,19 @@ import com.fasterxml.jackson.dataformat.xml.annotation.JacksonXmlProperty;
  * @author LamHM
  *
  */
-public class Character implements SerializableQAntType {
+public class Character {
 	@JacksonXmlProperty(localName = "Name")
-	public String name;
-	@JacksonXmlProperty(localName = "Level")
-	public int level;
+	private String name;
 
 	@JacksonXmlProperty(localName = "BaseStats")
-	@Transient
 	private transient BaseStats baseStats;
 	@JacksonXmlProperty(localName = "SubStats")
 	private SubStats subStats;
+	@JacksonXmlProperty(localName = "LevelUpStats")
+	private AdditionLevelUpStats levelUpStats;
 
 
 	public Character() {
-		level = 1;
 	}
 
 
@@ -36,16 +34,6 @@ public class Character implements SerializableQAntType {
 
 	public void setName(String name) {
 		this.name = name;
-	}
-
-
-	public int getLevel() {
-		return level;
-	}
-
-
-	public void setLevel(int level) {
-		this.level = level;
 	}
 
 
@@ -66,6 +54,11 @@ public class Character implements SerializableQAntType {
 
 	public void setSubStats(SubStats subStats) {
 		this.subStats = subStats;
+	}
+
+
+	public AdditionLevelUpStats getLevelUpStats() {
+		return levelUpStats;
 	}
 
 }

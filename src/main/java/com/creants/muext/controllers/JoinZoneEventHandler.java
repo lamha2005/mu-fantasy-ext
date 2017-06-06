@@ -1,8 +1,6 @@
 package com.creants.muext.controllers;
 
-import java.util.ArrayList;
 import java.util.Calendar;
-import java.util.Collections;
 import java.util.Date;
 import java.util.List;
 
@@ -21,13 +19,11 @@ import com.creants.creants_2x.socket.gate.wood.QAntUser;
 import com.creants.muext.Creants2XApplication;
 import com.creants.muext.config.StageConfig;
 import com.creants.muext.dao.GameHeroRepository;
-import com.creants.muext.dao.HeroRepository;
 import com.creants.muext.dao.HeroStageRepository;
 import com.creants.muext.dao.QuestStatsRepository;
 import com.creants.muext.dao.SequenceRepository;
 import com.creants.muext.entities.GameHero;
 import com.creants.muext.entities.HeroClass;
-import com.creants.muext.entities.HeroClassType;
 import com.creants.muext.entities.quest.HeroQuest;
 import com.creants.muext.entities.world.HeroStage;
 import com.creants.muext.managers.HeroClassManager;
@@ -45,7 +41,6 @@ public class JoinZoneEventHandler extends BaseServerEventHandler {
 	public static final int STAMINA_REHI_VALUE = 1;
 
 	private GameHeroRepository repository;
-	private HeroRepository heroRepository;
 	private QuestStatsRepository questStatsRepository;
 	private QuestManager questManager;
 	private HeroClassManager heroManager;
@@ -58,7 +53,6 @@ public class JoinZoneEventHandler extends BaseServerEventHandler {
 		questStatsRepository = Creants2XApplication.getBean(QuestStatsRepository.class);
 		questManager = Creants2XApplication.getBean(QuestManager.class);
 		heroManager = Creants2XApplication.getBean(HeroClassManager.class);
-		heroRepository = Creants2XApplication.getBean(HeroRepository.class);
 		sequenceRepository = Creants2XApplication.getBean(SequenceRepository.class);
 		stageRepository = Creants2XApplication.getBean(HeroStageRepository.class);
 	}
@@ -77,12 +71,7 @@ public class JoinZoneEventHandler extends BaseServerEventHandler {
 		if (gameHero == null) {
 			gameHero = createNewGameHero(creantsUserId);
 		} else {
-			List<HeroClass> heroes = heroRepository.findHeroesByGameHeroId(gameHeroId);
-			for (HeroClass heroClass : heroes) {
-				heroClass.setRanger(!(heroClass.getIndex() == 10));
-			}
-			heroRepository.save(heroes);
-			Collections.reverse(heroes);
+			List<HeroClass> heroes = heroManager.findHeroesByGameHeroId(gameHeroId);
 			gameHero.setHeroes(heroes);
 		}
 
@@ -154,23 +143,21 @@ public class JoinZoneEventHandler extends BaseServerEventHandler {
 		gameHero.setVipLevel(1);
 		gameHero.setVipPoint(0);
 		gameHero.setMaxVipPoint(100);
+		repository.save(gameHero);
 
-		QAntTracer.debug(this.getClass(), "Create new hero: " + gameHero.getId());
+		String gameHeroId = gameHero.getId();
+		QAntTracer.debug(this.getClass(), "Create new hero: " + gameHeroId);
 
-		// cho trước 3 nhân vật
-		List<HeroClass> heroes = new ArrayList<>(2);
-		heroes.add(heroManager.createNewHero(gameHero.getId(), HeroClassType.DARK_KNIGHT));
-		heroes.add(heroManager.createNewHero(gameHero.getId(), HeroClassType.FAIRY_ELF));
-		gameHero.setHeroes(heroes);
-		heroRepository.save(heroes);
+		// cho trước 2 nhân vật
+		List<HeroClass> endowHeroes = heroManager.endowHeroes(gameHeroId);
+		gameHero.setHeroes(endowHeroes);
 
-		gameHero = repository.save(gameHero);
 		// tạo nhiệm vụ cho hero
 		questManager.registerQuestsFromHero(gameHero);
 
 		// mở world, chapter, stage, mission
 		HeroStage heroStage = new HeroStage(StageConfig.getInstance().getStage(100));
-		heroStage.setHeroId(gameHero.getId());
+		heroStage.setHeroId(gameHeroId);
 		heroStage.setId(sequenceRepository.getNextSequenceId("hero_stage_id"));
 		heroStage.setUnlock(true);
 		stageRepository.save(heroStage);

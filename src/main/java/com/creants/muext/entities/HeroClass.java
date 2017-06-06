@@ -9,45 +9,64 @@ import org.springframework.data.annotation.Transient;
 import org.springframework.data.mongodb.core.index.Indexed;
 import org.springframework.data.mongodb.core.mapping.Document;
 
+import com.creants.creants_2x.socket.gate.protocol.serialization.SerializableQAntType;
 import com.creants.muext.config.GameConfig;
 import com.creants.muext.entities.states.AdditionLevelUpStats;
-import com.creants.muext.entities.states.AdditionStats;
 import com.creants.muext.entities.states.BaseStats;
-import com.fasterxml.jackson.dataformat.xml.annotation.JacksonXmlProperty;
 
 /**
  * @author LamHM
  *
  */
 @Document(collection = "heroes")
-public abstract class HeroClass extends Character {
-	@JacksonXmlProperty(localName = "Index", isAttribute = true)
-	public int index;
-	@JacksonXmlProperty(localName = "Ranger", isAttribute = true)
-	public boolean ranger;
+public class HeroClass implements SerializableQAntType {
 	@Id
 	public long id;
-	public int exp;
-	public int rank;
-
-	public int atk;
-	public int mag;
-	public int hp;
-	public int mp;
-	public int def;
-	public int res;
-	public int spd;
-	@Indexed
-	public transient String gameHeroId;
-
-	private AdditionStats additionStats;
-	@JacksonXmlProperty(localName = "LevelUpStats")
 	@Transient
-	private AdditionLevelUpStats levelUpStats;
+	public int exp;
+	@Transient
+	public int atk;
+	@Transient
+	public int mag;
+	@Transient
+	public int hp;
+	@Transient
+	public int mp;
+	@Transient
+	public int def;
+	@Transient
+	public int res;
+	@Transient
+	public int spd;
+	@Transient
+	public boolean ranger;
+	@Indexed
+	public String gameHeroId;
+	public String name;
+	public int level;
+	public int index;
+
+	@Transient
+	private transient HeroBase heroBase;
 
 
 	public HeroClass() {
-		init();
+		level = 1;
+	}
+
+
+	public HeroClass(HeroBase heroBase) {
+		level = 1;
+		this.heroBase = heroBase;
+		initBaseInfo();
+	}
+
+
+	private void initBaseInfo() {
+		name = heroBase.getName();
+		index = heroBase.getIndex();
+		ranger = heroBase.isRanger();
+		levelUp(level);
 	}
 
 
@@ -56,21 +75,14 @@ public abstract class HeroClass extends Character {
 	}
 
 
-	public abstract void init();
+	public HeroBase getHeroBase() {
+		return heroBase;
+	}
 
 
-	@SuppressWarnings("unchecked")
-	public <T> T setDefaultStats() {
-		BaseStats baseStats = getBaseStats();
-		rank = 1;
-		atk = baseStats.getAtk();
-		mag = baseStats.getMag();
-		hp = baseStats.getHp();
-		mp = baseStats.getMp();
-		def = baseStats.getDef();
-		res = baseStats.getRes();
-		spd = baseStats.getSpd();
-		return (T) this;
+	public void setHeroBase(HeroBase heroBase) {
+		this.heroBase = heroBase;
+		initBaseInfo();
 	}
 
 
@@ -81,16 +93,6 @@ public abstract class HeroClass extends Character {
 
 	public void setGameHeroId(String gameHeroId) {
 		this.gameHeroId = gameHeroId;
-	}
-
-
-	public int getIndex() {
-		return index;
-	}
-
-
-	public void setIndex(int index) {
-		this.index = index;
 	}
 
 
@@ -129,36 +131,6 @@ public abstract class HeroClass extends Character {
 	}
 
 
-	public int getRank() {
-		return rank;
-	}
-
-
-	public void setRank(int rank) {
-		this.rank = rank;
-	}
-
-
-	public AdditionStats getAdditionStats() {
-		return additionStats;
-	}
-
-
-	public void setAdditionStats(AdditionStats additionStats) {
-		this.additionStats = additionStats;
-	}
-
-
-	public AdditionLevelUpStats getLevelUpStats() {
-		return levelUpStats;
-	}
-
-
-	public void setLevelUpStats(AdditionLevelUpStats levelUpStats) {
-		this.levelUpStats = levelUpStats;
-	}
-
-
 	public int getAtk() {
 		return atk;
 	}
@@ -194,29 +166,31 @@ public abstract class HeroClass extends Character {
 	}
 
 
+	public int getIndex() {
+		return index;
+	}
+
+
+	public void setIndex(int index) {
+		this.index = index;
+	}
+
+
 	public int getExpPoolSize() {
 		return -1;
 	}
 
 
-	public boolean isRanger() {
-		return ranger;
-	}
-
-
-	public void setRanger(boolean ranger) {
-		this.ranger = ranger;
-	}
-
-
 	public void levelUp(int levelUp) {
-		atk = getBaseStats().getAtk() + (levelUp - 1) * levelUpStats.getAtk();
-		mag = getBaseStats().getMag() + (levelUp - 1) * levelUpStats.getMag();
-		hp = getBaseStats().getHp() + (levelUp - 1) * levelUpStats.getHp();
-		mp = (int) (getBaseStats().getMp() + (levelUp - 1) * levelUpStats.getMp());
-		def = (int) (getBaseStats().getDef() + (levelUp - 1) * levelUpStats.getDef());
-		res = (int) (getBaseStats().getRes() + (levelUp - 1) * levelUpStats.getRes());
-		spd = (int) (getBaseStats().getSpd() + (levelUp - 1) * levelUpStats.getSpd());
+		BaseStats baseStats = heroBase.getBaseStats();
+		AdditionLevelUpStats levelUpStats = heroBase.getLevelUpStats();
+		atk = baseStats.getAtk() + (levelUp - 1) * levelUpStats.getAtk();
+		mag = baseStats.getMag() + (levelUp - 1) * levelUpStats.getMag();
+		hp = baseStats.getHp() + (levelUp - 1) * levelUpStats.getHp();
+		mp = (int) (baseStats.getMp() + (levelUp - 1) * levelUpStats.getMp());
+		def = (int) (baseStats.getDef() + (levelUp - 1) * levelUpStats.getDef());
+		res = (int) (baseStats.getRes() + (levelUp - 1) * levelUpStats.getRes());
+		spd = (int) (baseStats.getSpd() + (levelUp - 1) * levelUpStats.getSpd());
 	}
 
 
@@ -224,7 +198,7 @@ public abstract class HeroClass extends Character {
 		Random rd = new Random();
 		int attackNo = roundNo * 20;
 
-		int chance = (int) (getSubStats().getCritch() * 100);
+		int chance = (int) (heroBase.getSubStats().getCritch() * 100);
 		float critRate = GameConfig.getInstance().getCritRate(chance);
 		List<Byte> critList = new ArrayList<Byte>();
 		int count = 1;

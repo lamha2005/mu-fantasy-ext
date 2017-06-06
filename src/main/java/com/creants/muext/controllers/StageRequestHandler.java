@@ -11,12 +11,12 @@ import com.creants.creants_2x.socket.gate.wood.QAntUser;
 import com.creants.muext.Creants2XApplication;
 import com.creants.muext.config.StageConfig;
 import com.creants.muext.dao.GameHeroRepository;
-import com.creants.muext.dao.HeroRepository;
 import com.creants.muext.entities.GameHero;
 import com.creants.muext.entities.HeroClass;
 import com.creants.muext.entities.Monster;
 import com.creants.muext.entities.world.Stage;
 import com.creants.muext.exception.ErrorCode;
+import com.creants.muext.managers.HeroClassManager;
 import com.creants.muext.managers.MatchManager;
 import com.creants.muext.services.MessageFactory;
 import com.creants.muext.util.UserHelper;
@@ -33,14 +33,14 @@ public class StageRequestHandler extends BaseClientRequestHandler {
 	public static final int STAMINA_REHI_TIME_MILI = 60000;
 	public static final int STAMINA_REHI_VALUE = 1;
 	private MatchManager matchManager;
-	private HeroRepository heroRepository;
 	private GameHeroRepository repository;
+	private HeroClassManager heroManager;
 
 
 	public StageRequestHandler() {
 		matchManager = Creants2XApplication.getBean(MatchManager.class);
-		heroRepository = Creants2XApplication.getBean(HeroRepository.class);
 		repository = Creants2XApplication.getBean(GameHeroRepository.class);
+		heroManager = Creants2XApplication.getBean(HeroClassManager.class);
 	}
 
 
@@ -100,7 +100,7 @@ public class StageRequestHandler extends BaseClientRequestHandler {
 		script.putQAntArray("monsters", monsterArr);
 
 		IQAntArray heroArr = QAntArray.newInstance();
-		List<HeroClass> heroes = heroRepository.findHeroesByGameHeroId(gameHeroId);
+		List<HeroClass> heroes = heroManager.findHeroesByGameHeroId(gameHeroId);
 		for (HeroClass hero : heroes) {
 			IQAntObject obj = QAntObject.newInstance();
 			obj.putLong("id", hero.getId());

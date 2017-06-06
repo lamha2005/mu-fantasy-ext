@@ -20,4 +20,9 @@ public enum HeroClassType {
 		this.nameVi = nameVi;
 	}
 
+
+	public int getId() {
+		return id;
+	}
+
 }
