@@ -1,0 +1,7 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<EquipmentList>
+	<Item ItemGroup="0" ItemIndex="0" ItemName="Short Sword" EquipSlot="1" ItemRank="0" SkillIndex="0" OptionIndex="0" TwoHanded="false" LVRequire="1" ATK="5" HP="0" MP="0" DEF="0" BlessCost="1" ZenCost="100" RefunCost="17" Recipe="0" Upgarde="true" Disassemble="true" AvailableClass="10" Imagefile="shortsword.png" Icon="icon0000.png"/>
+	<Item ItemGroup="0" ItemIndex="1" ItemName="Katana" EquipSlot="1" ItemRank="0" SkillIndex="0" OptionIndex="0" TwoHanded="false" LVRequire="5" ATK="15" HP="0" MP="0" DEF="0" BlessCost="3" ZenCost="2000" RefunCost="333" Recipe="0" Upgarde="true" Disassemble="true" AvailableClass="10" Imagefile="shortsword.png" Icon="icon0000.png"/>
+	<Item ItemGroup="0" ItemIndex="2" ItemName="Assassin" EquipSlot="1" ItemRank="1" SkillIndex="0" OptionIndex="0" TwoHanded="false" LVRequire="5" ATK="50" HP="0" MP="0" DEF="0" BlessCost="5" ZenCost="5000" RefunCost="833" Recipe="0" Upgarde="true" Disassemble="true" AvailableClass="10" Imagefile="shortsword.png" Icon="icon0000.png"/>
+</EquipmentList>
+

@@ -16,7 +16,6 @@ import com.creants.muext.Creants2XApplication;
 import com.creants.muext.dao.HeroStageRepository;
 import com.creants.muext.entities.world.HeroStage;
 import com.creants.muext.entities.world.Stage;
-import com.creants.muext.util.UserHelper;
 
 /**
  * Tham khảo trả về response thế nào SFSResponseApi
@@ -40,7 +39,7 @@ public class JoinChapterRequestHandler extends BaseClientRequestHandler {
 			return;
 		}
 
-		String gameHeroId = UserHelper.getGameHeroId(user);
+		String gameHeroId = user.getName();
 		// reset lại số lần được farm nếu qua ngày
 		List<HeroStage> findStages = stageRepository.findStages(gameHeroId, chapterId, getStartOfDateMilis());
 		if (findStages != null && findStages.size() > 0) {

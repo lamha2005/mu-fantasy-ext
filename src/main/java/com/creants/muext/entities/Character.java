@@ -1,7 +1,5 @@
 package com.creants.muext.entities;
 
-import org.springframework.data.annotation.Transient;
-
 import com.creants.muext.entities.states.AdditionLevelUpStats;
 import com.creants.muext.entities.states.BaseStats;
 import com.creants.muext.entities.states.SubStats;

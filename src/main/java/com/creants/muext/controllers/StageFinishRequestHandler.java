@@ -25,7 +25,6 @@ import com.creants.muext.entities.world.HeroStage;
 import com.creants.muext.entities.world.Stage;
 import com.creants.muext.managers.MatchManager;
 import com.creants.muext.services.QuestManager;
-import com.creants.muext.util.UserHelper;
 
 /**
  * Tham khảo trả về response thế nào SFSResponseApi
@@ -53,7 +52,7 @@ public class StageFinishRequestHandler extends BaseClientRequestHandler {
 
 	@Override
 	public void handleClientRequest(QAntUser user, IQAntObject params) {
-		String gameHeroId = UserHelper.getGameHeroId(user);
+		String gameHeroId = user.getName();
 		Boolean isWin = params.getBool("win");
 		params = QAntObject.newInstance();
 		params.putByte("result", (byte) ((isWin != null && isWin) ? 1 : 0));

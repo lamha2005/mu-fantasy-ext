@@ -21,6 +21,7 @@ import com.creants.muext.entities.HeroBase;
 import com.creants.muext.entities.HeroClass;
 import com.creants.muext.entities.HeroClassType;
 import com.creants.muext.entities.Monster;
+import com.creants.muext.entities.skill.Skill;
 import com.fasterxml.jackson.dataformat.xml.XmlMapper;
 
 /**
@@ -87,10 +88,21 @@ public class HeroClassManager implements InitializingBean {
 	}
 
 
+	/**
+	 * Lấy danh sách hero class
+	 * 
+	 * @param gameHeroId
+	 * @return
+	 */
 	public List<HeroClass> findHeroesByGameHeroId(String gameHeroId) {
 		List<HeroClass> heroes = heroRepository.findHeroesByGameHeroId(gameHeroId);
 		for (HeroClass heroClass : heroes) {
 			heroClass.setHeroBase(getHeroBase(heroClass.getIndex()));
+			if (heroClass.getSkillList().size() <= 0) {
+				HeroBase heroBase = getHeroBase(heroClass.getIndex());
+				resetSkill(heroClass, heroBase.getSkills());
+				heroRepository.save(heroClass);
+			}
 		}
 		return heroes;
 	}
@@ -102,10 +114,23 @@ public class HeroClassManager implements InitializingBean {
 
 
 	public HeroClass createNewHero(String gameHeroId, HeroClassType type) {
-		HeroClass heroClass = new HeroClass(getHeroBase(type.getId()));
+		HeroBase heroBase = getHeroBase(type.getId());
+		HeroClass heroClass = new HeroClass(heroBase);
 		heroClass.setId(getNextHeroId());
 		heroClass.setGameHeroId(gameHeroId);
+		resetSkill(heroClass, heroBase.getSkills());
 		return heroClass;
+	}
+
+
+	private void resetSkill(HeroClass heroClass, int[] skillArr) {
+		for (int i = 0; i < skillArr.length; i++) {
+			int skillIndex = skillArr[i];
+			Skill skill = new Skill();
+			skill.setIndex(skillIndex);
+			skill.setLevel(1);
+			heroClass.addSkill(skill);
+		}
 	}
 
 

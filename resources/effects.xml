@@ -1,0 +1,12 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<EffectList>
+	<Effect Index="1" Name="ATK" Description="Tăng chỉ số  physic attack"	ValueType="interger" EffectType="buff"/>
+	<Effect Index="2" Name="MAG" Description="Tăng chỉ số magic power"	ValueType="interger" EffectType="buff"/>
+	<Effect Index="3" Name="maxHP" Description="Tăng chỉ số HP tối đa"	ValueType="interger" EffectType="buff"/>
+	<Effect Index="4" Name="maxMP" Description="Tăng chỉ số MP tối đa"	ValueType="interger" EffectType="buff"/>
+	<Effect Index="5" Name="HPreg" Description="Tăng chỉ số hồi phục HP"	ValueType="percent" EffectType="buff"/>
+	<Effect Index="6" Name="MPreg" Description="Tăng chỉ số hồi phục MP"	ValueType="percent" EffectType="buff"/>
+	<Effect Index="80" Name="Status Chance" Description="tỷ lệ % xuất hiện ra hiệu ứng (max=100%)" ValueType="percent" EffectType="chance"/>
+	<Effect Index="99" Name="Disable" Description="khiến đối phương mất N lượt (thí dụ: stun-choáng)" ValueType="interger" EffectType="status"/>
+</EffectList>
+

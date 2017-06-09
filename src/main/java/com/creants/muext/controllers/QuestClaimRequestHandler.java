@@ -19,7 +19,6 @@ import com.creants.muext.entities.GameHero;
 import com.creants.muext.entities.Reward;
 import com.creants.muext.entities.quest.HeroQuest;
 import com.creants.muext.entities.quest.Quest;
-import com.creants.muext.util.UserHelper;
 
 /**
  * @author LamHM
@@ -43,14 +42,14 @@ public class QuestClaimRequestHandler extends BaseClientRequestHandler {
 		params = QAntObject.newInstance();
 		if (!heroQuest.isFinish() && heroQuest.isClaim()) {
 			Quest quest = QuestConfig.getInstance().getQuest(heroQuest.getQuestIndex());
-			GameHero gameHero = repository.findOne(UserHelper.getGameHeroId(user));
+			GameHero gameHero = repository.findOne(user.getName());
 			processReward(user, quest.getReward(), gameHero);
 			params.putQAntObject("game_hero", QAntObject.newFromObject(gameHero));
 			heroQuest.setFinish(true);
 			questRepository.save(heroQuest);
 			send("cmd_quest_claim", params, user);
 		} else {
-			QAntTracer.warn(this.getClass(), "Bad request! gameHeroId:" + UserHelper.getGameHeroId(user));
+			QAntTracer.warn(this.getClass(), "Bad request! gameHeroId:" + user.getName());
 		}
 
 	}

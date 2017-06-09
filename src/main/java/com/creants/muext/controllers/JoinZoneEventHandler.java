@@ -28,14 +28,12 @@ import com.creants.muext.entities.quest.HeroQuest;
 import com.creants.muext.entities.world.HeroStage;
 import com.creants.muext.managers.HeroClassManager;
 import com.creants.muext.services.QuestManager;
-import com.creants.muext.util.UserHelper;
 
 /**
  * @author LamHM
  *
  */
 public class JoinZoneEventHandler extends BaseServerEventHandler {
-	private static final String SERVER_ID = "mus1";
 	private static final String HERO_NAME_PREFIX = "Mu Hero ";
 	public static final int STAMINA_REHI_TIME_MILI = 60000;
 	public static final int STAMINA_REHI_VALUE = 1;
@@ -61,15 +59,13 @@ public class JoinZoneEventHandler extends BaseServerEventHandler {
 	@Override
 	public void handleServerEvent(IQAntEvent event) throws QAntException {
 		QAntUser user = (QAntUser) event.getParameter(QAntEventParam.USER);
+		user.setLoginTime(System.currentTimeMillis());
 		long creantsUserId = user.getCreantsUserId();
-		String gameHeroId = SERVER_ID + "#" + creantsUserId;
-		long loginTime = System.currentTimeMillis();
-		UserHelper.setHeroId(user, gameHeroId);
-		UserHelper.setLoginTime(user, loginTime);
+		String gameHeroId = user.getName();
 
 		GameHero gameHero = repository.findOne(gameHeroId);
 		if (gameHero == null) {
-			gameHero = createNewGameHero(creantsUserId);
+			gameHero = createNewGameHero(gameHeroId, creantsUserId);
 		} else {
 			List<HeroClass> heroes = heroManager.findHeroesByGameHeroId(gameHeroId);
 			gameHero.setHeroes(heroes);
@@ -105,7 +101,7 @@ public class JoinZoneEventHandler extends BaseServerEventHandler {
 		// event
 		params.putInt("event_no", 10);
 
-		params.putLong("login_time", loginTime);
+		params.putLong("login_time", user.getLoginTime()	);
 		send("join_game", params, user);
 
 		return;
@@ -131,8 +127,8 @@ public class JoinZoneEventHandler extends BaseServerEventHandler {
 	}
 
 
-	private GameHero createNewGameHero(long creantsUserId) {
-		GameHero gameHero = new GameHero(SERVER_ID, creantsUserId);
+	private GameHero createNewGameHero(String serverId, long creantsUserId) {
+		GameHero gameHero = new GameHero(serverId, creantsUserId);
 		gameHero.setName(HERO_NAME_PREFIX + creantsUserId);
 		gameHero.setExp(0);
 		gameHero.setLevel(1);

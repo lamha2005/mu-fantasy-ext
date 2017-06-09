@@ -19,7 +19,6 @@ import com.creants.muext.exception.ErrorCode;
 import com.creants.muext.managers.HeroClassManager;
 import com.creants.muext.managers.MatchManager;
 import com.creants.muext.services.MessageFactory;
-import com.creants.muext.util.UserHelper;
 
 /**
  * Tham khảo trả về response thế nào SFSResponseApi
@@ -46,7 +45,7 @@ public class StageRequestHandler extends BaseClientRequestHandler {
 
 	@Override
 	public void handleClientRequest(QAntUser user, IQAntObject params) {
-		String gameHeroId = UserHelper.getGameHeroId(user);
+		String gameHeroId = user.getName();
 		int stageIndex = params.getInt(STAGE_INDEX);
 		Stage stage = StageConfig.getInstance().getStage(stageIndex);
 		if (stage == null) {

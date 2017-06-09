@@ -1,7 +1,8 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<QuestList>
-	<Quest TaskIndex="0" TaskGroup="1" TaskType="1" TaskName="Bull Hunter" TaskDescription="Hunt Bull Fighter in Loren"   MonsterIndex1="0" MonsterIndex2="" TaskCount="10" TaskReward="1"/>
-	<Quest TaskIndex="1" TaskGroup="1" TaskType="1" TaskName="Yeti Hunter" TaskDescription="Hunt Yeti"   MonsterIndex1="1" MonsterIndex2="3" TaskCount="10" TaskReward="1"/>
-	<Quest TaskIndex="100" TaskGroup="100" TaskType="3" TaskName="Chaos Castle Master" TaskDescription="Join and win the Chaos Castle event"   MonsterIndex1="" MonsterIndex2="" TaskCount="10" TaskReward="1"/>
-</QuestList>
+<SkillList>
+	<Skill Index="1000" Name="Falling Slash" Description="Gives twice as much damage than any other regular attack" SkillType="1" ManaCost="10"	Cooldown="2" TargetType="1"	Affects="3"	EffectIndex="1,7,8"	EffectValue="100,50,1" ValueGrowth="30,0,0.2" CastImage="cast1000.png" EffectImage="eff1000.png" HitImage="hit1000.png"	StatusImage="stun.png"	CastSound="cast1000.wave" EffectSound="effect1000.wave"	HitSound="hit1000.wave"/>
+	<Skill Index="1001" Name="Great Strength" Description="Increase max HP" SkillType="2" ManaCost="" Cooldown="" TargetType="1" Affects="1"	EffectIndex="3"	EffectValue="50" ValueGrowth="50" CastImage="" EffectImage="" HitImage="" StatusImage="" CastSound="" EffectSound="" HitSound=""/>
+	<Skill Index="1002" Name="Heal" Description="Heal the target’s life." SkillType="1" ManaCost="20" Cooldown="20" TargetType="2" Affects="1"	EffectIndex="5"	EffectValue="10" ValueGrowth="1" CastImage="cast1000.png" EffectImage="eff1000.png" HitImage="hit1000.png"	StatusImage=""	CastSound="cast1000.wave" EffectSound="effect1000.wave"	HitSound="hit1000.wave"/>
+	<Skill Index="1003" Name="Triple Shot" Description="Dealing damage to multiple enemies." SkillType="1" ManaCost="50" Cooldown="3" TargetType="3" Affects="2" EffectIndex="5" EffectValue="100" ValueGrowth="50" CastImage="cast1000.png" EffectImage="eff1000.png" HitImage="hit1000.png" StatusImage=""	CastSound="cast1000.wave" EffectSound="effect1000.wave"	HitSound="hit1000.wave"/>
+</SkillList>
 

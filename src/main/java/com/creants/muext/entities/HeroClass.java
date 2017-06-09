@@ -11,6 +11,7 @@ import org.springframework.data.mongodb.core.mapping.Document;
 
 import com.creants.creants_2x.socket.gate.protocol.serialization.SerializableQAntType;
 import com.creants.muext.config.GameConfig;
+import com.creants.muext.entities.skill.Skill;
 import com.creants.muext.entities.states.AdditionLevelUpStats;
 import com.creants.muext.entities.states.BaseStats;
 
@@ -41,22 +42,28 @@ public class HeroClass implements SerializableQAntType {
 	@Transient
 	public boolean ranger;
 	@Indexed
-	public String gameHeroId;
+	public transient String gameHeroId;
 	public String name;
 	public int level;
 	public int index;
+	public int rank;
 
 	@Transient
 	private transient HeroBase heroBase;
 
+	public int skillPoint;
+	public List<Skill> skillList;
+
 
 	public HeroClass() {
 		level = 1;
+		skillList = new ArrayList<>();
 	}
 
 
 	public HeroClass(HeroBase heroBase) {
 		level = 1;
+		skillList = new ArrayList<>();
 		this.heroBase = heroBase;
 		initBaseInfo();
 	}
@@ -181,6 +188,41 @@ public class HeroClass implements SerializableQAntType {
 	}
 
 
+	public int getRank() {
+		return rank;
+	}
+
+
+	public void setRank(int rank) {
+		this.rank = rank;
+	}
+
+
+	public List<Skill> getSkillList() {
+		return skillList;
+	}
+
+
+	public void setSkillList(List<Skill> skillList) {
+		this.skillList = skillList;
+	}
+
+
+	public void addSkill(Skill skill) {
+		skillList.add(skill);
+	}
+
+
+	public int getSkillPoint() {
+		return skillPoint;
+	}
+
+
+	public void setSkillPoint(int skillPoint) {
+		this.skillPoint = skillPoint;
+	}
+
+
 	public void levelUp(int levelUp) {
 		BaseStats baseStats = heroBase.getBaseStats();
 		AdditionLevelUpStats levelUpStats = heroBase.getLevelUpStats();
@@ -191,6 +233,7 @@ public class HeroClass implements SerializableQAntType {
 		def = (int) (baseStats.getDef() + (levelUp - 1) * levelUpStats.getDef());
 		res = (int) (baseStats.getRes() + (levelUp - 1) * levelUpStats.getRes());
 		spd = (int) (baseStats.getSpd() + (levelUp - 1) * levelUpStats.getSpd());
+		this.skillPoint++;
 	}
 
 

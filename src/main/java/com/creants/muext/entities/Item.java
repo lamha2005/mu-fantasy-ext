@@ -2,6 +2,7 @@ package com.creants.muext.entities;
 
 import com.fasterxml.jackson.annotation.JsonInclude;
 import com.fasterxml.jackson.annotation.JsonInclude.Include;
+import com.fasterxml.jackson.dataformat.xml.annotation.JacksonXmlProperty;
 
 /**
  * @author LamHM
@@ -9,12 +10,17 @@ import com.fasterxml.jackson.annotation.JsonInclude.Include;
  */
 @JsonInclude(Include.NON_NULL)
 public class Item {
+	@JacksonXmlProperty(localName = "ItemIndex", isAttribute = true)
 	private int index;
+	@JacksonXmlProperty(localName = "ItemGroup", isAttribute = true)
 	private int groupId;
+	@JacksonXmlProperty(localName = "ItemName", isAttribute = true)
 	private String name;
+
+	@JacksonXmlProperty(localName = "Imagefile", isAttribute = true)
 	private String img;
-	private Integer no;
 	private Integer gridIndex;
+	private Integer no;
 
 
 	public int getIndex() {
@@ -24,16 +30,6 @@ public class Item {
 
 	public void setIndex(int index) {
 		this.index = index;
-	}
-
-
-	public Integer getNo() {
-		return no;
-	}
-
-
-	public void setNo(Integer no) {
-		this.no = no;
 	}
 
 
@@ -74,6 +70,16 @@ public class Item {
 
 	public void setGridIndex(Integer gridIndex) {
 		this.gridIndex = gridIndex;
+	}
+
+
+	public Integer getNo() {
+		return no;
+	}
+
+
+	public void setNo(Integer no) {
+		this.no = no;
 	}
 
 }

@@ -19,7 +19,6 @@ import com.creants.muext.Creants2XApplication;
 import com.creants.muext.dao.QuestStatsRepository;
 import com.creants.muext.entities.quest.HeroQuest;
 import com.creants.muext.services.QuestManager;
-import com.creants.muext.util.UserHelper;
 
 /**
  * @author LamHM
@@ -39,12 +38,13 @@ public class GetQuestListRequestHandler extends BaseClientRequestHandler {
 
 	@Override
 	public void handleClientRequest(QAntUser user, IQAntObject params) {
+
 		Integer groupId = params.getInt("gid");
 		if (groupId == null) {
 			groupId = QuestManager.GROUP_MAIN_QUEST;
 		}
 
-		String gameHeroId = UserHelper.getGameHeroId(user);
+		String gameHeroId = user.getName();
 		List<HeroQuest> quests = new ArrayList<>();
 		if (groupId == QuestManager.GROUP_MAIN_QUEST) {
 			quests = questStateRepository.getQuests(gameHeroId, groupId, false);
