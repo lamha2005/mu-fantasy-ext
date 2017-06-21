@@ -15,7 +15,7 @@ import javax.xml.stream.XMLStreamReader;
 import org.apache.commons.lang.StringUtils;
 import org.apache.commons.lang.math.NumberUtils;
 
-import com.creants.muext.entities.Item;
+import com.creants.muext.entities.ItemBase;
 import com.creants.muext.entities.Reward;
 import com.creants.muext.entities.quest.GroupDailyQuest;
 import com.creants.muext.entities.quest.GroupMainQuest;
@@ -94,7 +94,7 @@ public class QuestConfig {
 							}
 							break;
 						case "Items":
-							List<Item> items = reward.getItems();
+							List<ItemBase> items = reward.getItems();
 							String[] itemArr = StringUtils.split(attValue, ";");
 							if (itemArr.length > 0) {
 								for (int j = 0; j < itemArr.length; j++) {
@@ -102,13 +102,13 @@ public class QuestConfig {
 									if (infos.length <= 0)
 										continue;
 
-									Item item = new Item();
+									ItemBase item = new ItemBase();
 									for (int k = 0; k < infos.length; k++) {
 										String[] stringItemArr = StringUtils.split(infos[k], "=");
 										if (stringItemArr[0].trim().startsWith("index")) {
 											item.setIndex(Integer.parseInt(stringItemArr[1].trim()));
 										} else if (stringItemArr[0].trim().startsWith("no")) {
-											item.setNo(Integer.parseInt(stringItemArr[1].trim()));
+											// item.setNo(Integer.parseInt(stringItemArr[1].trim()));
 										}
 									}
 									items.add(item);

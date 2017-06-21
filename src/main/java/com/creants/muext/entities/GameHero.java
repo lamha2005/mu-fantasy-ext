@@ -37,10 +37,7 @@ public class GameHero implements SerializableQAntType {
 	public List<HeroClass> heroes;
 
 
-	public GameHero(String serverName, long userId) {
-		this.serverName = serverName;
-		this.userId = userId;
-		this.id = genId();
+	public GameHero() {
 		maxStamina = 100;
 	}
 
@@ -52,11 +49,6 @@ public class GameHero implements SerializableQAntType {
 
 	public void setHeroes(List<HeroClass> heroes) {
 		this.heroes = heroes;
-	}
-
-
-	private String genId() {
-		return serverName + "#" + userId;
 	}
 
 
@@ -162,6 +154,11 @@ public class GameHero implements SerializableQAntType {
 
 	public void setZen(long zen) {
 		this.zen = zen;
+	}
+
+
+	public void incrZen(long value) {
+		this.zen += value;
 	}
 
 

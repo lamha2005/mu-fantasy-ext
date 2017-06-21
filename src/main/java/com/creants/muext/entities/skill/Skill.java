@@ -30,4 +30,9 @@ public class Skill implements SerializableQAntType {
 		this.level = level;
 	}
 
+
+	public void upgradeLevel(int value) {
+		this.level += value;
+	}
+
 }

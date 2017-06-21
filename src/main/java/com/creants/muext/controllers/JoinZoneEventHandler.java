@@ -8,6 +8,7 @@ import org.apache.commons.lang.time.DateUtils;
 
 import com.creants.creants_2x.core.IQAntEvent;
 import com.creants.creants_2x.core.QAntEventParam;
+import com.creants.creants_2x.core.annotations.Instantiation;
 import com.creants.creants_2x.core.exception.QAntException;
 import com.creants.creants_2x.core.extension.BaseServerEventHandler;
 import com.creants.creants_2x.core.util.QAntTracer;
@@ -17,6 +18,7 @@ import com.creants.creants_2x.socket.gate.entities.QAntArray;
 import com.creants.creants_2x.socket.gate.entities.QAntObject;
 import com.creants.creants_2x.socket.gate.wood.QAntUser;
 import com.creants.muext.Creants2XApplication;
+import com.creants.muext.admin.managers.AdminManager;
 import com.creants.muext.config.StageConfig;
 import com.creants.muext.dao.GameHeroRepository;
 import com.creants.muext.dao.HeroStageRepository;
@@ -33,6 +35,7 @@ import com.creants.muext.services.QuestManager;
  * @author LamHM
  *
  */
+@Instantiation(Instantiation.InstantiationMode.SINGLE_INSTANCE)
 public class JoinZoneEventHandler extends BaseServerEventHandler {
 	private static final String HERO_NAME_PREFIX = "Mu Hero ";
 	public static final int STAMINA_REHI_TIME_MILI = 60000;
@@ -44,6 +47,7 @@ public class JoinZoneEventHandler extends BaseServerEventHandler {
 	private HeroClassManager heroManager;
 	private SequenceRepository sequenceRepository;
 	private HeroStageRepository stageRepository;
+	private AdminManager adminManager;
 
 
 	public JoinZoneEventHandler() {
@@ -53,6 +57,7 @@ public class JoinZoneEventHandler extends BaseServerEventHandler {
 		heroManager = Creants2XApplication.getBean(HeroClassManager.class);
 		sequenceRepository = Creants2XApplication.getBean(SequenceRepository.class);
 		stageRepository = Creants2XApplication.getBean(HeroStageRepository.class);
+		adminManager = Creants2XApplication.getBean(AdminManager.class);
 	}
 
 
@@ -100,10 +105,10 @@ public class JoinZoneEventHandler extends BaseServerEventHandler {
 
 		// event
 		params.putInt("event_no", 10);
-
-		params.putLong("login_time", user.getLoginTime()	);
+		params.putLong("login_time", user.getLoginTime());
 		send("join_game", params, user);
 
+		adminManager.incrAndNotifyCCU();
 		return;
 	}
 
@@ -127,8 +132,10 @@ public class JoinZoneEventHandler extends BaseServerEventHandler {
 	}
 
 
-	private GameHero createNewGameHero(String serverId, long creantsUserId) {
-		GameHero gameHero = new GameHero(serverId, creantsUserId);
+	private GameHero createNewGameHero(String gameHeroId, long creantsUserId) {
+		GameHero gameHero = new GameHero();
+		gameHero.setId(gameHeroId);
+		gameHero.setUserId(creantsUserId);
 		gameHero.setName(HERO_NAME_PREFIX + creantsUserId);
 		gameHero.setExp(0);
 		gameHero.setLevel(1);
@@ -141,7 +148,6 @@ public class JoinZoneEventHandler extends BaseServerEventHandler {
 		gameHero.setMaxVipPoint(100);
 		repository.save(gameHero);
 
-		String gameHeroId = gameHero.getId();
 		QAntTracer.debug(this.getClass(), "Create new hero: " + gameHeroId);
 
 		// cho trước 2 nhân vật

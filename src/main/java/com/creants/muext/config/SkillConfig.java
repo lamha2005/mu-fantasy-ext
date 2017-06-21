@@ -2,7 +2,9 @@ package com.creants.muext.config;
 
 import java.io.File;
 import java.io.FileInputStream;
+import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 import java.util.NoSuchElementException;
 
@@ -19,9 +21,11 @@ import com.fasterxml.jackson.dataformat.xml.XmlMapper;
  */
 public class SkillConfig {
 	private static final String SKILL_CONFIG = "resources/skills.xml";
+	private static final String UPGRADE_COST_CONFIG = "resources/update_cost.xml";
 	private static final XMLInputFactory f = XMLInputFactory.newFactory();
 	private static SkillConfig instance;
 	private Map<Integer, SkillBase> skillMap;
+	private Map<Integer, List<Long>> upgradeCostMap;
 
 
 	public static SkillConfig getInstance() {
@@ -34,6 +38,7 @@ public class SkillConfig {
 
 	private SkillConfig() {
 		loadSkill();
+		loadUpgradeCost();
 	}
 
 
@@ -61,6 +66,51 @@ public class SkillConfig {
 	}
 
 
+	private void loadUpgradeCost() {
+		upgradeCostMap = new HashMap<>();
+
+		XMLStreamReader sr;
+		try {
+			sr = f.createXMLStreamReader(new FileInputStream(UPGRADE_COST_CONFIG));
+			sr.next(); // to point to <Monsters>
+			while (sr.hasNext()) {
+				sr.next();
+
+				if (sr.getEventType() != XMLStreamReader.START_ELEMENT) {
+					continue;
+				}
+
+				List<Long> costList = new ArrayList<>();
+				int skillIndex = -1;
+				int attributeCount = sr.getAttributeCount();
+				for (int i = 0; i <= attributeCount; i++) {
+					String attName = sr.getAttributeLocalName(i);
+					String attValue = sr.getAttributeValue(i);
+					if (attName.equals("SkillIndex")) {
+						skillIndex = Integer.parseInt(attValue);
+					} else if (attName.startsWith("ZenCostLV")) {
+						costList.add(Long.parseLong(attValue));
+					}
+
+				}
+
+				upgradeCostMap.put(skillIndex, costList);
+			}
+			sr.close();
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
+	}
+
+
+	public long getCost(int skillIndex, int level){
+		List<Long> list = upgradeCostMap.get(skillIndex);
+		Long cost = list.get(level-1);
+		if(cost == null) return Long.MAX_VALUE;
+		return cost;
+	}
+
+
 	public void writeToJsonFile() {
 		try {
 			ObjectMapper mapper = new ObjectMapper();
@@ -68,6 +118,11 @@ public class SkillConfig {
 		} catch (Exception e) {
 			e.printStackTrace();
 		}
+	}
+
+
+	public boolean containSkill(int index) {
+		return skillMap.containsKey(index);
 	}
 
 
@@ -79,7 +134,7 @@ public class SkillConfig {
 	public SkillBase getSkill(int index) {
 		return skillMap.get(index);
 	}
-	
+
 
 	public static void main(String[] args) {
 		SkillConfig.getInstance().writeToJsonFile();

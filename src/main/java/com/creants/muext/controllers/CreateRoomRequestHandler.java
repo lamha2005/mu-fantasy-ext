@@ -11,6 +11,8 @@ import com.creants.creants_2x.socket.gate.wood.QAntUser;
  *
  */
 public class CreateRoomRequestHandler extends BaseClientRequestHandler {
+	private static final String GROUP_NAME = "MuFantasy";
+
 
 	@Override
 	public void handleClientRequest(QAntUser user, IQAntObject params) {
@@ -20,7 +22,7 @@ public class CreateRoomRequestHandler extends BaseClientRequestHandler {
 
 		CreateRoomSettings roomSettings = new CreateRoomSettings();
 		roomSettings.setName(name);
-		roomSettings.setGroupId("MuFantasy");
+		roomSettings.setGroupId(GROUP_NAME);
 		roomSettings.setPassword(pass);
 		roomSettings.setGame(true);
 		roomSettings.setMaxUsers(maxUsers);

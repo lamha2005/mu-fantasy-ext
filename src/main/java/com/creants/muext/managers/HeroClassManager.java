@@ -108,6 +108,11 @@ public class HeroClassManager implements InitializingBean {
 	}
 
 
+	public HeroClass findHeroById(long heroId) {
+		return heroRepository.findOne(heroId);
+	}
+
+
 	public HeroBase getHeroBase(int index) {
 		return heroes.get(index);
 	}
@@ -136,6 +141,11 @@ public class HeroClassManager implements InitializingBean {
 
 	public void save(List<HeroClass> heroes) {
 		heroRepository.save(heroes);
+	}
+
+
+	public void save(HeroClass heroClass) {
+		heroRepository.save(heroClass);
 	}
 
 

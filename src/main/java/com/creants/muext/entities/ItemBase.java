@@ -9,7 +9,7 @@ import com.fasterxml.jackson.dataformat.xml.annotation.JacksonXmlProperty;
  *
  */
 @JsonInclude(Include.NON_NULL)
-public class Item {
+public class ItemBase {
 	@JacksonXmlProperty(localName = "ItemIndex", isAttribute = true)
 	private int index;
 	@JacksonXmlProperty(localName = "ItemGroup", isAttribute = true)
@@ -18,13 +18,25 @@ public class Item {
 	private String name;
 
 	@JacksonXmlProperty(localName = "Imagefile", isAttribute = true)
+	@JsonInclude(JsonInclude.Include.NON_NULL)
 	private String img;
-	private Integer gridIndex;
-	private Integer no;
+
+	@JacksonXmlProperty(localName = "Icon", isAttribute = true)
+	private String icon;
 
 
 	public int getIndex() {
 		return index;
+	}
+
+
+	public String getIcon() {
+		return icon;
+	}
+
+
+	public void setIcon(String icon) {
+		this.icon = icon;
 	}
 
 
@@ -60,26 +72,6 @@ public class Item {
 
 	public void setImg(String img) {
 		this.img = img;
-	}
-
-
-	public Integer getGridIndex() {
-		return gridIndex;
-	}
-
-
-	public void setGridIndex(Integer gridIndex) {
-		this.gridIndex = gridIndex;
-	}
-
-
-	public Integer getNo() {
-		return no;
-	}
-
-
-	public void setNo(Integer no) {
-		this.no = no;
 	}
 
 }

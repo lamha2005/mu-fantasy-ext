@@ -1,133 +1,137 @@
 package com.creants.muext.entities.item;
 
+import org.springframework.data.annotation.Id;
 import org.springframework.data.annotation.Transient;
-
-import com.creants.muext.entities.Item;
-import com.fasterxml.jackson.dataformat.xml.annotation.JacksonXmlProperty;
 
 /**
  * @author LamHM
  *
  */
-public class Equipment extends Item {
-	@JacksonXmlProperty(localName = "EquipSlot", isAttribute = true)
-	private int equipSlot;
-
-	@JacksonXmlProperty(localName = "LVRequire", isAttribute = true)
-	private int levelRequire;
-	@JacksonXmlProperty(localName = "ATK", isAttribute = true)
-	private Integer atk;
-	@JacksonXmlProperty(localName = "HP", isAttribute = true)
-	private Integer hp;
-	@JacksonXmlProperty(localName = "MP", isAttribute = true)
-	private Integer mp;
-	@JacksonXmlProperty(localName = "DEF", isAttribute = true)
-	private Integer def;
-	private Boolean lock;
-	private Boolean wearing;
-	@JacksonXmlProperty(localName = "AvailableClass", isAttribute = true)
-	private transient String availableHeroesString;
+public class Equipment {
+	@Id
+	private long id;
+	private String gameHeroId;
+	private long heroId;
+	private int index;
+	private int groupId;
+	private boolean lock;
+	private boolean wearing;
+	private int level;
+	private Integer gridIndex;
+	private Integer no;
 	@Transient
-	private int[] availableHeroes;
+	private EquipmentBase equipmentBase;
 
 
-	public int getEquipSlot() {
-		return equipSlot;
+	public void setEquipmentBase(EquipmentBase equipmentBase) {
+		this.equipmentBase = equipmentBase;
+		this.index = equipmentBase.getIndex();
+		this.groupId = equipmentBase.getGroupId();
 	}
 
 
-	public void setEquipSlot(int equipSlot) {
-		this.equipSlot = equipSlot;
+	public long getId() {
+		return id;
 	}
 
 
-	public int getLevelRequire() {
-		return levelRequire;
+	public void setId(long id) {
+		this.id = id;
 	}
 
 
-	public void setLevelRequire(int levelRequire) {
-		this.levelRequire = levelRequire;
+	public int getIndex() {
+		return index;
 	}
 
 
-	public Integer getAtk() {
-		return atk;
+	public void setIndex(int index) {
+		this.index = index;
 	}
 
 
-	public void setAtk(Integer atk) {
-		this.atk = atk;
-	}
-
-
-	public Integer getHp() {
-		return hp;
-	}
-
-
-	public void setHp(Integer hp) {
-		this.hp = hp;
-	}
-
-
-	public Integer getMp() {
-		return mp;
-	}
-
-
-	public void setMp(Integer mp) {
-		this.mp = mp;
-	}
-
-
-	public Integer getDef() {
-		return def;
-	}
-
-
-	public void setDef(Integer def) {
-		this.def = def;
-	}
-
-
-	public Boolean getLock() {
+	public boolean isLock() {
 		return lock;
 	}
 
 
-	public void setLock(Boolean lock) {
+	public void setLock(boolean lock) {
 		this.lock = lock;
 	}
 
 
-	public Boolean getWearing() {
+	public boolean isWearing() {
 		return wearing;
 	}
 
 
-	public void setWearing(Boolean wearing) {
+	public void setWearing(boolean wearing) {
 		this.wearing = wearing;
 	}
 
 
-	public String getAvailableHeroesString() {
-		return availableHeroesString;
+	public EquipmentBase getEquipmentBase() {
+		return equipmentBase;
 	}
 
 
-	public void setAvailableHeroesString(String availableHeroesString) {
-		this.availableHeroesString = availableHeroesString;
+	public int getGroupId() {
+		return groupId;
 	}
 
 
-	public int[] getAvailableHeroes() {
-		return availableHeroes;
+	public void setGroupId(int groupId) {
+		this.groupId = groupId;
 	}
 
 
-	public void setAvailableHeroes(int[] availableHeroes) {
-		this.availableHeroes = availableHeroes;
+	public int getLevel() {
+		return level;
+	}
+
+
+	public void setLevel(int level) {
+		this.level = level;
+	}
+
+
+	public Integer getGridIndex() {
+		return gridIndex;
+	}
+
+
+	public void setGridIndex(Integer gridIndex) {
+		this.gridIndex = gridIndex;
+	}
+
+
+	public Integer getNo() {
+		return no;
+	}
+
+
+	public void setNo(Integer no) {
+		this.no = no;
+	}
+
+
+	public String getGameHeroId() {
+		return gameHeroId;
+	}
+
+
+	public void setGameHeroId(String gameHeroId) {
+		this.gameHeroId = gameHeroId;
+	}
+
+
+	public long getHeroId() {
+		return heroId;
+	}
+
+
+	public void setHeroId(long heroId) {
+		this.heroId = heroId;
 	}
 
 }

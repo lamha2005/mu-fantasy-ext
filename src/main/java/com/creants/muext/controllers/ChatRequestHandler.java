@@ -25,6 +25,7 @@ public class ChatRequestHandler extends BaseClientRequestHandler {
 		QAntUser userByName = getApi().getUserByName(user.getName());
 		String message = params.getUtfString("msg");
 		System.out.println("message: " + message);
+		
 	}
 
 }

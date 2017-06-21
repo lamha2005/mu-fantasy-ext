@@ -12,7 +12,7 @@ import com.creants.muext.entities.HeroClass;
  *
  */
 @Repository
-public interface HeroRepository extends MongoRepository<HeroClass, String> {
+public interface HeroRepository extends MongoRepository<HeroClass, Long> {
 
 	List<HeroClass> findHeroesByGameHeroId(String gameHeroId);
 }

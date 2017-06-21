@@ -1,0 +1,229 @@
+package com.creants.muext.entities.item;
+
+import com.creants.muext.entities.ItemBase;
+import com.fasterxml.jackson.dataformat.xml.annotation.JacksonXmlProperty;
+
+/**
+ * @author LamHM
+ *
+ */
+public class EquipmentBase extends ItemBase {
+	@JacksonXmlProperty(localName = "EquipSlot", isAttribute = true)
+	private int equipSlot;
+	@JacksonXmlProperty(localName = "ItemRank", isAttribute = true)
+	private int itemRank;
+	@JacksonXmlProperty(localName = "SkillIndex", isAttribute = true)
+	private int skillIndex;
+	@JacksonXmlProperty(localName = "OptionIndex", isAttribute = true)
+	private int optionIndex;
+	@JacksonXmlProperty(localName = "TwoHanded", isAttribute = true)
+	private Boolean twoHanded;
+
+	@JacksonXmlProperty(localName = "LVRequire", isAttribute = true)
+	private int levelRequire;
+	@JacksonXmlProperty(localName = "ATK", isAttribute = true)
+	private Integer atk;
+	@JacksonXmlProperty(localName = "HP", isAttribute = true)
+	private Integer hp;
+	@JacksonXmlProperty(localName = "MP", isAttribute = true)
+	private Integer mp;
+	@JacksonXmlProperty(localName = "DEF", isAttribute = true)
+	private Integer def;
+	@JacksonXmlProperty(localName = "BlessCost", isAttribute = true)
+	private Integer blessCost;
+	@JacksonXmlProperty(localName = "ZenCost", isAttribute = true)
+	private Integer zenCost;
+	@JacksonXmlProperty(localName = "RefunCost", isAttribute = true)
+	private Integer refunCost;
+	@JacksonXmlProperty(localName = "RecipeIndex", isAttribute = true)
+	private Integer recipeIndex;
+	@JacksonXmlProperty(localName = "Upgarde", isAttribute = true)
+	private Boolean upgarde;
+	@JacksonXmlProperty(localName = "Disassemble", isAttribute = true)
+	private Boolean disassemble;
+
+	@JacksonXmlProperty(localName = "AvailableClass", isAttribute = true)
+	private transient String availableHeroesString;
+	private int[] availableHeroes;
+
+
+	public int getEquipSlot() {
+		return equipSlot;
+	}
+
+
+	public void setEquipSlot(int equipSlot) {
+		this.equipSlot = equipSlot;
+	}
+
+
+	public int getLevelRequire() {
+		return levelRequire;
+	}
+
+
+	public void setLevelRequire(int levelRequire) {
+		this.levelRequire = levelRequire;
+	}
+
+
+	public Integer getAtk() {
+		return atk;
+	}
+
+
+	public void setAtk(Integer atk) {
+		this.atk = atk;
+	}
+
+
+	public Integer getHp() {
+		return hp;
+	}
+
+
+	public void setHp(Integer hp) {
+		this.hp = hp;
+	}
+
+
+	public Integer getMp() {
+		return mp;
+	}
+
+
+	public void setMp(Integer mp) {
+		this.mp = mp;
+	}
+
+
+	public Integer getDef() {
+		return def;
+	}
+
+
+	public void setDef(Integer def) {
+		this.def = def;
+	}
+
+
+	public String getAvailableHeroesString() {
+		return availableHeroesString;
+	}
+
+
+	public void setAvailableHeroesString(String availableHeroesString) {
+		this.availableHeroesString = availableHeroesString;
+	}
+
+
+	public int[] getAvailableHeroes() {
+		return availableHeroes;
+	}
+
+
+	public void setAvailableHeroes(int[] availableHeroes) {
+		this.availableHeroes = availableHeroes;
+	}
+
+
+	public Integer getBlessCost() {
+		return blessCost;
+	}
+
+
+	public void setBlessCost(Integer blessCost) {
+		this.blessCost = blessCost;
+	}
+
+
+	public Integer getZenCost() {
+		return zenCost;
+	}
+
+
+	public void setZenCost(Integer zenCost) {
+		this.zenCost = zenCost;
+	}
+
+
+	public Integer getRefunCost() {
+		return refunCost;
+	}
+
+
+	public void setRefunCost(Integer refunCost) {
+		this.refunCost = refunCost;
+	}
+
+
+	public Boolean getUpgarde() {
+		return upgarde;
+	}
+
+
+	public void setUpgarde(Boolean upgarde) {
+		this.upgarde = upgarde;
+	}
+
+
+	public Boolean getDisassemble() {
+		return disassemble;
+	}
+
+
+	public void setDisassemble(Boolean disassemble) {
+		this.disassemble = disassemble;
+	}
+
+
+	public int getItemRank() {
+		return itemRank;
+	}
+
+
+	public void setItemRank(int itemRank) {
+		this.itemRank = itemRank;
+	}
+
+
+	public int getSkillIndex() {
+		return skillIndex;
+	}
+
+
+	public void setSkillIndex(int skillIndex) {
+		this.skillIndex = skillIndex;
+	}
+
+
+	public int getOptionIndex() {
+		return optionIndex;
+	}
+
+
+	public void setOptionIndex(int optionIndex) {
+		this.optionIndex = optionIndex;
+	}
+
+
+	public Boolean getTwoHanded() {
+		return twoHanded;
+	}
+
+
+	public void setTwoHanded(Boolean twoHanded) {
+		this.twoHanded = twoHanded;
+	}
+
+
+	public Integer getRecipeIndex() {
+		return recipeIndex;
+	}
+
+
+	public void setRecipeIndex(Integer recipeIndex) {
+		this.recipeIndex = recipeIndex;
+	}
+
+}

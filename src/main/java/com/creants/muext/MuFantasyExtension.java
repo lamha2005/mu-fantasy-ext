@@ -3,8 +3,12 @@ package com.creants.muext;
 import com.creants.creants_2x.core.QAntEventType;
 import com.creants.creants_2x.core.extension.QAntExtension;
 import com.creants.creants_2x.core.util.QAntTracer;
+import com.creants.muext.admin.controllers.AdminLoginRequestHandler;
+import com.creants.muext.admin.controllers.CCURequestHandler;
+import com.creants.muext.admin.managers.AdminManager;
 import com.creants.muext.controllers.ChatRequestHandler;
 import com.creants.muext.controllers.CreateRoomRequestHandler;
+import com.creants.muext.controllers.DisconnectEventHandler;
 import com.creants.muext.controllers.GetQuestListRequestHandler;
 import com.creants.muext.controllers.JoinChapterRequestHandler;
 import com.creants.muext.controllers.JoinGameRequestHandler;
@@ -25,6 +29,8 @@ public class MuFantasyExtension extends QAntExtension {
 	public void init() {
 		QAntTracer.debug(this.getClass(), "========================= START MU =========================");
 		addEventRequestHandler();
+
+		Creants2XApplication.getBean(AdminManager.class).initQAntApi();
 		QAntTracer.debug(this.getClass(), "========================= MU STARTED =========================");
 	}
 
@@ -33,6 +39,7 @@ public class MuFantasyExtension extends QAntExtension {
 		addEventHandler(QAntEventType.USER_LOGIN, LoginEventHandler.class);
 		addEventHandler(QAntEventType.USER_LOGOUT, LogoutEventHandler.class);
 		addEventHandler(QAntEventType.USER_JOIN_ZONE, JoinZoneEventHandler.class);
+		addEventHandler(QAntEventType.USER_DISCONNECT, DisconnectEventHandler.class);
 
 		addRequestHandler("cmd_chat", ChatRequestHandler.class);
 		addRequestHandler("cmd_join_game", JoinGameRequestHandler.class);
@@ -42,6 +49,9 @@ public class MuFantasyExtension extends QAntExtension {
 		addRequestHandler("cmd_stage_finish", StageFinishRequestHandler.class);
 		addRequestHandler("cmd_join_chapter", JoinChapterRequestHandler.class);
 		addRequestHandler("cmd_quest_claim", QuestClaimRequestHandler.class);
+
+		addRequestHandler("cmd_ccu", CCURequestHandler.class);
+		addRequestHandler("cmd_admin_login", AdminLoginRequestHandler.class);
 	}
 
 }

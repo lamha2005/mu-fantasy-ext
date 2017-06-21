@@ -13,7 +13,7 @@ public class Reward {
 	private int soul;
 	private int zen;
 
-	private List<Item> items;
+	private List<ItemBase> items;
 
 
 	public Reward() {
@@ -61,12 +61,12 @@ public class Reward {
 	}
 
 
-	public List<Item> getItems() {
+	public List<ItemBase> getItems() {
 		return items;
 	}
 
 
-	public void setItems(List<Item> items) {
+	public void setItems(List<ItemBase> items) {
 		this.items = items;
 	}
 
