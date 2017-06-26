@@ -15,7 +15,7 @@ import com.creants.muext.entities.GameHero;
 import com.creants.muext.entities.HeroClass;
 import com.creants.muext.entities.Monster;
 import com.creants.muext.entities.world.Stage;
-import com.creants.muext.exception.ErrorCode;
+import com.creants.muext.exception.GameErrorCode;
 import com.creants.muext.managers.HeroClassManager;
 import com.creants.muext.managers.MatchManager;
 import com.creants.muext.services.MessageFactory;
@@ -49,7 +49,7 @@ public class StageRequestHandler extends BaseClientRequestHandler {
 		int stageIndex = params.getInt(STAGE_INDEX);
 		Stage stage = StageConfig.getInstance().getStage(stageIndex);
 		if (stage == null) {
-			send("cmd_exception", MessageFactory.createErrorMsg(CMD, ErrorCode.STAGE_NOT_FOUND), user);
+			sendError(MessageFactory.createErrorMsg(CMD, GameErrorCode.STAGE_NOT_FOUND), user);
 			return;
 		}
 

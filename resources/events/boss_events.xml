@@ -1,7 +1,8 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <BotEventList>
 	<!-- Thông báo BOSS xuất hiện vào lúc 14h15, 14h20, 14h25 hàng ngày, và BOSS xuất hiện lúc 14h30 --> 
-	<BossEvent Index="1" MonsterIndex="10001" EventName="Blood Castle" NotificationTime="0 15,20,25 11 * * ?" EventTime="0 30 14 * * ?" BossEventRewardIndex="1" Description="Cốt Tinh Vương đang phá làng phá xóm, các chiến sĩ hay mau tới tiêu diệt" Image=""/>
+	<BossEvent Index="1" MonsterIndex="1029" EventName="Blood Castle" NotificationTime="0 26,27,28 15 * * ?" EventTime="0 30 14 * * ?" BossEventRewardIndex="1" Description="Cốt Tinh Vương đang phá làng phá xóm, các chiến sĩ hay mau tới tiêu diệt" Image=""/>
+	<BossEvent Index="2" MonsterIndex="1029" EventName="Blood Castle1" NotificationTime="0 26,27,28 15 * * ?" EventTime="0 30 14 * * ?" BossEventRewardIndex="1" Description="Cốt Tinh Vương đang phá làng phá xóm, các chiến sĩ hay mau tới tiêu diệt" Image=""/>
 	<!-- <BossEvent Index="2" MonsterIndex="10002" EventName="Chaos Castle" NotificationTime="0 15,20,25 14 * * ?" EventTime="0 30 14 * * ?" BossEventRewardIndex="1" Description="Yakun Pháp Vương đang phá làng phá xóm, các chiến sĩ hay mau tới tiêu diệt" Image=""/>
 	<BossEvent Index="3" MonsterIndex="10003" EventName="Arca Battle" NotificationTime="0 15,20,25 14 * * ?" EventTime="0 30 14 * * ?" BossEventRewardIndex="1" Description="Nữ Hoàng Băng đang phá làng phá xóm, các chiến sĩ hay mau tới tiêu diệt" Image=""/>
 	<BossEvent Index="4" MonsterIndex="10004" EventName="Quỹ Gorgon" NotificationTime="0 15,20,25 14 * * ?" EventTime="0 30 14 * * ?" BossEventRewardIndex="1" Description="Nữ Hoàng Băng đang phá làng phá xóm, các chiến sĩ hay mau tới tiêu diệt" Image=""/> -->

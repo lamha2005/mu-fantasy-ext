@@ -30,6 +30,7 @@ import com.creants.muext.entities.quest.HeroQuest;
 import com.creants.muext.entities.world.HeroStage;
 import com.creants.muext.managers.HeroClassManager;
 import com.creants.muext.services.QuestManager;
+import com.creants.muext.util.UserHelper;
 
 /**
  * @author LamHM
@@ -71,6 +72,7 @@ public class JoinZoneEventHandler extends BaseServerEventHandler {
 		GameHero gameHero = repository.findOne(gameHeroId);
 		if (gameHero == null) {
 			gameHero = createNewGameHero(gameHeroId, creantsUserId);
+			user.setProperty(UserHelper.GAME_HERO_NAME, gameHero.getName());
 		} else {
 			List<HeroClass> heroes = heroManager.findHeroesByGameHeroId(gameHeroId);
 			gameHero.setHeroes(heroes);

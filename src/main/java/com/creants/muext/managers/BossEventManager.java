@@ -7,7 +7,6 @@ import org.quartz.CronScheduleBuilder;
 import org.quartz.JobBuilder;
 import org.quartz.JobDataMap;
 import org.quartz.JobDetail;
-import org.quartz.JobKey;
 import org.quartz.Scheduler;
 import org.quartz.SchedulerException;
 import org.quartz.Trigger;
@@ -27,11 +26,11 @@ import com.creants.muext.managers.jobs.NotificationBotEventJob;
  *
  */
 @Service
-public class BotEventManager implements InitializingBean {
+public class BossEventManager implements InitializingBean {
 	@Autowired
 	HeroClassManager heroClassManager;
 
-	public List<String> bossEvents;
+	private List<String> bossEvents;
 
 
 	@Override
@@ -44,12 +43,13 @@ public class BotEventManager implements InitializingBean {
 
 			for (BossEvent bossEvent : events) {
 				QAntTracer.debug(this.getClass(), "- Boss event " + bossEvent.toString());
+
 				// báo cho player trước khi boss xuất hiện
 				JobDetail job = JobBuilder.newJob(NotificationBotEventJob.class)
 						.withIdentity("BossEventName_" + bossEvent.getIndex(), "BossEventGroup").build();
 				JobDataMap jobDataMap = job.getJobDataMap();
 				jobDataMap.put("event_index", bossEvent.getIndex());
-				
+
 				Trigger notificationTrigger = TriggerBuilder.newTrigger()
 						.withIdentity("NotificationTrigger_" + bossEvent.getIndex(), "BossEventGroup")
 						.withSchedule(CronScheduleBuilder.cronSchedule(bossEvent.getNotificationTime())).build();
@@ -76,17 +76,4 @@ public class BotEventManager implements InitializingBean {
 		return bossEvents;
 	}
 
-
-	public static void main(String[] args) {
-		JobDetail job = JobBuilder.newJob(NotificationBotEventJob.class).withIdentity("1", "BossEventGroup").build();
-		JobKey key = job.getKey();
-		String name = key.getName();
-		System.out.println(name);
-
-		Trigger trigger = TriggerBuilder.newTrigger().withIdentity("BotEventTrigger", "BotEventGroup")
-				.withSchedule(CronScheduleBuilder.dailyAtHourAndMinute(11, 59)).build();
-		trigger.getKey().getName();
-		System.out.println();
-
-	}
 }
