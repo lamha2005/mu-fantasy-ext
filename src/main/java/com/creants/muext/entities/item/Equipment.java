@@ -2,6 +2,7 @@ package com.creants.muext.entities.item;
 
 import org.springframework.data.annotation.Id;
 import org.springframework.data.annotation.Transient;
+import org.springframework.data.mongodb.core.index.Indexed;
 
 /**
  * @author LamHM
@@ -10,8 +11,9 @@ import org.springframework.data.annotation.Transient;
 public class Equipment {
 	@Id
 	private long id;
+	@Indexed
 	private String gameHeroId;
-	private long heroId;
+	private Long heroId;
 	private int index;
 	private int groupId;
 	private boolean lock;
@@ -125,12 +127,12 @@ public class Equipment {
 	}
 
 
-	public long getHeroId() {
+	public Long getHeroId() {
 		return heroId;
 	}
 
 
-	public void setHeroId(long heroId) {
+	public void setHeroId(Long heroId) {
 		this.heroId = heroId;
 	}
 

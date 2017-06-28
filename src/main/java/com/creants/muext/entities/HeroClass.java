@@ -28,17 +28,11 @@ public class HeroClass implements SerializableQAntType {
 	@Transient
 	public int atk;
 	@Transient
-	public int mag;
-	@Transient
 	public int hp;
-	@Transient
-	public int mp;
 	@Transient
 	public int def;
 	@Transient
-	public int res;
-	@Transient
-	public int spd;
+	public int rec;
 	@Transient
 	public boolean ranger;
 	@Indexed
@@ -143,33 +137,13 @@ public class HeroClass implements SerializableQAntType {
 	}
 
 
-	public int getMag() {
-		return mag;
-	}
-
-
 	public int getHp() {
 		return hp;
 	}
 
 
-	public int getMp() {
-		return mp;
-	}
-
-
 	public int getDef() {
 		return def;
-	}
-
-
-	public int getRes() {
-		return res;
-	}
-
-
-	public int getSpd() {
-		return spd;
 	}
 
 
@@ -223,16 +197,22 @@ public class HeroClass implements SerializableQAntType {
 	}
 
 
+	public int getRec() {
+		return rec;
+	}
+
+
+	public void setRec(int rec) {
+		this.rec = rec;
+	}
+
+
 	public void levelUp(int levelUp) {
 		BaseStats baseStats = heroBase.getBaseStats();
 		AdditionLevelUpStats levelUpStats = heroBase.getLevelUpStats();
 		atk = baseStats.getAtk() + (levelUp - 1) * levelUpStats.getAtk();
-		mag = baseStats.getMag() + (levelUp - 1) * levelUpStats.getMag();
 		hp = baseStats.getHp() + (levelUp - 1) * levelUpStats.getHp();
-		mp = (int) (baseStats.getMp() + (levelUp - 1) * levelUpStats.getMp());
 		def = (int) (baseStats.getDef() + (levelUp - 1) * levelUpStats.getDef());
-		res = (int) (baseStats.getRes() + (levelUp - 1) * levelUpStats.getRes());
-		spd = (int) (baseStats.getSpd() + (levelUp - 1) * levelUpStats.getSpd());
 		this.skillPoint++;
 	}
 

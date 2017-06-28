@@ -75,6 +75,7 @@ public class StageFinishRequestHandler extends BaseClientRequestHandler {
 		processReward(user, reward, gameHero);
 		params.putQAntObject("game_hero", QAntObject.newFromObject(gameHero));
 
+		// kiểm tra xử lý nhiệm vụ
 		Integer stageIndex = match.getInt(StageRequestHandler.STAGE_INDEX);
 		List<HeroQuest> quests = processQuest(stageIndex, gameHeroId);
 		if (quests != null) {
@@ -92,12 +93,19 @@ public class StageFinishRequestHandler extends BaseClientRequestHandler {
 			stage.setSweepTimes(1);
 
 			// mở 1 stage mới
-			HeroStage heroStage = new HeroStage(StageConfig.getInstance().getStage(stageIndex + 1));
+			Stage nextStage = StageConfig.getInstance().getStage(stageIndex + 1);
+			HeroStage heroStage = new HeroStage(nextStage);
+
 			heroStage.setHeroId(gameHero.getId());
 			heroStage.setId(sequenceRepository.getNextSequenceId("hero_stage_id"));
 			heroStage.setUnlock(true);
 			heroStageRepository.save(heroStage);
 			params.putQAntObject("new_stage", QAntObject.newFromObject(heroStage));
+
+			if (nextStage.getChapterIndex() > stage.getChapterIndex()) {
+				// TODO thông báo mở chương mới
+			}
+
 		} else {
 			// TODO nếu sao lớn hơn thì cập nhật lại sao
 			stage.setSweepTimes(stage.getSweepTimes() + 1);

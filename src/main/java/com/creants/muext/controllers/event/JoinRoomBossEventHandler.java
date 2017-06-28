@@ -12,6 +12,8 @@ import com.creants.muext.BossEventExtension;
  *
  */
 public class JoinRoomBossEventHandler extends BaseServerEventHandler {
+	private static final String CMD = "cmd_boss_event_join";
+
 
 	@Override
 	public void handleServerEvent(IQAntEvent event) throws QAntException {
@@ -19,7 +21,7 @@ public class JoinRoomBossEventHandler extends BaseServerEventHandler {
 		QAntUser user = (QAntUser) event.getParameter(QAntEventParam.USER);
 		parentExt.join(user);
 
-		send("cmd_boss_event_join", parentExt.getData(), user);
+		send(CMD, parentExt.getData(), user);
 	}
 
 }

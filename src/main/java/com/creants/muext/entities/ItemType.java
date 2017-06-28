@@ -9,7 +9,9 @@ public enum ItemType {
 	POTISON(1, "Thuốc"),
 	HERO_FRAGMENT(2, "Mảnh Hero"),
 	EQUIPMENT_FRAGMENT(3, "Mảnh vũ khí"),
-	SKILL_BOOK_FRAGMENT(4, "Mảnh sách kĩ năng");
+	SKILL_BOOK_FRAGMENT(4, "Mảnh sách kĩ năng"),
+	GIFT_BOX(5, "Mảnh sách kĩ năng");
+
 	int groupIndex;
 	String groupName;
 

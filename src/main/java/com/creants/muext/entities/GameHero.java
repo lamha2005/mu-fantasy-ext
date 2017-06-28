@@ -14,11 +14,11 @@ import com.creants.creants_2x.socket.gate.protocol.serialization.SerializableQAn
  */
 @Document(collection = "game-heroes")
 public class GameHero implements SerializableQAntType {
-	// server_id#user_id
 	@Id
 	public String id;
 	public long userId;
 	public transient String serverName;
+	public String avatar;
 	public String name;
 	public int level;
 	public long zen;
@@ -204,6 +204,16 @@ public class GameHero implements SerializableQAntType {
 
 	public void setMaxVipPoint(int maxVipPoint) {
 		this.maxVipPoint = maxVipPoint;
+	}
+
+
+	public String getAvatar() {
+		return avatar;
+	}
+
+
+	public void setAvatar(String avatar) {
+		this.avatar = avatar;
 	}
 
 }

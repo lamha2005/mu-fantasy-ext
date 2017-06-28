@@ -12,18 +12,12 @@ import com.fasterxml.jackson.dataformat.xml.annotation.JacksonXmlProperty;
 public class BaseStats implements SerializableQAntType {
 	@JacksonXmlProperty(localName = "PhysicAttack", isAttribute = true)
 	private int atk;
-	@JacksonXmlProperty(localName = "MagicPower", isAttribute = true)
-	private int mag;
 	@JacksonXmlProperty(localName = "HealthPoint", isAttribute = true)
 	private int hp;
-	@JacksonXmlProperty(localName = "ManaPoint", isAttribute = true)
-	private int mp;
 	@JacksonXmlProperty(localName = "Defense", isAttribute = true)
 	private int def;
-	@JacksonXmlProperty(localName = "MagicResistance", isAttribute = true)
-	private int res;
-	@JacksonXmlProperty(localName = "Speed", isAttribute = true)
-	private int spd;
+	@JacksonXmlProperty(localName = "Recovery", isAttribute = true)
+	private int rec;
 
 
 	public int getAtk() {
@@ -33,16 +27,6 @@ public class BaseStats implements SerializableQAntType {
 
 	public void setAtk(int atk) {
 		this.atk = atk;
-	}
-
-
-	public int getMag() {
-		return mag;
-	}
-
-
-	public void setMag(int mag) {
-		this.mag = mag;
 	}
 
 
@@ -56,16 +40,6 @@ public class BaseStats implements SerializableQAntType {
 	}
 
 
-	public int getMp() {
-		return mp;
-	}
-
-
-	public void setMp(int mp) {
-		this.mp = mp;
-	}
-
-
 	public int getDef() {
 		return def;
 	}
@@ -76,30 +50,10 @@ public class BaseStats implements SerializableQAntType {
 	}
 
 
-	public int getRes() {
-		return res;
-	}
-
-
-	public void setRes(int res) {
-		this.res = res;
-	}
-
-
-	public int getSpd() {
-		return spd;
-	}
-
-
-	public void setSpd(int spd) {
-		this.spd = spd;
-	}
-
-
 	@Override
 	public String toString() {
-		return "[BaseStats] {PhysicAttack:" + atk + ", MagicPower:" + mag + ", HealthPoint:" + hp + ", ManaPoint:" + mp
-				+ ", Defense:" + def + ", MagicResistance:" + res + "}";
+		return "[BaseStats] {PhysicAttack:" + atk + ", HealthPoint:" + hp + ", Defense:" + def + ", Recovery:" + rec
+				+ "}";
 	}
 
 }
