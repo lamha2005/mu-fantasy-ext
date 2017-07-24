@@ -33,8 +33,6 @@ public class HeroClass implements SerializableQAntType {
 	public int def;
 	@Transient
 	public int rec;
-	@Transient
-	public boolean ranger;
 	@Indexed
 	public transient String gameHeroId;
 	public String name;
@@ -66,6 +64,7 @@ public class HeroClass implements SerializableQAntType {
 	private void initBaseInfo() {
 		name = heroBase.getName();
 		index = heroBase.getIndex();
+		rank = heroBase.getRank();
 		levelUp(level);
 	}
 
@@ -212,6 +211,7 @@ public class HeroClass implements SerializableQAntType {
 		atk = baseStats.getAtk() + (levelUp - 1) * levelUpStats.getAtk();
 		hp = baseStats.getHp() + (levelUp - 1) * levelUpStats.getHp();
 		def = (int) (baseStats.getDef() + (levelUp - 1) * levelUpStats.getDef());
+		rec = (int) (baseStats.getRec() + (levelUp - 1) * levelUpStats.getRec());
 		this.skillPoint++;
 	}
 

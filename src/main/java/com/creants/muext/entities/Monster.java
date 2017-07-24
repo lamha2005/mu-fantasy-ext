@@ -1,11 +1,6 @@
 package com.creants.muext.entities;
 
-import java.util.ArrayList;
-import java.util.List;
-import java.util.Random;
-
 import com.creants.creants_2x.socket.gate.protocol.serialization.SerializableQAntType;
-import com.creants.muext.config.GameConfig;
 import com.fasterxml.jackson.annotation.JsonInclude;
 import com.fasterxml.jackson.annotation.JsonInclude.Include;
 import com.fasterxml.jackson.dataformat.xml.annotation.JacksonXmlProperty;
@@ -28,8 +23,6 @@ public class Monster implements SerializableQAntType {
 
 	@JacksonXmlProperty(localName = "Image", isAttribute = true)
 	public String img;
-	@JacksonXmlProperty(localName = "MonsterX2DamageChance", isAttribute = true)
-	public float damX2Change;
 
 	@JacksonXmlProperty(localName = "Dam", isAttribute = true)
 	public int dam;
@@ -38,13 +31,14 @@ public class Monster implements SerializableQAntType {
 	@JacksonXmlProperty(localName = "Defense", isAttribute = true)
 	public int def;
 
-	@JacksonXmlProperty(localName = "MagicResistance", isAttribute = true)
-	public int res;
-	@JacksonXmlProperty(localName = "Speed", isAttribute = true)
-	public int spd;
+	@JacksonXmlProperty(localName = "Recovery", isAttribute = true)
+	public int rec;
 
-	@JacksonXmlProperty(localName = "Ranger", isAttribute = true)
-	public boolean ranger;
+	@JacksonXmlProperty(localName = "BCPerHit", isAttribute = true)
+	public int bcPerHit;
+
+	@JacksonXmlProperty(localName = "MaxBC", isAttribute = true)
+	public int maxBC;
 
 
 	public Monster() {
@@ -57,12 +51,12 @@ public class Monster implements SerializableQAntType {
 		this.name = monster.getName();
 		this.level = monster.getLevel();
 		this.img = monster.getImg();
-		this.damX2Change = monster.getDamX2Change();
 		this.dam = monster.getDam();
 		this.hp = monster.getHp();
 		this.def = monster.getDef();
-		this.res = monster.getRes();
-		this.spd = monster.getSpd();
+		this.rec = monster.getRec();
+		this.bcPerHit = monster.getBcPerHit();
+		this.maxBC = monster.getMaxBC();
 	}
 
 
@@ -79,6 +73,26 @@ public class Monster implements SerializableQAntType {
 	}
 
 
+	public int getBcPerHit() {
+		return bcPerHit;
+	}
+
+
+	public void setBcPerHit(int bcPerHit) {
+		this.bcPerHit = bcPerHit;
+	}
+
+
+	public int getMaxBC() {
+		return maxBC;
+	}
+
+
+	public void setMaxBC(int maxBC) {
+		this.maxBC = maxBC;
+	}
+
+
 	public int getLevel() {
 		return level;
 	}
@@ -91,6 +105,16 @@ public class Monster implements SerializableQAntType {
 
 	public void setIndex(int index) {
 		this.index = index;
+	}
+
+
+	public int getRec() {
+		return rec;
+	}
+
+
+	public void setRec(int rec) {
+		this.rec = rec;
 	}
 
 
@@ -119,16 +143,6 @@ public class Monster implements SerializableQAntType {
 	}
 
 
-	public void setRes(int res) {
-		this.res = res;
-	}
-
-
-	public void setSpd(int spd) {
-		this.spd = spd;
-	}
-
-
 	public String getImg() {
 		return img;
 	}
@@ -136,16 +150,6 @@ public class Monster implements SerializableQAntType {
 
 	public void setImg(String img) {
 		this.img = img;
-	}
-
-
-	public float getDamX2Change() {
-		return damX2Change;
-	}
-
-
-	public void setDamX2Change(float damX2Change) {
-		this.damX2Change = damX2Change;
 	}
 
 
@@ -164,61 +168,45 @@ public class Monster implements SerializableQAntType {
 	}
 
 
-	public int getRes() {
-		return res;
-	}
-
-
-	public int getSpd() {
-		return spd;
-	}
-
-
 	public String getName() {
 		return name;
 	}
 
 
-	public boolean isRanger() {
-		return ranger;
-	}
-
-
-	public void setRanger(boolean ranger) {
-		this.ranger = ranger;
-	}
-
+	// public byte[] genX2Dam(int roundNo) {
+	// Random rd = new Random();
+	// int attackNo = roundNo * 20;
+	//
+	// int chance = (int) (damX2Change * 100);
+	// float critRate = GameConfig.getInstance().getCritRate(chance);
+	// List<Byte> dam2x = new ArrayList<>();
+	// int count = 1;
+	// for (byte i = 0; i < attackNo; i++) {
+	// int rate = (int) (critRate * count);
+	// count++;
+	// if (rate >= 100) {
+	// dam2x.add(i);
+	// count = 1;
+	// continue;
+	// }
+	//
+	// boolean b = (rd.nextInt(100 - rate) + 1) == 1;
+	// if (b) {
+	// dam2x.add(i);
+	// count = 1;
+	// }
+	// }
+	//
+	// byte[] result = new byte[dam2x.size()];
+	// for (int i = 0; i < dam2x.size(); i++) {
+	// result[i] = dam2x.get(i);
+	// }
+	//
+	// return result;
+	// }
 
 	public byte[] genX2Dam(int roundNo) {
-		Random rd = new Random();
-		int attackNo = roundNo * 20;
-
-		int chance = (int) (damX2Change * 100);
-		float critRate = GameConfig.getInstance().getCritRate(chance);
-		List<Byte> dam2x = new ArrayList<>();
-		int count = 1;
-		for (byte i = 0; i < attackNo; i++) {
-			int rate = (int) (critRate * count);
-			count++;
-			if (rate >= 100) {
-				dam2x.add(i);
-				count = 1;
-				continue;
-			}
-
-			boolean b = (rd.nextInt(100 - rate) + 1) == 1;
-			if (b) {
-				dam2x.add(i);
-				count = 1;
-			}
-		}
-
-		byte[] result = new byte[dam2x.size()];
-		for (int i = 0; i < dam2x.size(); i++) {
-			result[i] = dam2x.get(i);
-		}
-
-		return result;
+		return new byte[] {};
 	}
 
 }

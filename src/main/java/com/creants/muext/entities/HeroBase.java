@@ -12,6 +12,9 @@ public class HeroBase extends Character {
 	@JacksonXmlProperty(localName = "Index", isAttribute = true)
 	private int index;
 
+	@JacksonXmlProperty(localName = "CharRank", isAttribute = true)
+	private int rank;
+
 	@JacksonXmlProperty(localName = "Element", isAttribute = true)
 	private String element;
 
@@ -26,6 +29,16 @@ public class HeroBase extends Character {
 
 	public void setIndex(int index) {
 		this.index = index;
+	}
+
+
+	public int getRank() {
+		return rank;
+	}
+
+
+	public void setRank(int rank) {
+		this.rank = rank;
 	}
 
 

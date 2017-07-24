@@ -1,23 +1,23 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <HeroeList>
-	<Hero Index="10" Name="Dragon Dark Knight" Element="Fire" SkillIndex="1000#1001">
+	<Hero Index="10" Name="Dragon Dark Knight" Element="Fire" CharRank="4" SkillIndex="1000#1001">
 		<BaseStats PhysicAttack="550" HealthPoint="1100" Defense="400" Recovery="350"/>
 		<SubStats Accuracy="0.05" CriticalChance="0.8" DefenseensePenetration="10"/>
 		<LevelUpStats LvUpATK="7" LvUpHP="1" LvUpDEF="5" LvUpREC="0.5"/>
 	</Hero>
-	<Hero Index="11" Name="Great Dragon Dark Knight" Element="Fire" SkillIndex="1000#1001#1002">
+	<Hero Index="11" Name="Great Dragon Dark Knight" Element="Fire" CharRank="5" SkillIndex="1000#1001#1002">
 		<BaseStats PhysicAttack="2500" HealthPoint="2200" Defense="1000" Recovery="700"/>
 		<SubStats Accuracy="0.05" CriticalChance="0.8" DefenseensePenetration="10"/>
 		<LevelUpStats LvUpATK="8" LvUpHP="2" LvUpDEF="3" LvUpREC="1"/>
 	</Hero>
 	
-	<Hero Index="20" Name="Legendary Dark Wizard" Element="Water" SkillIndex="">
+	<Hero Index="20" Name="Legendary Dark Wizard" Element="Water" CharRank="4" SkillIndex="">
 		<BaseStats PhysicAttack="600" HealthPoint="900" Defense="250" Recovery="150"/>
 		<SubStats Accuracy="0.05" CriticalChance="0.8" DefenseensePenetration="10"/>
 		<LevelUpStats LvUpATK="1" LvUpHP="7" LvUpDEF="2" LvUpREC="4"/>
 	</Hero>
 	
-	<Hero Index="30" Name="Iris Fairy Elf" Element="Earth" SkillIndex="1002#1003">
+	<Hero Index="30" Name="Iris Fairy Elf" Element="Earth" CharRank="4" SkillIndex="1002#1003">
 		<BaseStats PhysicAttack="420" HealthPoint="1000" Defense="360" Recovery="450"/>
 		<SubStats Accuracy="0.05" CriticalChance="0.8" DefenseensePenetration="10"/>
 		<LevelUpStats LvUpATK="3" LvUpHP="5" LvUpDEF="3" LvUpREC="3"/>

@@ -50,6 +50,16 @@ public class BaseStats implements SerializableQAntType {
 	}
 
 
+	public int getRec() {
+		return rec;
+	}
+
+
+	public void setRec(int rec) {
+		this.rec = rec;
+	}
+
+
 	@Override
 	public String toString() {
 		return "[BaseStats] {PhysicAttack:" + atk + ", HealthPoint:" + hp + ", Defense:" + def + ", Recovery:" + rec

@@ -46,4 +46,14 @@ public class AdditionLevelUpStats {
 		this.def = def;
 	}
 
+
+	public float getRec() {
+		return rec;
+	}
+
+
+	public void setRec(float rec) {
+		this.rec = rec;
+	}
+
 }

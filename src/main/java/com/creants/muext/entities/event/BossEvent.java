@@ -8,14 +8,6 @@ import com.fasterxml.jackson.dataformat.xml.annotation.JacksonXmlProperty;
  * @author LamHM
  *
  */
-/**
- * @author LamHM
- *
- */
-/**
- * @author LamHM
- *
- */
 @JsonInclude(Include.NON_NULL)
 public class BossEvent {
 	@JacksonXmlProperty(localName = "Index", isAttribute = true)
