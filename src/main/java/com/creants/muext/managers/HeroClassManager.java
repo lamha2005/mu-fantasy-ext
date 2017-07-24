@@ -6,6 +6,7 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.NoSuchElementException;
+import java.util.Random;
 
 import javax.xml.stream.XMLInputFactory;
 import javax.xml.stream.XMLStreamReader;
@@ -53,7 +54,11 @@ public class HeroClassManager implements InitializingBean {
 			sequenceRepository.setDefaultValue(HERO_ID_SEQ, 1000);
 			sequenceRepository.createSequenceDocument("hero_stage_id");
 		}
+
 		loadHeroes();
+
+		// TODO remove
+		// endowHero("mus1#317", HeroClassType.DARK_WIZARD);
 	}
 
 
@@ -118,8 +123,28 @@ public class HeroClassManager implements InitializingBean {
 	}
 
 
+	public List<HeroClass> summon(String gameHeroId) {
+		HeroBase heroBase = heroes.get((new Random()).nextInt(heroes.size()));
+		HeroClass createNewHero = createNewHero(gameHeroId, heroBase);
+		save(createNewHero);
+
+		List<HeroClass> heroList = new ArrayList<>();
+		heroList.add(createNewHero);
+		return heroList;
+	}
+
+
 	public HeroClass createNewHero(String gameHeroId, HeroClassType type) {
 		HeroBase heroBase = getHeroBase(type.getId());
+		HeroClass heroClass = new HeroClass(heroBase);
+		heroClass.setId(getNextHeroId());
+		heroClass.setGameHeroId(gameHeroId);
+		resetSkill(heroClass, heroBase.getSkills());
+		return heroClass;
+	}
+
+
+	public HeroClass createNewHero(String gameHeroId, HeroBase heroBase) {
 		HeroClass heroClass = new HeroClass(heroBase);
 		heroClass.setId(getNextHeroId());
 		heroClass.setGameHeroId(gameHeroId);
@@ -160,6 +185,11 @@ public class HeroClassManager implements InitializingBean {
 		heroes.add(createNewHero(gameHeroId, HeroClassType.FAIRY_ELF));
 		heroRepository.save(heroes);
 		return heroes;
+	}
+
+
+	private void endowHero(String gameHeroId, HeroClassType type) {
+		heroRepository.save(createNewHero(gameHeroId, type));
 	}
 
 

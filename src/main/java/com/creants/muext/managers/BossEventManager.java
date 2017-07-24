@@ -19,7 +19,7 @@ import org.springframework.stereotype.Service;
 import com.creants.creants_2x.core.util.QAntTracer;
 import com.creants.muext.config.BossEventConfig;
 import com.creants.muext.entities.event.BossEvent;
-import com.creants.muext.managers.jobs.NotificationBotEventJob;
+import com.creants.muext.managers.jobs.NotificationBossEventJob;
 
 /**
  * @author LamHM
@@ -45,7 +45,7 @@ public class BossEventManager implements InitializingBean {
 				QAntTracer.debug(this.getClass(), "- Boss event " + bossEvent.toString());
 
 				// báo cho player trước khi boss xuất hiện
-				JobDetail job = JobBuilder.newJob(NotificationBotEventJob.class)
+				JobDetail job = JobBuilder.newJob(NotificationBossEventJob.class)
 						.withIdentity("BossEventName_" + bossEvent.getIndex(), "BossEventGroup").build();
 				JobDataMap jobDataMap = job.getJobDataMap();
 				jobDataMap.put("event_index", bossEvent.getIndex());

@@ -5,7 +5,8 @@ package com.creants.muext.entities;
  *
  */
 public enum HeroClassType {
-	DARK_KNIGHT(10, "Dark Knight", "Chiến Binh"),
+	DARK_KNIGHT(10, "Dragon Dark Knight", "Chiến Binh"),
+	GREAT_DARK_KNIGHT(11, "Great Dragon Dark Knight", "Chiến Binh"),
 	DARK_WIZARD(20, "Dark Wizard", "Pháp Sư"),
 	FAIRY_ELF(30, "Fairy Elf", "Tiên Nữ");
 

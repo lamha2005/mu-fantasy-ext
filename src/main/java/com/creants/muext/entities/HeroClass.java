@@ -66,7 +66,6 @@ public class HeroClass implements SerializableQAntType {
 	private void initBaseInfo() {
 		name = heroBase.getName();
 		index = heroBase.getIndex();
-		ranger = heroBase.isRanger();
 		levelUp(level);
 	}
 

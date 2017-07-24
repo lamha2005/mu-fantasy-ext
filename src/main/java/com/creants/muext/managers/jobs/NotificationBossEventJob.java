@@ -23,7 +23,7 @@ import com.creants.muext.entities.event.BossEvent;
  * @author LamHM
  *
  */
-public class NotificationBotEventJob implements Job {
+public class NotificationBossEventJob implements Job {
 
 	@Override
 	public void execute(JobExecutionContext context) throws JobExecutionException {

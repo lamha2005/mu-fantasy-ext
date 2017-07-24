@@ -11,8 +11,9 @@ import com.fasterxml.jackson.dataformat.xml.annotation.JacksonXmlProperty;
 public class HeroBase extends Character {
 	@JacksonXmlProperty(localName = "Index", isAttribute = true)
 	private int index;
-	@JacksonXmlProperty(localName = "Ranger", isAttribute = true)
-	private boolean ranger;
+
+	@JacksonXmlProperty(localName = "Element", isAttribute = true)
+	private String element;
 
 	@JacksonXmlProperty(localName = "SkillIndex", isAttribute = true)
 	private String skillIndex;
@@ -28,13 +29,13 @@ public class HeroBase extends Character {
 	}
 
 
-	public boolean isRanger() {
-		return ranger;
+	public String getElement() {
+		return element;
 	}
 
 
-	public void setRanger(boolean ranger) {
-		this.ranger = ranger;
+	public void setElement(String element) {
+		this.element = element;
 	}
 
 
