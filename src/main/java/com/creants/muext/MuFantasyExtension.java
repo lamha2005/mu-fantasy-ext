@@ -17,6 +17,7 @@ import com.creants.muext.controllers.ChatRequestHandler;
 import com.creants.muext.controllers.CreateRoomRequestHandler;
 import com.creants.muext.controllers.DisconnectEventHandler;
 import com.creants.muext.controllers.GetQuestListRequestHandler;
+import com.creants.muext.controllers.HeroListRequestHandler;
 import com.creants.muext.controllers.JoinChapterRequestHandler;
 import com.creants.muext.controllers.JoinGameRequestHandler;
 import com.creants.muext.controllers.JoinZoneEventHandler;
@@ -26,6 +27,8 @@ import com.creants.muext.controllers.QuestClaimRequestHandler;
 import com.creants.muext.controllers.StageFinishRequestHandler;
 import com.creants.muext.controllers.StageRequestHandler;
 import com.creants.muext.controllers.SummonRequestHandler;
+import com.creants.muext.controllers.UpdateBattleTeamRequestHandler;
+import com.creants.muext.controllers.event.GiftEventRequestHandler;
 import com.creants.muext.controllers.event.JoinBossEventRequestHandler;
 import com.creants.muext.entities.event.BossEvent;
 
@@ -67,6 +70,9 @@ public class MuFantasyExtension extends QAntExtension {
 		addRequestHandler("cmd_quest_claim", QuestClaimRequestHandler.class);
 		addRequestHandler("cmd_boss_event_join", JoinBossEventRequestHandler.class);
 		addRequestHandler("cmd_summon", SummonRequestHandler.class);
+		addRequestHandler("cmd_get_events", GiftEventRequestHandler.class);
+		addRequestHandler("cmd_heroes", HeroListRequestHandler.class);
+		addRequestHandler("cmd_upd_battle_team", UpdateBattleTeamRequestHandler.class);
 
 		addRequestHandler("cmd_ccu", CCURequestHandler.class);
 		addRequestHandler("cmd_admin_login", AdminLoginRequestHandler.class);

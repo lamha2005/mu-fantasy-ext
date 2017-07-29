@@ -38,7 +38,7 @@ public class SkillConfig {
 
 	private SkillConfig() {
 		loadSkill();
-		loadUpgradeCost();
+		// loadUpgradeCost();
 	}
 
 
@@ -103,10 +103,11 @@ public class SkillConfig {
 	}
 
 
-	public long getCost(int skillIndex, int level){
+	public long getCost(int skillIndex, int level) {
 		List<Long> list = upgradeCostMap.get(skillIndex);
-		Long cost = list.get(level-1);
-		if(cost == null) return Long.MAX_VALUE;
+		Long cost = list.get(level - 1);
+		if (cost == null)
+			return Long.MAX_VALUE;
 		return cost;
 	}
 

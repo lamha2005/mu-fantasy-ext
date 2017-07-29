@@ -13,6 +13,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
 
+import com.creants.muext.config.GiftEventConfig;
 import com.creants.muext.config.QuestConfig;
 import com.creants.muext.dao.GameHeroRepository;
 import com.creants.muext.dao.QuestRepository;
@@ -55,6 +56,8 @@ public class QuestManager implements InitializingBean {
 		if (firstDeploy) {
 			sequenceRepository.createSequenceDocument(QUEST_ID_SEQ);
 		}
+		
+		GiftEventConfig.getInstance();
 	}
 
 

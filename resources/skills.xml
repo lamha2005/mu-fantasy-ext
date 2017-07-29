@@ -4,5 +4,9 @@
 	<Skill Index="1001" Name="Great Strength" Description="Increase max HP" SkillType="2" ManaCost="" Cooldown="" TargetType="1" Affects="1"	EffectIndex="3"	EffectValue="50" ValueGrowth="50" CastImage="" EffectImage="" HitImage="" StatusImage="" CastSound="" EffectSound="" HitSound=""/>
 	<Skill Index="1002" Name="Heal" Description="Heal the target’s life." SkillType="1" ManaCost="20" Cooldown="20" TargetType="2" Affects="1"	EffectIndex="5"	EffectValue="10" ValueGrowth="1" CastImage="cast1000.png" EffectImage="eff1000.png" HitImage="hit1000.png"	StatusImage=""	CastSound="cast1000.wave" EffectSound="effect1000.wave"	HitSound="hit1000.wave"/>
 	<Skill Index="1003" Name="Triple Shot" Description="Dealing damage to multiple enemies." SkillType="1" ManaCost="50" Cooldown="3" TargetType="3" Affects="2" EffectIndex="5" EffectValue="100" ValueGrowth="50" CastImage="cast1000.png" EffectImage="eff1000.png" HitImage="hit1000.png" StatusImage=""	CastSound="cast1000.wave" EffectSound="effect1000.wave"	HitSound="hit1000.wave"/>
+
+	<Skill Index="9000" Name="Learder Skill" Description="Increase max HP by 300" SkillType="2" ManaCost="" Cooldown="" TargetType="2" Affects="4" EffectIndex="3" EffectValue="300" ValueGrowth="" CastImage="" EffectImage="" HitImage="" StatusImage=""	CastSound="" EffectSound=""	HitSound=""/>
+	<Skill Index="9001" Name="Learder Skill" Description="Increase ATK by 100" SkillType="2" ManaCost="" Cooldown="" TargetType="2" Affects="4" EffectIndex="1" EffectValue="100" ValueGrowth="" CastImage="" EffectImage="" HitImage="" StatusImage=""	CastSound="" EffectSound=""	HitSound=""/>
+	<Skill Index="9002" Name="Learder Skill" Description="Increase DEF by 150" SkillType="2" ManaCost="" Cooldown="" TargetType="2" Affects="4" EffectIndex="6" EffectValue="150" ValueGrowth="" CastImage="" EffectImage="" HitImage="" StatusImage=""	CastSound="" EffectSound=""	HitSound=""/>
 </SkillList>
 

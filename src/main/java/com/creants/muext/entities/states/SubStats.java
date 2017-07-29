@@ -18,6 +18,11 @@ public class SubStats implements SerializableQAntType {
 	@JacksonXmlProperty(localName = "DefenseensePenetration", isAttribute = true)
 	private int defpe;
 
+	@JacksonXmlProperty(localName = "MaxMP", isAttribute = true)
+	private int maxMp;
+	@JacksonXmlProperty(localName = "MPRec", isAttribute = true)
+	private int mpRec;
+
 
 	public int getDefpe() {
 		return defpe;
@@ -46,6 +51,26 @@ public class SubStats implements SerializableQAntType {
 
 	public void setCritch(float critch) {
 		this.critch = critch;
+	}
+
+
+	public int getMaxMp() {
+		return maxMp;
+	}
+
+
+	public void setMaxMp(int maxMp) {
+		this.maxMp = maxMp;
+	}
+
+
+	public int getMpRec() {
+		return mpRec;
+	}
+
+
+	public void setMpRec(int mpRec) {
+		this.mpRec = mpRec;
 	}
 
 }

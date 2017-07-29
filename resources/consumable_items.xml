@@ -1,12 +1,12 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <ItemList>
-	<Item ItemGroup="11000" ItemIndex="11000" ItemName="HP Potion (Small)" Description="Restore 100 HP" ItemType="1" Overlap="30" EffectType="1"/>
-	<Item ItemGroup="11000" ItemIndex="11001" ItemName="HP Potion (Medium)" Description="Restore 1000 HP" ItemType="1" Overlap="30" EffectType="1"/>
-	<Item ItemGroup="11000" ItemIndex="11002" ItemName="HP Potion (Large)" Description="Restore 5000 HP" ItemType="1" Overlap="30" EffectType="1"/>
-	<Item ItemGroup="11000" ItemIndex="11003" ItemName="Mana Potion (Small)" Description="Restore 100 MP" ItemType="1" Overlap="30" EffectType="1"/>
-	<Item ItemGroup="11000" ItemIndex="11004" ItemName="Mana Potion (Medium)" Description="Restore 1000 MP" ItemType="1" Overlap="30" EffectType="1"/>
-	<Item ItemGroup="11000" ItemIndex="11005" ItemName="Mana Potion (Large)" Description="Restore 5000 MP" ItemType="1" Overlap="30" EffectType="1"/>
-	<Item ItemGroup="11000" ItemIndex="11006" ItemName="Soul" Description="A unique material in this word" ItemType="9" Overlap="1"/>
-	<Item ItemGroup="11000" ItemIndex="11007" ItemName="Bless" Description="A unique material in this word" ItemType="9" Overlap="1"/>
+	<Item ItemGroup="11000" ItemIndex="11000" ItemName="HP Potion (Small)" Description="Restore 100 HP" ItemType="1" Overlap="30" EffectType="1" Icon="icon11000.png"/>
+	<Item ItemGroup="11000" ItemIndex="11001" ItemName="HP Potion (Medium)" Description="Restore 1000 HP" ItemType="1" Overlap="30" EffectType="1" Icon="icon11001.png"/>
+	<Item ItemGroup="11000" ItemIndex="11002" ItemName="HP Potion (Large)" Description="Restore 5000 HP" ItemType="1" Overlap="30" EffectType="1" Icon="icon11002.png"/>
+	<Item ItemGroup="11000" ItemIndex="11003" ItemName="Mana Potion (Small)" Description="Restore 100 MP" ItemType="1" Overlap="30" EffectType="1" Icon="icon11003.png"/>
+	<Item ItemGroup="11000" ItemIndex="11004" ItemName="Mana Potion (Medium)" Description="Restore 1000 MP" ItemType="1" Overlap="30" EffectType="1" Icon="icon11004.png"/>
+	<Item ItemGroup="11000" ItemIndex="11005" ItemName="Mana Potion (Large)" Description="Restore 5000 MP" ItemType="1" Overlap="30" EffectType="1" Icon="icon11005.png"/>
+	<Item ItemGroup="11000" ItemIndex="11006" ItemName="Soul" Description="A unique material in this word" ItemType="9" Overlap="1" Icon="icon11006.png"/>
+	<Item ItemGroup="11000" ItemIndex="11007" ItemName="Bless" Description="A unique material in this word" ItemType="9" Overlap="1" Icon="icon11007.png"/>
 </ItemList>
 

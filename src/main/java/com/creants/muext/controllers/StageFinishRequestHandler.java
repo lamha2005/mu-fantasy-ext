@@ -1,8 +1,11 @@
 package com.creants.muext.controllers;
 
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
 import java.util.Set;
+
+import org.apache.commons.lang.StringUtils;
 
 import com.creants.creants_2x.core.extension.BaseClientRequestHandler;
 import com.creants.creants_2x.core.util.QAntTracer;
@@ -12,17 +15,24 @@ import com.creants.creants_2x.socket.gate.entities.QAntArray;
 import com.creants.creants_2x.socket.gate.entities.QAntObject;
 import com.creants.creants_2x.socket.gate.wood.QAntUser;
 import com.creants.muext.Creants2XApplication;
+import com.creants.muext.config.ItemConfig;
 import com.creants.muext.config.StageConfig;
 import com.creants.muext.dao.GameHeroRepository;
 import com.creants.muext.dao.HeroStageRepository;
+import com.creants.muext.dao.ItemRepository;
 import com.creants.muext.dao.QuestStatsRepository;
 import com.creants.muext.dao.SequenceRepository;
 import com.creants.muext.entities.GameHero;
+import com.creants.muext.entities.HeroClass;
+import com.creants.muext.entities.ItemBase;
+import com.creants.muext.entities.item.ConsumeableItemBase;
+import com.creants.muext.entities.item.Item;
 import com.creants.muext.entities.quest.HeroQuest;
 import com.creants.muext.entities.quest.Task;
 import com.creants.muext.entities.quest.TaskType;
 import com.creants.muext.entities.world.HeroStage;
 import com.creants.muext.entities.world.Stage;
+import com.creants.muext.managers.HeroClassManager;
 import com.creants.muext.managers.MatchManager;
 import com.creants.muext.services.QuestManager;
 
@@ -38,6 +48,8 @@ public class StageFinishRequestHandler extends BaseClientRequestHandler {
 	private QuestStatsRepository questStageRepository;
 	private HeroStageRepository heroStageRepository;
 	private SequenceRepository sequenceRepository;
+	private ItemRepository itemRepository;
+	private HeroClassManager heroManager;
 
 
 	public StageFinishRequestHandler() {
@@ -47,6 +59,8 @@ public class StageFinishRequestHandler extends BaseClientRequestHandler {
 		questStageRepository = Creants2XApplication.getBean(QuestStatsRepository.class);
 		heroStageRepository = Creants2XApplication.getBean(HeroStageRepository.class);
 		sequenceRepository = Creants2XApplication.getBean(SequenceRepository.class);
+		itemRepository = Creants2XApplication.getBean(ItemRepository.class);
+		heroManager = Creants2XApplication.getBean(HeroClassManager.class);
 	}
 
 
@@ -67,16 +81,64 @@ public class StageFinishRequestHandler extends BaseClientRequestHandler {
 			QAntTracer.warn(this.getClass(), "Request finish match not found!");
 			return;
 		}
+
 		matchManager.removeMatch(gameHeroId);
-
 		GameHero gameHero = repository.findOne(gameHeroId);
-		IQAntObject reward = match.getQAntObject("reward");
 
-		processReward(user, reward, gameHero);
-		params.putQAntObject("game_hero", QAntObject.newFromObject(gameHero));
-
-		// kiểm tra xử lý nhiệm vụ
 		Integer stageIndex = match.getInt(StageRequestHandler.STAGE_INDEX);
+		HeroStage heroStage = heroStageRepository.findStageByHeroIdAndIndex(gameHeroId, stageIndex);
+		Stage stage = StageConfig.getInstance().getStage(stageIndex);
+
+		// tăng điểm kinh nghiệm cho hero còn sống
+		int expReward = stage.getExpReward();
+		List<HeroClass> heroes = heroManager.findHeroesByGameHeroId(gameHeroId);
+		gameHero.setHeroes(heroes);
+		if (heroes != null && heroes.size() > 0) {
+			IQAntArray heroArr = QAntArray.newInstance();
+			for (HeroClass heroClass : heroes) {
+				heroClass.incrExp(expReward);
+				IQAntObject qantObj = QAntObject.newInstance();
+				qantObj.putInt("exp", heroClass.getExp());
+				qantObj.putInt("maxExp", heroClass.getMaxExp());
+				qantObj.putInt("level", heroClass.getLevel());
+				heroArr.addQAntObject(qantObj);
+			}
+
+			heroManager.save(heroes);
+			params.putQAntArray("level_up", heroArr);
+		}
+
+		// xử lý trả thưởng
+		boolean isFirstTime = !heroStage.isClear();
+		List<Item> bonusItems = splitItem(heroStage.getRandomBonus());
+		processReward(user, stageIndex, gameHero, bonusItems);
+
+		if (isFirstTime) {
+			heroStage.setClear(true);
+			heroStage.setStarNo(3);
+			heroStage.setSweepTimes(1);
+
+			// mở 1 stage mới
+			Stage nextStage = StageConfig.getInstance().getStage(stageIndex + 1);
+			HeroStage heroStg = new HeroStage(nextStage);
+
+			heroStg.setHeroId(gameHeroId);
+			heroStg.setId(sequenceRepository.getNextSequenceId("hero_stage_id"));
+			heroStg.setUnlock(true);
+			heroStageRepository.save(heroStg);
+			params.putQAntObject("new_stage", QAntObject.newFromObject(heroStg));
+
+			if (nextStage.getChapterIndex() > heroStg.getChapterIndex()) {
+				// TODO thông báo mở chương mới
+			}
+
+		} else {
+			// TODO nếu sao lớn hơn thì cập nhật lại sao
+			heroStage.setSweepTimes(heroStage.getSweepTimes() + 1);
+		}
+
+		// kiểm tra xử lý nhiệm vụ, nên tách ra notification quest riêng nếu
+		// performance ko tốt
 		List<HeroQuest> quests = processQuest(stageIndex, gameHeroId);
 		if (quests != null) {
 			IQAntArray questArr = QAntArray.newInstance();
@@ -86,33 +148,21 @@ public class StageFinishRequestHandler extends BaseClientRequestHandler {
 			params.putQAntArray("quests", questArr);
 		}
 
-		HeroStage stage = heroStageRepository.findStageByHeroIdAndIndex(gameHeroId, stageIndex);
-		if (!stage.isClear()) {
-			stage.setClear(true);
-			stage.setStarNo(3);
-			stage.setSweepTimes(1);
-
-			// mở 1 stage mới
-			Stage nextStage = StageConfig.getInstance().getStage(stageIndex + 1);
-			HeroStage heroStage = new HeroStage(nextStage);
-
-			heroStage.setHeroId(gameHero.getId());
-			heroStage.setId(sequenceRepository.getNextSequenceId("hero_stage_id"));
-			heroStage.setUnlock(true);
-			heroStageRepository.save(heroStage);
-			params.putQAntObject("new_stage", QAntObject.newFromObject(heroStage));
-
-			if (nextStage.getChapterIndex() > stage.getChapterIndex()) {
-				// TODO thông báo mở chương mới
+		if (bonusItems.size() > 0) {
+			IQAntArray itemArr = QAntArray.newInstance();
+			for (Item item : bonusItems) {
+				QAntObject qantObject = QAntObject.newInstance();
+				qantObject.putInt("itemGroup", item.getItemGroup());
+				qantObject.putInt("index", item.getIndex());
+				qantObject.putInt("no", item.getNo());
+				itemArr.addQAntObject(qantObject);
 			}
-
-		} else {
-			// TODO nếu sao lớn hơn thì cập nhật lại sao
-			stage.setSweepTimes(stage.getSweepTimes() + 1);
+			params.putQAntArray("item_bonus", itemArr);
 		}
 
-		stage.setLastestSweepTime(System.currentTimeMillis());
-		heroStageRepository.save(stage);
+		params.putQAntObject("game_hero", QAntObject.newFromObject(gameHero));
+		heroStage.setLastestSweepTime(System.currentTimeMillis());
+		heroStageRepository.save(heroStage);
 		send("cmd_stage_finish", params, user);
 	}
 
@@ -171,9 +221,11 @@ public class StageFinishRequestHandler extends BaseClientRequestHandler {
 	}
 
 
-	private void processReward(QAntUser user, IQAntObject reward, GameHero gameHero) {
+	private void processReward(QAntUser user, int stageIndex, GameHero gameHero, List<Item> rewardItems) {
 		IQAntObject assets = QAntObject.newInstance();
-		Integer exp = reward.getInt("exp");
+		Stage stage = StageConfig.getInstance().getStage(stageIndex);
+
+		Integer exp = stage.getExpAccReward();
 		if (exp > 0) {
 			gameHero.setExp(gameHero.getExp() + exp);
 			boolean isLevelUp = false;
@@ -191,11 +243,44 @@ public class StageFinishRequestHandler extends BaseClientRequestHandler {
 			}
 		}
 
-		gameHero.setZen(gameHero.getZen() + reward.getInt("zen"));
+		gameHero.setZen(gameHero.getZen() + stage.getZenReward());
 		assets.putLong("zen", gameHero.getZen());
-		send("cmd_assets_change", assets, user);
 
+		send("cmd_assets_change", assets, user);
 		repository.save(gameHero);
+	}
+
+
+	private List<Item> convertToItem(List<int[]> items) {
+		List<Item> itemList = new ArrayList<>();
+		if (items.size() > 0) {
+			for (int[] ir : items) {
+				ItemBase itemBase = ItemConfig.getInstance().getItem(ir[0]);
+				Item item = new Item();
+				item.setNo(ir[1]);
+				item.setIndex(itemBase.getIndex());
+				item.setItemGroup(itemBase.getGroupId());
+				if (itemBase instanceof ConsumeableItemBase) {
+					item.setOverlap(true);
+				}
+				itemList.add(item);
+
+			}
+		}
+		return itemList;
+	}
+
+
+	private List<Item> splitItem(String itemArrString) {
+		List<int[]> itemsReward = new ArrayList<>();
+		if (StringUtils.isNotBlank(itemArrString)) {
+			String[] items = StringUtils.split(itemArrString, "#");
+			for (int i = 0; i < items.length; i++) {
+				String[] split = StringUtils.split(items[0], "/");
+				itemsReward.add(new int[] { Integer.parseInt(split[0]), Integer.parseInt(split[1]) });
+			}
+		}
+		return convertToItem(itemsReward);
 	}
 
 }

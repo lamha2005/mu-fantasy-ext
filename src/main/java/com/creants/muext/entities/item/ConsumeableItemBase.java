@@ -7,7 +7,7 @@ import com.fasterxml.jackson.dataformat.xml.annotation.JacksonXmlProperty;
  * @author LamHM
  *
  */
-public class ConsumeableItemBase extends ItemBase {
+public class ConsumeableItemBase extends ItemBase implements IConsumeableItem {
 	@JacksonXmlProperty(localName = "ItemType", isAttribute = true)
 	private int itemType;
 	@JacksonXmlProperty(localName = "Overlap", isAttribute = true)
@@ -16,6 +16,7 @@ public class ConsumeableItemBase extends ItemBase {
 	private Integer effectType;
 	@JacksonXmlProperty(localName = "Description", isAttribute = true)
 	private String desc;
+
 
 	public int getItemType() {
 		return itemType;

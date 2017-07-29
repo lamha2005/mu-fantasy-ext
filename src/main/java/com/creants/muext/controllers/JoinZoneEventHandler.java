@@ -1,8 +1,10 @@
 package com.creants.muext.controllers;
 
+import java.util.Arrays;
 import java.util.Calendar;
 import java.util.Date;
 import java.util.List;
+import java.util.stream.Collectors;
 
 import org.apache.commons.lang.time.DateUtils;
 
@@ -20,12 +22,15 @@ import com.creants.creants_2x.socket.gate.wood.QAntUser;
 import com.creants.muext.Creants2XApplication;
 import com.creants.muext.admin.managers.AdminManager;
 import com.creants.muext.config.StageConfig;
+import com.creants.muext.dao.BattleTeamRepository;
 import com.creants.muext.dao.GameHeroRepository;
 import com.creants.muext.dao.HeroStageRepository;
 import com.creants.muext.dao.QuestStatsRepository;
 import com.creants.muext.dao.SequenceRepository;
+import com.creants.muext.entities.BattleTeam;
 import com.creants.muext.entities.GameHero;
 import com.creants.muext.entities.HeroClass;
+import com.creants.muext.entities.Team;
 import com.creants.muext.entities.quest.HeroQuest;
 import com.creants.muext.entities.world.HeroStage;
 import com.creants.muext.managers.HeroClassManager;
@@ -49,6 +54,7 @@ public class JoinZoneEventHandler extends BaseServerEventHandler {
 	private SequenceRepository sequenceRepository;
 	private HeroStageRepository stageRepository;
 	private AdminManager adminManager;
+	private BattleTeamRepository battleTeamRepository;
 
 
 	public JoinZoneEventHandler() {
@@ -59,6 +65,7 @@ public class JoinZoneEventHandler extends BaseServerEventHandler {
 		sequenceRepository = Creants2XApplication.getBean(SequenceRepository.class);
 		stageRepository = Creants2XApplication.getBean(HeroStageRepository.class);
 		adminManager = Creants2XApplication.getBean(AdminManager.class);
+		battleTeamRepository = Creants2XApplication.getBean(BattleTeamRepository.class);
 	}
 
 
@@ -104,6 +111,19 @@ public class JoinZoneEventHandler extends BaseServerEventHandler {
 		dailyQuest.putInt("no", dailyQuestList.size());
 		questArr.addQAntObject(dailyQuest);
 		params.putQAntArray("quests", questArr);
+
+		// team
+		BattleTeam battleTeam = battleTeamRepository.findOne(gameHeroId);
+		List<Team> teamList = battleTeam.getTeamList();
+		IQAntArray teamArr = QAntArray.newInstance();
+		for (Team team : teamList) {
+			QAntObject teamObj = QAntObject.newInstance();
+			teamObj.putUtfString("name", team.getName());
+			List<Long> collect = Arrays.stream(team.getHeroes()).boxed().collect(Collectors.toList());
+			teamObj.putLongArray("heroes", collect);
+			teamArr.addQAntObject(teamObj);
+		}
+		params.putQAntArray("teams", teamArr);
 
 		// event
 		params.putInt("event_no", 10);
@@ -155,6 +175,17 @@ public class JoinZoneEventHandler extends BaseServerEventHandler {
 		// cho trước 2 nhân vật
 		List<HeroClass> endowHeroes = heroManager.endowHeroes(gameHeroId);
 		gameHero.setHeroes(endowHeroes);
+
+		// tạo team battle
+		BattleTeam battleTeam = new BattleTeam();
+		battleTeam.setGameHeroId(gameHeroId);
+		Team team = new Team();
+		battleTeam.addTeam(team);
+		team.setName("Team 1");
+		for (HeroClass heroClass : endowHeroes) {
+			team.addHero(heroClass.getId());
+		}
+		battleTeamRepository.save(battleTeam);
 
 		// tạo nhiệm vụ cho hero
 		questManager.registerQuestsFromHero(gameHero);

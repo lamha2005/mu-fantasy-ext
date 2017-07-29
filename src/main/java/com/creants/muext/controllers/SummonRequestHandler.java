@@ -38,7 +38,7 @@ public class SummonRequestHandler extends BaseClientRequestHandler {
 
 		response.putQAntArray("heroes", heroArr);
 
-		send("cmd_summon", params, user);
+		send("cmd_summon", response, user);
 	}
 
 }

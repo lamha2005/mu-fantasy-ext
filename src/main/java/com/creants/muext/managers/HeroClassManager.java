@@ -124,7 +124,7 @@ public class HeroClassManager implements InitializingBean {
 
 
 	public List<HeroClass> summon(String gameHeroId) {
-		HeroBase heroBase = heroes.get((new Random()).nextInt(heroes.size()));
+		HeroBase heroBase = new ArrayList<>(heroes.values()).get((new Random()).nextInt(heroes.size()));
 		HeroClass createNewHero = createNewHero(gameHeroId, heroBase);
 		save(createNewHero);
 

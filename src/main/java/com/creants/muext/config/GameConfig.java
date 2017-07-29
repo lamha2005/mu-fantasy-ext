@@ -13,8 +13,10 @@ import com.fasterxml.jackson.databind.ObjectMapper;
  */
 public class GameConfig {
 	private static final String CRIT_RATE = "resources/crit_dam_rate.json";
+	private static final String HERO_EXP = "resources/hero_exp.json";
 	private static GameConfig instance;
 	private Map<Integer, Float> critRateMap;
+	private Map<Integer, Integer> heroExpMap;
 
 
 	public static GameConfig getInstance() {
@@ -27,6 +29,7 @@ public class GameConfig {
 
 	private GameConfig() {
 		loadCritRate();
+		loadHeroExp();
 	}
 
 
@@ -42,9 +45,27 @@ public class GameConfig {
 	}
 
 
+	private void loadHeroExp() {
+		try {
+			heroExpMap = new HashMap<Integer, Integer>();
+			ObjectMapper mapper = new ObjectMapper();
+			heroExpMap = mapper.readValue(new File(HERO_EXP), new TypeReference<Map<Integer, Integer>>() {
+			});
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
+	}
+
+
 	public Float getCritRate(int chance) {
 		Float crit = critRateMap.get(chance);
 		return crit == null ? 0 : crit;
+	}
+
+
+	public int getMaxExp(int level) {
+		Integer maxExp = heroExpMap.get(level);
+		return maxExp == null ? Integer.MAX_VALUE : maxExp;
 	}
 
 }

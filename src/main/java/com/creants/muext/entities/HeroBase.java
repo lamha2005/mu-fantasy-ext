@@ -9,8 +9,11 @@ import com.fasterxml.jackson.dataformat.xml.annotation.JacksonXmlProperty;
  *
  */
 public class HeroBase extends Character {
-	@JacksonXmlProperty(localName = "Index", isAttribute = true)
+	@JacksonXmlProperty(localName = "ClassIndex", isAttribute = true)
 	private int index;
+
+	@JacksonXmlProperty(localName = "ClassGroup", isAttribute = true)
+	private int classGroup;
 
 	@JacksonXmlProperty(localName = "CharRank", isAttribute = true)
 	private int rank;
@@ -59,6 +62,16 @@ public class HeroBase extends Character {
 
 	public void setSkillIndex(String skillIndex) {
 		this.skillIndex = skillIndex;
+	}
+
+
+	public int getClassGroup() {
+		return classGroup;
+	}
+
+
+	public void setClassGroup(int classGroup) {
+		this.classGroup = classGroup;
 	}
 
 

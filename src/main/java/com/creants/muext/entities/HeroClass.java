@@ -23,8 +23,9 @@ import com.creants.muext.entities.states.BaseStats;
 public class HeroClass implements SerializableQAntType {
 	@Id
 	public long id;
-	@Transient
 	public int exp;
+	@Transient
+	public int maxExp;
 	@Transient
 	public int atk;
 	@Transient
@@ -33,12 +34,19 @@ public class HeroClass implements SerializableQAntType {
 	public int def;
 	@Transient
 	public int rec;
+
+	@Transient
+	public int maxMp;
+	@Transient
+	public int mpRec;
 	@Indexed
 	public transient String gameHeroId;
 	public String name;
 	public int level;
 	public int index;
+	public int classGroup;
 	public int rank;
+	public String element;
 
 	@Transient
 	private transient HeroBase heroBase;
@@ -65,6 +73,11 @@ public class HeroClass implements SerializableQAntType {
 		name = heroBase.getName();
 		index = heroBase.getIndex();
 		rank = heroBase.getRank();
+		classGroup = heroBase.getClassGroup();
+		maxMp = heroBase.getSubStats().getMaxMp();
+		mpRec = heroBase.getSubStats().getMpRec();
+		element = heroBase.getElement();
+		maxExp = GameConfig.getInstance().getMaxExp(level + 1);
 		levelUp(level);
 	}
 
@@ -100,8 +113,28 @@ public class HeroClass implements SerializableQAntType {
 	}
 
 
+	public int getMaxMp() {
+		return maxMp;
+	}
+
+
+	public int getMpRec() {
+		return mpRec;
+	}
+
+
 	public int getExp() {
 		return exp;
+	}
+
+
+	public int getMaxExp() {
+		return maxExp;
+	}
+
+
+	public void setMaxExp(int maxExp) {
+		this.maxExp = maxExp;
 	}
 
 
@@ -205,6 +238,26 @@ public class HeroClass implements SerializableQAntType {
 	}
 
 
+	public int getClassGroup() {
+		return classGroup;
+	}
+
+
+	public void setClassGroup(int classGroup) {
+		this.classGroup = classGroup;
+	}
+
+
+	public String getElement() {
+		return element;
+	}
+
+
+	public void setElement(String element) {
+		this.element = element;
+	}
+
+
 	public void levelUp(int levelUp) {
 		BaseStats baseStats = heroBase.getBaseStats();
 		AdditionLevelUpStats levelUpStats = heroBase.getLevelUpStats();
@@ -213,6 +266,24 @@ public class HeroClass implements SerializableQAntType {
 		def = (int) (baseStats.getDef() + (levelUp - 1) * levelUpStats.getDef());
 		rec = (int) (baseStats.getRec() + (levelUp - 1) * levelUpStats.getRec());
 		this.skillPoint++;
+	}
+
+
+	public boolean incrExp(int value) {
+		if (value <= 0)
+			return false;
+
+		exp += value;
+		boolean isLevelUp = false;
+		while (exp >= maxExp) {
+			exp -= maxExp;
+			level++;
+			maxExp = GameConfig.getInstance().getMaxExp(level);
+			levelUp(level);
+			isLevelUp = true;
+		}
+
+		return isLevelUp;
 	}
 
 

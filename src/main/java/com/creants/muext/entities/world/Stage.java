@@ -46,13 +46,22 @@ public class Stage implements SerializableQAntType {
 	public transient String monsterIndex;
 
 	@JacksonXmlProperty(localName = "FirstTimeReward", isAttribute = true)
-	public transient Integer rewardIndex;
+	public transient String firstTimeReward;
 
 	@JacksonXmlProperty(localName = "ZenReward", isAttribute = true)
 	public transient Integer zenReward;
 
 	@JacksonXmlProperty(localName = "SweepTimes", isAttribute = true)
 	public int sweepTimes;
+
+	@JacksonXmlProperty(localName = "RandomBonus", isAttribute = true)
+	public transient String randomBonus;
+
+	@JacksonXmlProperty(localName = "ExpReward", isAttribute = true)
+	public transient int expReward;
+
+	@JacksonXmlProperty(localName = "ExpAccReward", isAttribute = true)
+	public transient int expAccReward;
 
 	private transient Map<Integer, Integer> monsterCountMap;
 	private transient List<Integer[]> roundList;
@@ -155,13 +164,8 @@ public class Stage implements SerializableQAntType {
 	}
 
 
-	public int getRewardIndex() {
-		return rewardIndex;
-	}
-
-
-	public void setRewardIndex(int rewardIndex) {
-		this.rewardIndex = rewardIndex;
+	public String getFirstTimeReward() {
+		return firstTimeReward;
 	}
 
 
@@ -172,6 +176,21 @@ public class Stage implements SerializableQAntType {
 
 	public void setZenReward(int zenReward) {
 		this.zenReward = zenReward;
+	}
+
+
+	public String getRandomBonus() {
+		return randomBonus;
+	}
+
+
+	public int getExpReward() {
+		return expReward;
+	}
+
+
+	public int getExpAccReward() {
+		return expAccReward;
 	}
 
 
