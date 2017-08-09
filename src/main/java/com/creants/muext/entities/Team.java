@@ -1,5 +1,8 @@
 package com.creants.muext.entities;
 
+import java.util.ArrayList;
+import java.util.List;
+
 import com.creants.creants_2x.socket.gate.protocol.serialization.SerializableQAntType;
 
 /**
@@ -7,13 +10,24 @@ import com.creants.creants_2x.socket.gate.protocol.serialization.SerializableQAn
  *
  */
 public class Team implements SerializableQAntType {
+	private int index;
 	public String name;
-	public long[] heroes;
+	public Long[] heroes;
 
 
 	public Team() {
-		heroes = new long[] { -1L, -1L, -1L, -1L };
+		heroes = new Long[] { -1L, -1L, -1L, -1L };
+		index = -1;
+	}
 
+
+	public int getIndex() {
+		return index;
+	}
+
+
+	public void setIndex(int index) {
+		this.index = index;
 	}
 
 
@@ -27,12 +41,12 @@ public class Team implements SerializableQAntType {
 	}
 
 
-	public long[] getHeroes() {
+	public Long[] getHeroes() {
 		return heroes;
 	}
 
 
-	public void setHeroes(long[] heroes) {
+	public void setHeroes(Long[] heroes) {
 		this.heroes = heroes;
 	}
 
@@ -44,6 +58,15 @@ public class Team implements SerializableQAntType {
 				break;
 			}
 		}
+	}
+
+
+	public List<Long> getIdList() {
+		List<Long> heroIds = new ArrayList<>(heroes.length);
+		for (int i = 0; i < heroes.length; i++) {
+			heroIds.add(heroes[i]);
+		}
+		return heroIds;
 	}
 
 }

@@ -7,6 +7,8 @@ import org.springframework.data.annotation.Transient;
 import org.springframework.data.mongodb.core.mapping.Document;
 
 import com.creants.creants_2x.socket.gate.protocol.serialization.SerializableQAntType;
+import com.creants.muext.config.GameConfig;
+import com.creants.muext.entities.item.HeroItem;
 
 /**
  * @author LamHM
@@ -35,6 +37,8 @@ public class GameHero implements SerializableQAntType {
 
 	@Transient
 	public List<HeroClass> heroes;
+	@Transient
+	public List<HeroItem> items;
 
 
 	public GameHero() {
@@ -49,6 +53,16 @@ public class GameHero implements SerializableQAntType {
 
 	public void setHeroes(List<HeroClass> heroes) {
 		this.heroes = heroes;
+	}
+
+
+	public List<HeroItem> getItems() {
+		return items;
+	}
+
+
+	public void setItems(List<HeroItem> items) {
+		this.items = items;
 	}
 
 
@@ -179,6 +193,23 @@ public class GameHero implements SerializableQAntType {
 
 	public void setExp(int exp) {
 		this.exp = exp;
+	}
+
+
+	public boolean incrExp(int value) {
+		if (value <= 0)
+			return false;
+
+		exp += value;
+		boolean isLevelUp = false;
+		while (exp >= maxExp) {
+			exp -= maxExp;
+			level++;
+			maxExp = GameConfig.getInstance().getAccMaxExp(level);
+			isLevelUp = true;
+		}
+
+		return isLevelUp;
 	}
 
 

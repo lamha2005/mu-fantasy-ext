@@ -21,6 +21,7 @@ public class GiftEventConfig {
 	private static final String GIFT_EVENTS_CONFIG = "resources/events/gift_events.xml";
 	private static final XMLInputFactory f = XMLInputFactory.newFactory();
 	private static GiftEventConfig instance;
+	private int revison;
 	private Map<Integer, GiftEventBase> gifts;
 
 
@@ -33,7 +34,7 @@ public class GiftEventConfig {
 	}
 
 
-	private  GiftEventConfig() {
+	private GiftEventConfig() {
 		loadStage();
 	}
 
@@ -43,7 +44,9 @@ public class GiftEventConfig {
 			gifts = new HashMap<>();
 			XMLStreamReader sr = f.createXMLStreamReader(new FileInputStream(GIFT_EVENTS_CONFIG));
 			XmlMapper mapper = new XmlMapper();
-			sr.next(); // to point to <Stages>
+			sr.next(); // to point to <Unicode>
+
+			revison = Integer.parseInt(sr.getAttributeValue(0));
 			sr.next();
 			GiftEventBase giftEvent = null;
 			while (sr.hasNext()) {
@@ -60,6 +63,11 @@ public class GiftEventConfig {
 			e.printStackTrace();
 		}
 
+	}
+
+
+	public int getRevison() {
+		return revison;
 	}
 
 

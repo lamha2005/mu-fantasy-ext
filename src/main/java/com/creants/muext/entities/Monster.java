@@ -20,6 +20,8 @@ public class Monster implements SerializableQAntType {
 	public String name;
 	@JacksonXmlProperty(localName = "Level", isAttribute = true)
 	public int level;
+	@JacksonXmlProperty(localName = "MonsterRank", isAttribute = true)
+	public int rank;
 
 	@JacksonXmlProperty(localName = "Image", isAttribute = true)
 	public String img;
@@ -57,6 +59,7 @@ public class Monster implements SerializableQAntType {
 		this.rec = monster.getRec();
 		this.bcPerHit = monster.getBcPerHit();
 		this.maxBC = monster.getMaxBC();
+		this.rank = monster.getRank();
 	}
 
 
@@ -100,6 +103,16 @@ public class Monster implements SerializableQAntType {
 
 	public int getIndex() {
 		return index;
+	}
+
+
+	public int getRank() {
+		return rank;
+	}
+
+
+	public void setRank(int rank) {
+		this.rank = rank;
 	}
 
 

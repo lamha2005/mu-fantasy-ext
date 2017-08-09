@@ -23,14 +23,16 @@ import com.fasterxml.jackson.dataformat.xml.annotation.JacksonXmlProperty;
 public class GiftEventBase implements SerializableQAntType {
 	@JacksonXmlProperty(localName = "Index", isAttribute = true)
 	public int index;
+	@JacksonXmlProperty(localName = "CategoryId", isAttribute = true)
+	public int categoryId;
 	@JacksonXmlProperty(localName = "EventName", isAttribute = true)
 	public String name;
 	@JacksonXmlProperty(localName = "Description", isAttribute = true)
 	public String desc;
 	@JacksonXmlProperty(localName = "GiftList", isAttribute = true)
-	public String giftStr;
+	private String giftStr;
 
-	private transient List<ItemPackageInfo> itemPackages;
+	public List<ItemPackageInfo> itemPackages;
 
 
 	public void init() {
@@ -72,6 +74,16 @@ public class GiftEventBase implements SerializableQAntType {
 
 	public void setIndex(int index) {
 		this.index = index;
+	}
+
+
+	public int getCategoryId() {
+		return categoryId;
+	}
+
+
+	public void setCategoryId(int categoryId) {
+		this.categoryId = categoryId;
 	}
 
 

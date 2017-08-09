@@ -1,12 +1,17 @@
 package com.creants.muext.controllers;
 
+import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.Collection;
+import java.util.List;
 
 import org.apache.commons.lang.StringUtils;
 
 import com.creants.creants_2x.core.extension.BaseClientRequestHandler;
 import com.creants.creants_2x.socket.gate.entities.IQAntArray;
 import com.creants.creants_2x.socket.gate.entities.IQAntObject;
+import com.creants.creants_2x.socket.gate.entities.QAntArray;
+import com.creants.creants_2x.socket.gate.entities.QAntObject;
 import com.creants.creants_2x.socket.gate.wood.QAntUser;
 import com.creants.muext.Creants2XApplication;
 import com.creants.muext.dao.BattleTeamRepository;
@@ -38,12 +43,13 @@ public class UpdateBattleTeamRequestHandler extends BaseClientRequestHandler {
 		for (int i = 0; i < teamArr.size(); i++) {
 			IQAntObject teamObj = teamArr.getQAntObject(i);
 			Team team = new Team();
-			String name = params.getUtfString("name");
-			if (StringUtils.isBlank(name)) {
-				team.setName("Team " + (i + 1));
-			}
+			String name = teamObj.getUtfString("name");
+			team.setName(StringUtils.isBlank(name) ? ("Team " + (i + 1)) : name);
+			Integer index = teamObj.getInt("index");
+			team.setIndex(index != null ? index : -1);
+
 			Collection<Integer> heroList = teamObj.getIntArray("heroes");
-			long[] heroArr = new long[4];
+			Long[] heroArr = new Long[4];
 			int count = 0;
 			for (long l : heroList) {
 				heroArr[count] = l;
@@ -55,6 +61,20 @@ public class UpdateBattleTeamRequestHandler extends BaseClientRequestHandler {
 		}
 
 		battleTeamRep.save(battleTeam);
+
+		params = QAntObject.newInstance();
+		List<Team> teamList = battleTeam.getTeamList();
+		teamArr = QAntArray.newInstance();
+		for (Team team : teamList) {
+			QAntObject teamObj = QAntObject.newInstance();
+			teamObj.putInt("index", team.getIndex());
+			teamObj.putUtfString("name", team.getName());
+			teamObj.putLongArray("heroes", new ArrayList<Long>(Arrays.asList(team.getHeroes())));
+			teamArr.addQAntObject(teamObj);
+		}
+		params.putQAntArray("teams", teamArr);
+
+		send("cmd_upd_battle_team", params, user);
 	}
 
 }

@@ -9,6 +9,11 @@ import java.util.Set;
 import org.apache.commons.lang.StringUtils;
 
 import com.creants.creants_2x.socket.gate.protocol.serialization.SerializableQAntType;
+import com.creants.muext.config.ItemConfig;
+import com.creants.muext.entities.ItemBase;
+import com.creants.muext.entities.item.ConsumeableItemBase;
+import com.creants.muext.entities.item.EquipmentBase;
+import com.creants.muext.entities.item.HeroItem;
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import com.fasterxml.jackson.annotation.JsonInclude;
 import com.fasterxml.jackson.annotation.JsonInclude.Include;
@@ -19,7 +24,7 @@ import com.fasterxml.jackson.dataformat.xml.annotation.JacksonXmlProperty;
  *
  */
 @JsonInclude(Include.NON_NULL)
-@JsonIgnoreProperties(ignoreUnknown = true)
+@JsonIgnoreProperties(value = { "rewards", "bonus", "rewardItems" })
 public class Stage implements SerializableQAntType {
 	@JacksonXmlProperty(localName = "StageIndex", isAttribute = true)
 	public int index;
@@ -39,8 +44,14 @@ public class Stage implements SerializableQAntType {
 	@JacksonXmlProperty(localName = "BattleBG", isAttribute = true)
 	public transient String battleBG;
 
+	@JacksonXmlProperty(localName = "Formation", isAttribute = true)
+	public transient String formation;
+
 	@JacksonXmlProperty(localName = "StaminaCost", isAttribute = true)
 	public transient Integer staminaCost;
+
+	@JacksonXmlProperty(localName = "Expansion", isAttribute = true)
+	public transient boolean expansion;
 
 	@JacksonXmlProperty(localName = "MonsterIndex", isAttribute = true)
 	public transient String monsterIndex;
@@ -66,11 +77,16 @@ public class Stage implements SerializableQAntType {
 	private transient Map<Integer, Integer> monsterCountMap;
 	private transient List<Integer[]> roundList;
 
+	private List<HeroItem> rewards;
+	private List<HeroItem> bonus;
+
 
 	public void init() {
 		monsterCountMap = new HashMap<>();
 		roundList = new ArrayList<>();
 		readMonsterIndex();
+		rewards = splitItem(firstTimeReward);
+		bonus = splitItem(randomBonus);
 	}
 
 
@@ -81,6 +97,16 @@ public class Stage implements SerializableQAntType {
 
 	public void setIndex(int index) {
 		this.index = index;
+	}
+
+
+	public boolean isExpansion() {
+		return expansion;
+	}
+
+
+	public void setExpansion(boolean expansion) {
+		this.expansion = expansion;
 	}
 
 
@@ -141,6 +167,16 @@ public class Stage implements SerializableQAntType {
 
 	public void setBattleBG(String battleBG) {
 		this.battleBG = battleBG;
+	}
+
+
+	public String getFormation() {
+		return formation;
+	}
+
+
+	public void setFormation(String formation) {
+		this.formation = formation;
 	}
 
 
@@ -234,4 +270,51 @@ public class Stage implements SerializableQAntType {
 	public Integer countMonster(int monsterIndex) {
 		return monsterCountMap.get(monsterIndex);
 	}
+
+
+	public List<HeroItem> getRewards() {
+		return rewards;
+	}
+
+
+	public List<HeroItem> getBonus() {
+		return bonus;
+	}
+
+
+	private List<HeroItem> splitItem(String itemArrString) {
+		List<int[]> itemsReward = new ArrayList<>();
+		if (StringUtils.isNotBlank(itemArrString)) {
+			String[] items = StringUtils.split(itemArrString, "#");
+			for (int i = 0; i < items.length; i++) {
+				String[] split = StringUtils.split(items[i], "/");
+				itemsReward.add(new int[] { Integer.parseInt(split[0]), Integer.parseInt(split[1]) });
+			}
+		}
+		return convertToItem(itemsReward);
+	}
+
+
+	private List<HeroItem> convertToItem(List<int[]> items) {
+		List<HeroItem> itemList = new ArrayList<>();
+		if (items.size() > 0) {
+			for (int[] ir : items) {
+				ItemBase itemBase = ItemConfig.getInstance().getItem(ir[0]);
+				HeroItem item = new HeroItem();
+				item.setNo(ir[1]);
+				item.setIndex(itemBase.getIndex());
+				item.setItemGroup(itemBase.getGroupId());
+				item.setItemBase(itemBase);
+				if (itemBase instanceof ConsumeableItemBase) {
+					item.setOverlap(true);
+				} else if (itemBase instanceof EquipmentBase) {
+					EquipmentBase equipmentBase = (EquipmentBase) itemBase;
+					item.setElement(equipmentBase.getElemental());
+				}
+				itemList.add(item);
+			}
+		}
+		return itemList;
+	}
+
 }

@@ -34,6 +34,7 @@ dependencies {
     compile 'org.springframework.data:spring-data-mongodb:1.9.6.RELEASE'
     compile 'com.fasterxml.jackson.dataformat:jackson-dataformat-xml:2.8.8'
     compile group: 'org.quartz-scheduler', name: 'quartz', version: '2.3.0'
+    compile 'de.jkeylockmanager:jkeylockmanager:2.1.0'
 }
 
 compileJava.options.encoding = 'UTF-8'

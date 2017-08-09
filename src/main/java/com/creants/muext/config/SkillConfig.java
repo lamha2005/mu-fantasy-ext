@@ -38,7 +38,7 @@ public class SkillConfig {
 
 	private SkillConfig() {
 		loadSkill();
-		// loadUpgradeCost();
+		loadUpgradeCost();
 	}
 
 

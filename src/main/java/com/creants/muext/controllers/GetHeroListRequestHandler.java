@@ -1,8 +1,8 @@
 package com.creants.muext.controllers;
 
+import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
-import java.util.stream.Collectors;
 
 import com.creants.creants_2x.core.extension.BaseClientRequestHandler;
 import com.creants.creants_2x.socket.gate.entities.IQAntArray;
@@ -21,12 +21,12 @@ import com.creants.muext.managers.HeroClassManager;
  * @author LamHM
  *
  */
-public class HeroListRequestHandler extends BaseClientRequestHandler {
+public class GetHeroListRequestHandler extends BaseClientRequestHandler {
 	private BattleTeamRepository battleTeamRep;
 	private HeroClassManager heroManager;
 
 
-	public HeroListRequestHandler() {
+	public GetHeroListRequestHandler() {
 		battleTeamRep = Creants2XApplication.getBean(BattleTeamRepository.class);
 		heroManager = Creants2XApplication.getBean(HeroClassManager.class);
 	}
@@ -49,9 +49,10 @@ public class HeroListRequestHandler extends BaseClientRequestHandler {
 		IQAntArray teamArr = QAntArray.newInstance();
 		for (Team team : teamList) {
 			QAntObject teamObj = QAntObject.newInstance();
+			int index = team.getIndex();
+			teamObj.putInt("index", index > 0 ? index : -1);
 			teamObj.putUtfString("name", team.getName());
-			List<Long> collect = Arrays.stream(team.getHeroes()).boxed().collect(Collectors.toList());
-			teamObj.putLongArray("heroes", collect);
+			teamObj.putLongArray("heroes", new ArrayList<Long>(Arrays.asList(team.getHeroes())));
 			teamArr.addQAntObject(teamObj);
 		}
 		params.putQAntArray("teams", teamArr);

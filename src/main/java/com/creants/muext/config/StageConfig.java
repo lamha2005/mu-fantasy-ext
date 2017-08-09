@@ -78,6 +78,11 @@ public class StageConfig {
 	}
 
 
+	public Stage getFirstStage() {
+		return getStages().get(0);
+	}
+
+
 	public List<Stage> getStages() {
 		return new ArrayList<>(stages.values());
 	}

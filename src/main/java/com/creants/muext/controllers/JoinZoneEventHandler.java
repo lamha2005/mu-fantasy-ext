@@ -1,10 +1,13 @@
 package com.creants.muext.controllers;
 
+import java.io.IOException;
+import java.time.temporal.ChronoUnit;
+import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Calendar;
 import java.util.Date;
 import java.util.List;
-import java.util.stream.Collectors;
+import java.util.Map;
 
 import org.apache.commons.lang.time.DateUtils;
 
@@ -21,19 +24,26 @@ import com.creants.creants_2x.socket.gate.entities.QAntObject;
 import com.creants.creants_2x.socket.gate.wood.QAntUser;
 import com.creants.muext.Creants2XApplication;
 import com.creants.muext.admin.managers.AdminManager;
+import com.creants.muext.config.GiftEventConfig;
 import com.creants.muext.config.StageConfig;
 import com.creants.muext.dao.BattleTeamRepository;
 import com.creants.muext.dao.GameHeroRepository;
+import com.creants.muext.dao.GiftEventRepository;
 import com.creants.muext.dao.HeroStageRepository;
-import com.creants.muext.dao.QuestStatsRepository;
-import com.creants.muext.dao.SequenceRepository;
 import com.creants.muext.entities.BattleTeam;
 import com.creants.muext.entities.GameHero;
 import com.creants.muext.entities.HeroClass;
 import com.creants.muext.entities.Team;
+import com.creants.muext.entities.event.GiftEventBase;
+import com.creants.muext.entities.event.GiftInfo;
+import com.creants.muext.entities.event.HeroGift;
+import com.creants.muext.entities.item.HeroItem;
 import com.creants.muext.entities.quest.HeroQuest;
 import com.creants.muext.entities.world.HeroStage;
+import com.creants.muext.entities.world.Stage;
 import com.creants.muext.managers.HeroClassManager;
+import com.creants.muext.managers.HeroItemManager;
+import com.creants.muext.services.AutoIncrementService;
 import com.creants.muext.services.QuestManager;
 import com.creants.muext.util.UserHelper;
 
@@ -46,26 +56,29 @@ public class JoinZoneEventHandler extends BaseServerEventHandler {
 	private static final String HERO_NAME_PREFIX = "Mu Hero ";
 	public static final int STAMINA_REHI_TIME_MILI = 60000;
 	public static final int STAMINA_REHI_VALUE = 1;
+	public static final GiftEventConfig giftEventConfig = GiftEventConfig.getInstance();
 
-	private GameHeroRepository repository;
-	private QuestStatsRepository questStatsRepository;
+	private GameHeroRepository gameHeroRep;
 	private QuestManager questManager;
 	private HeroClassManager heroManager;
-	private SequenceRepository sequenceRepository;
 	private HeroStageRepository stageRepository;
 	private AdminManager adminManager;
 	private BattleTeamRepository battleTeamRepository;
+	private AutoIncrementService autoIncrementService;
+	private HeroItemManager heroItemManager;
+	private GiftEventRepository giftEventRepository;
 
 
 	public JoinZoneEventHandler() {
-		repository = Creants2XApplication.getBean(GameHeroRepository.class);
-		questStatsRepository = Creants2XApplication.getBean(QuestStatsRepository.class);
+		gameHeroRep = Creants2XApplication.getBean(GameHeroRepository.class);
 		questManager = Creants2XApplication.getBean(QuestManager.class);
 		heroManager = Creants2XApplication.getBean(HeroClassManager.class);
-		sequenceRepository = Creants2XApplication.getBean(SequenceRepository.class);
+		autoIncrementService = Creants2XApplication.getBean(AutoIncrementService.class);
 		stageRepository = Creants2XApplication.getBean(HeroStageRepository.class);
 		adminManager = Creants2XApplication.getBean(AdminManager.class);
 		battleTeamRepository = Creants2XApplication.getBean(BattleTeamRepository.class);
+		heroItemManager = Creants2XApplication.getBean(HeroItemManager.class);
+		giftEventRepository = Creants2XApplication.getBean(GiftEventRepository.class);
 	}
 
 
@@ -76,19 +89,22 @@ public class JoinZoneEventHandler extends BaseServerEventHandler {
 		long creantsUserId = user.getCreantsUserId();
 		String gameHeroId = user.getName();
 
-		GameHero gameHero = repository.findOne(gameHeroId);
+		GameHero gameHero = gameHeroRep.findOne(gameHeroId);
 		if (gameHero == null) {
 			gameHero = createNewGameHero(gameHeroId, creantsUserId);
 			user.setProperty(UserHelper.GAME_HERO_NAME, gameHero.getName());
 		} else {
 			List<HeroClass> heroes = heroManager.findHeroesByGameHeroId(gameHeroId);
 			gameHero.setHeroes(heroes);
+
+			List<HeroItem> items = heroItemManager.getItems(gameHeroId);
+			gameHero.setItems(items);
 		}
 
 		updateStamina(user, gameHero);
 
 		// main quest
-		List<HeroQuest> mainQuests = questStatsRepository.getQuests(gameHeroId, QuestManager.GROUP_MAIN_QUEST, false);
+		List<HeroQuest> mainQuests = questManager.getQuests(gameHeroId, QuestManager.GROUP_MAIN_QUEST, false);
 		IQAntObject params = new QAntObject();
 		params.putQAntObject("game_hero", QAntObject.newFromObject(gameHero));
 		IQAntArray questArr = QAntArray.newInstance();
@@ -99,7 +115,7 @@ public class JoinZoneEventHandler extends BaseServerEventHandler {
 		questArr.addQAntObject(mainQuest);
 
 		// daily quest
-		List<HeroQuest> dailyQuestList = questStatsRepository.findDailyQuests(gameHeroId, getStartOfDateMilis(),
+		List<HeroQuest> dailyQuestList = questManager.findDailyQuests(gameHeroId, getStartOfDateMilis(),
 				getEndOfDateMilis());
 		if (dailyQuestList == null || dailyQuestList.size() <= 0) {
 			dailyQuestList = questManager.resetDailyQuest(gameHero);
@@ -119,8 +135,8 @@ public class JoinZoneEventHandler extends BaseServerEventHandler {
 		for (Team team : teamList) {
 			QAntObject teamObj = QAntObject.newInstance();
 			teamObj.putUtfString("name", team.getName());
-			List<Long> collect = Arrays.stream(team.getHeroes()).boxed().collect(Collectors.toList());
-			teamObj.putLongArray("heroes", collect);
+			teamObj.putInt("index", team.getIndex());
+			teamObj.putLongArray("heroes", new ArrayList<Long>(Arrays.asList(team.getHeroes())));
 			teamArr.addQAntObject(teamObj);
 		}
 		params.putQAntArray("teams", teamArr);
@@ -128,10 +144,83 @@ public class JoinZoneEventHandler extends BaseServerEventHandler {
 		// event
 		params.putInt("event_no", 10);
 		params.putLong("login_time", user.getLoginTime());
+
+		// process gift
+		processGiftEvent(user, params);
 		send("join_game", params, user);
 
 		adminManager.incrAndNotifyCCU();
 		return;
+	}
+
+
+	private void processGiftEvent(QAntUser user, IQAntObject params) {
+		long currentTimeMillis = System.currentTimeMillis();
+		HeroGift heroGift = giftEventRepository.findOne(user.getName());
+		if (heroGift == null || heroGift.isEmpty()) {
+			heroGift = new HeroGift();
+			heroGift.setGameHeroId(user.getName());
+
+			// Daily gift
+			GiftInfo giftInfo = new GiftInfo(giftEventConfig.getEvent(0));
+			giftInfo.setAnchorTime(currentTimeMillis);
+			heroGift.addGiftInfo(giftInfo);
+		}
+
+		heroGift.setRevision(giftEventConfig.getRevison());
+
+		IQAntObject giftEventObj = QAntObject.newInstance();
+		params.putQAntObject("gift_event", giftEventObj);
+		giftEventObj.putInt("rvs", heroGift.getRevision());
+
+		Map<Integer, GiftInfo> giftEventMap = heroGift.getGiftEventMap();
+		int giftNotification = 0;
+		IQAntArray giftArr = QAntArray.newInstance();
+		for (GiftInfo giftInfo : giftEventMap.values()) {
+			GiftEventBase event = giftEventConfig.getEvent(giftInfo.getGiftIndex());
+			switch (event.getCategoryId()) {
+				// Daily gift
+				case 0:
+					boolean over7Day = isOver7Day(new Date(giftInfo.getAnchorTime()), new Date(currentTimeMillis));
+					if (over7Day) {
+						giftInfo.reset();
+					}
+
+					long curDate = DateUtils.truncate(new Date(), Calendar.DATE).getTime();
+					long preDate = DateUtils.truncate(new Date(giftInfo.getLastUpdateTime()), Calendar.DATE).getTime();
+					if (curDate != preDate) {
+						giftInfo.setClaim(true);
+						giftInfo.claimNextPackage();
+						giftNotification++;
+					}
+					break;
+
+				default:
+					break;
+			}
+			giftInfo.setLastUpdateTime(currentTimeMillis);
+
+			giftArr.addQAntObject(giftInfo.convertToQAntObject());
+		}
+		giftEventObj.putQAntArray("gifts", giftArr);
+		giftEventObj.putInt("noti", giftNotification);
+		giftEventRepository.save(heroGift);
+	}
+
+
+	private boolean isOver7Day(Date firstDate, Date secondDate) {
+		long betweenDates = 0;
+		try {
+			betweenDates = betweenDates(firstDate, secondDate);
+		} catch (IOException e) {
+			e.printStackTrace();
+		}
+		return betweenDates > 7;
+	}
+
+
+	private long betweenDates(Date firstDate, Date secondDate) throws IOException {
+		return ChronoUnit.DAYS.between(firstDate.toInstant(), secondDate.toInstant());
 	}
 
 
@@ -150,7 +239,7 @@ public class JoinZoneEventHandler extends BaseServerEventHandler {
 		} else if (gameHero.getStamina() >= gameHero.getMaxExp()) {
 			gameHero.setStaUpdTime(updateTime);
 		}
-		repository.save(gameHero);
+		gameHeroRep.save(gameHero);
 	}
 
 
@@ -168,7 +257,7 @@ public class JoinZoneEventHandler extends BaseServerEventHandler {
 		gameHero.setVipLevel(1);
 		gameHero.setVipPoint(0);
 		gameHero.setMaxVipPoint(100);
-		repository.save(gameHero);
+		gameHeroRep.save(gameHero);
 
 		QAntTracer.debug(this.getClass(), "Create new hero: " + gameHeroId);
 
@@ -180,6 +269,7 @@ public class JoinZoneEventHandler extends BaseServerEventHandler {
 		BattleTeam battleTeam = new BattleTeam();
 		battleTeam.setGameHeroId(gameHeroId);
 		Team team = new Team();
+		team.setIndex(1);
 		battleTeam.addTeam(team);
 		team.setName("Team 1");
 		for (HeroClass heroClass : endowHeroes) {
@@ -191,9 +281,10 @@ public class JoinZoneEventHandler extends BaseServerEventHandler {
 		questManager.registerQuestsFromHero(gameHero);
 
 		// mở world, chapter, stage, mission
-		HeroStage heroStage = new HeroStage(StageConfig.getInstance().getStage(100));
+		Stage firstStage = StageConfig.getInstance().getFirstStage();
+		HeroStage heroStage = new HeroStage(firstStage);
 		heroStage.setHeroId(gameHeroId);
-		heroStage.setId(sequenceRepository.getNextSequenceId("hero_stage_id"));
+		heroStage.setId(autoIncrementService.genHeroStageId());
 		heroStage.setUnlock(true);
 		stageRepository.save(heroStage);
 		return gameHero;

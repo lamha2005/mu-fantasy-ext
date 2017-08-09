@@ -24,6 +24,8 @@ public class ItemBase {
 	@JacksonXmlProperty(localName = "Icon", isAttribute = true)
 	private String icon;
 
+	private int type;
+
 
 	public int getIndex() {
 		return index;
@@ -72,6 +74,16 @@ public class ItemBase {
 
 	public void setImg(String img) {
 		this.img = img;
+	}
+
+
+	public int getType() {
+		return type;
+	}
+
+
+	public void setType(int type) {
+		this.type = type;
 	}
 
 }

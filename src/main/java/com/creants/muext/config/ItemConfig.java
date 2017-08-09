@@ -24,6 +24,8 @@ import com.fasterxml.jackson.dataformat.xml.XmlMapper;
  *
  */
 public class ItemConfig {
+	private static final int CONSUMABLE_ITEM = 1;
+	private static final int EQUIPMENT_ITEM = 2;
 	private static final String COMSUMEABLE_ITEM_CONFIG = "resources/consumable_items.xml";
 	private static final String EQUIPMENT_CONFIG = "resources/equipments.xml";
 	private static final XMLInputFactory f = XMLInputFactory.newFactory();
@@ -56,6 +58,7 @@ public class ItemConfig {
 			while (sr.hasNext()) {
 				try {
 					item = mapper.readValue(sr, ConsumeableItemBase.class);
+					item.setType(CONSUMABLE_ITEM);
 					itemMap.put(item.getIndex(), item);
 				} catch (NoSuchElementException e) {
 				}
@@ -78,13 +81,14 @@ public class ItemConfig {
 			while (sr.hasNext()) {
 				try {
 					equipment = mapper.readValue(sr, EquipmentBase.class);
-					String availableHeroesString = equipment.getAvailableHeroesString();
-					String[] items = StringUtils.split(availableHeroesString, ";");
-					int[] availableHeroes = new int[items.length];
+					String availableClassString = equipment.getAvailableHeroesString();
+					String[] items = StringUtils.split(availableClassString, "#");
+					int[] availableClassGroups = new int[items.length];
 					for (int i = 0; i < items.length; i++) {
-						availableHeroes[i] = Integer.parseInt(items[i]);
+						availableClassGroups[i] = Integer.parseInt(items[i]);
 					}
-					equipment.setAvailableHeroes(availableHeroes);
+					equipment.setAvailableClassGroups(availableClassGroups);
+					equipment.setType(EQUIPMENT_ITEM);
 
 					itemMap.put(equipment.getIndex(), equipment);
 				} catch (NoSuchElementException e) {

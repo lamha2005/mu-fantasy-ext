@@ -10,7 +10,7 @@
 		<SubStats Accuracy="0.05" CriticalChance="0.8" DefenseensePenetration="10" MaxMP="1000" MPRec="40"/>
 		<LevelUpStats LvUpATK="8" LvUpHP="2" LvUpDEF="3" LvUpREC="1"/>
 	</Hero>
-	<Hero ClassGroup="100" ClassIndex="102" Name="Great Dragon Dark Knight" Element="Fire" CharRank="5" SkillIndex="1000#1001#1002">
+	<Hero ClassGroup="100" ClassIndex="102" Name="Blue Dragon Knight" Element="Fire" CharRank="5" SkillIndex="1000#1001#1002">
 		<BaseStats PhysicAttack="2500" HealthPoint="2200" Defense="1000" Recovery="700"/>
 		<SubStats Accuracy="0.05" CriticalChance="0.8" DefenseensePenetration="10" MaxMP="1000" MPRec="40"/>
 		<LevelUpStats LvUpATK="8" LvUpHP="2" LvUpDEF="3" LvUpREC="1"/>

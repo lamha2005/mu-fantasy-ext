@@ -1,34 +1,34 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <MonsterList>
-	<Monster Index="1000" Name="Bull Fighter" Image="bull" Level="6" Dam="530" HealthPoint="1400" Defense="300" Recovery="100" BCPerHit="3" MaxBC="27"/>
-	<Monster Index="1001" Name="Bull Fighter" Image="bull" Level="6" Dam="520" HealthPoint="1450" Defense="300" Recovery="100" BCPerHit="3" MaxBC="27"/>
-	<Monster Index="1002" Name="Bull Fighter" Image="bull" Level="6" Dam="550" HealthPoint="1500" Defense="300" Recovery="100" BCPerHit="3" MaxBC="27"/>
-	<Monster Index="1003" Name="Bull Fighter" Image="bull" Level="6" Dam="560" HealthPoint="1600" Defense="300" Recovery="100" BCPerHit="3" MaxBC="27"/>
-	<Monster Index="1004" Name="Bull Fighter" Image="bull" Level="6" Dam="530" HealthPoint="1700" Defense="300" Recovery="100" BCPerHit="3" MaxBC="27"/>
-	<Monster Index="1005" Name="Bull Fighter" Image="bull" Level="6" Dam="630" HealthPoint="1800" Defense="300" Recovery="100" BCPerHit="3" MaxBC="27"/>
-	<Monster Index="1006" Name="Yeti" Image="yeti" Level="5" Dam="530" HealthPoint="2400" Defense="300" Recovery="100" BCPerHit="3" MaxBC="27"/>
-	<Monster Index="1007" Name="Yeti" Image="yeti" Level="6" Dam="530" HealthPoint="2400" Defense="300" Recovery="100" BCPerHit="3" MaxBC="27"/>
-	<Monster Index="1008" Name="Yeti" Image="yeti" Level="6" Dam="530" HealthPoint="2450" Defense="300" Recovery="100" BCPerHit="3" MaxBC="27"/>
-	<Monster Index="1009" Name="Yeti" Image="yeti" Level="6" Dam="530" HealthPoint="2900" Defense="300" Recovery="100" BCPerHit="3" MaxBC="27"/>
-	<Monster Index="1010" Name="Yeti" Image="yeti" Level="6" Dam="530" HealthPoint="2900" Defense="300" Recovery="100" BCPerHit="3" MaxBC="27"/>
-	<Monster Index="1011" Name="Gaint" Image="gaint" Level="6" Dam="530" HealthPoint="2900" Defense="300" Recovery="100" BCPerHit="3" MaxBC="27"/>
-	<Monster Index="1012" Name="Gaint" Image="gaint" Level="6" Dam="530" HealthPoint="2900" Defense="300" Recovery="100" BCPerHit="3" MaxBC="27"/>
-	<Monster Index="1013" Name="Gaint" Image="gaint" Level="6" Dam="530" HealthPoint="2900" Defense="300" Recovery="100" BCPerHit="3" MaxBC="27"/>
-	<Monster Index="1014" Name="Gaint" Image="gaint" Level="6" Dam="530" HealthPoint="2900" Defense="300" Recovery="100" BCPerHit="3" MaxBC="27"/>
-	<Monster Index="1015" Name="Gaint" Image="gaint" Level="6" Dam="530" HealthPoint="2900" Defense="300" Recovery="100" BCPerHit="3" MaxBC="27"/>
-	<Monster Index="1016" Name="Elite Yeti" Image="eliteyeti" Level="8" Dam="530" HealthPoint="2900" Defense="300" Recovery="100" BCPerHit="3" MaxBC="27"/>
-	<Monster Index="1017" Name="Elite Yeti" Image="eliteyeti" Level="8" Dam="530" HealthPoint="2900" Defense="300" Recovery="100" BCPerHit="3" MaxBC="27"/>
-	<Monster Index="1018" Name="Elite Yeti" Image="eliteyeti" Level="8" Dam="530" HealthPoint="2900" Defense="300" Recovery="100" BCPerHit="3" MaxBC="27"/>
-	<Monster Index="1019" Name="Elite Yeti" Image="eliteyeti" Level="8" Dam="530" HealthPoint="2900" Defense="300" Recovery="100" BCPerHit="3" MaxBC="27"/>
-	<Monster Index="1020" Name="Elite Yeti" Image="eliteyeti" Level="8" Dam="530" HealthPoint="2900" Defense="300" Recovery="100" BCPerHit="3" MaxBC="27"/>
-	<Monster Index="1021" Name="Ice Queen" Image="icequee" Level="6" Dam="530" HealthPoint="2900" Defense="300" Recovery="100" BCPerHit="3" MaxBC="27"/>
-	<Monster Index="1022" Name="Ice Queen" Image="icequee" Level="6" Dam="530" HealthPoint="2900" Defense="300" Recovery="100" BCPerHit="3" MaxBC="27"/>
-	<Monster Index="1023" Name="Ice Queen" Image="icequee" Level="6" Dam="530" HealthPoint="2900" Defense="300" Recovery="100" BCPerHit="3" MaxBC="27"/>
-	<Monster Index="1024" Name="Ice Queen" Image="icequee" Level="6" Dam="530" HealthPoint="2900" Defense="300" Recovery="100" BCPerHit="3" MaxBC="27"/>
-	<Monster Index="1025" Name="Ice Queen" Image="icequee" Level="6" Dam="530" HealthPoint="2900" Defense="300" Recovery="100" BCPerHit="3" MaxBC="27"/>
-	<Monster Index="1026" Name="Ice Queen BOSS" Image="icequee" Level="16" Dam="530" HealthPoint="2900" Defense="400" Recovery="100" BCPerHit="3" MaxBC="27"/>
-	<Monster Index="1027" Name="Ice Queen BOSS" Image="icequee" Level="16" Dam="530" HealthPoint="2900" Defense="400" Recovery="100" BCPerHit="3" MaxBC="27"/>
-	<Monster Index="1028" Name="Ice Queen BOSS" Image="icequee" Level="16" Dam="530" HealthPoint="2900" Defense="400" Recovery="100" BCPerHit="3" MaxBC="27"/>
-	<Monster Index="1029" Name="Ice Queen BOSS" Image="icequee" Level="16" Dam="530" HealthPoint="2900" Defense="400" Recovery="100" BCPerHit="3" MaxBC="27"/>
+	<Monster Index="1000" Name="Golden Dragon" Image="goldendragon" MonsterRank="5" Level="99" Dam="530" HealthPoint="1400" Defense="300" Recovery="100" BCPerHit="3" MaxBC="27"/>
+	<Monster Index="1001" Name="Gordon" Image="gordon" MonsterRank="5" Level="6" Dam="520" HealthPoint="1450" Defense="300" Recovery="100" BCPerHit="3" MaxBC="27"/>
+	<Monster Index="1002" Name="Boss Dead" Image="bossdead" MonsterRank="5" Level="6" Dam="550" HealthPoint="1500" Defense="300" Recovery="100" BCPerHit="3" MaxBC="27"/>
+	<Monster Index="1003" Name="Bull Fighter" Image="bullfighter" MonsterRank="5" Level="6" Dam="560" HealthPoint="1600" Defense="300" Recovery="100" BCPerHit="3" MaxBC="27"/>
+	<Monster Index="1004" Name="Elite Bull" Image="elitebull" MonsterRank="5" Level="6" Dam="530" HealthPoint="1700" Defense="300" Recovery="100" BCPerHit="3" MaxBC="27"/>
+	<Monster Index="1005" Name="Skeleton" Image="skeleton" MonsterRank="5" Level="6" Dam="630" HealthPoint="1800" Defense="300" Recovery="100" BCPerHit="3" MaxBC="27"/>
+	<Monster Index="1006" Name="Skeleton Archer" Image="skeletonarcher" MonsterRank="5" Level="5" Dam="530" HealthPoint="2400" Defense="300" Recovery="100" BCPerHit="3" MaxBC="27"/>
+	<Monster Index="1007" Name="Armored Skeleton" Image="armoredskeleton" MonsterRank="5" Level="6" Dam="530" HealthPoint="2400" Defense="300" Recovery="100" BCPerHit="3" MaxBC="27"/>
+	<Monster Index="1008" Name="Chief Skeleton Warrior" Image="chiefskeletonwarrior" MonsterRank="5" Level="6" Dam="530" HealthPoint="2450" Defense="300" Recovery="100" BCPerHit="3" MaxBC="27"/>
+	<Monster Index="1009" Name="Spider" Image="spider" MonsterRank="5" Level="6" Dam="530" HealthPoint="2900" Defense="300" Recovery="100" BCPerHit="3" MaxBC="27"/>
+	<Monster Index="1010" Name="Hell Spider" Image="spider" MonsterRank="5" Level="6" Dam="530" HealthPoint="2900" Defense="300" Recovery="100" BCPerHit="3" MaxBC="27"/>
+	<Monster Index="1011" Name="Hound" Image="hound" MonsterRank="5" Level="6" Dam="530" HealthPoint="2900" Defense="300" Recovery="100" BCPerHit="3" MaxBC="27"/>
+	<Monster Index="1012" Name="Hell Hound" Image="hellhound" MonsterRank="5" Level="6" Dam="530" HealthPoint="2900" Defense="300" Recovery="100" BCPerHit="3" MaxBC="27"/>
+	<Monster Index="1013" Name="Budge Dragon" Image="budgedragon" MonsterRank="5" Level="6" Dam="530" HealthPoint="2900" Defense="300" Recovery="100" BCPerHit="3" MaxBC="27"/>
+	<Monster Index="1014" Name="Goblin" Image="goblin" MonsterRank="5" Level="6" Dam="530" HealthPoint="2900" Defense="300" Recovery="100" BCPerHit="3" MaxBC="27"/>
+	<Monster Index="1015" Name="Elite Goblin" Image="elitegoblin" MonsterRank="5" Level="6" Dam="530" HealthPoint="2900" Defense="300" Recovery="100" BCPerHit="3" MaxBC="27"/>
+	<Monster Index="1016" Name="Beetle Monster" Image="beetlemonster" MonsterRank="5" Level="8" Dam="530" HealthPoint="2900" Defense="300" Recovery="100" BCPerHit="3" MaxBC="27"/>
+	<Monster Index="1017" Name="Stone Golem" Image="stonegolem" MonsterRank="5" Level="8" Dam="530" HealthPoint="2900" Defense="300" Recovery="100" BCPerHit="3" MaxBC="27"/>
+	<Monster Index="1018" Name="Worm" Image="worm" MonsterRank="5" Level="8" Dam="530" HealthPoint="2900" Defense="300" Recovery="100" BCPerHit="3" MaxBC="27"/>
+	<Monster Index="1019" Name="Hommerd" Image="hommerd" MonsterRank="5" Level="8" Dam="530" HealthPoint="2900" Defense="300" Recovery="100" BCPerHit="3" MaxBC="27"/>
+	<Monster Index="1020" Name="Ice Monster" Image="icemonster" MonsterRank="5" Level="8" Dam="530" HealthPoint="2900" Defense="300" Recovery="100" BCPerHit="3" MaxBC="27"/>
+	<Monster Index="1021" Name="Assassin" Image="assassin" MonsterRank="5" Level="6" Dam="530" HealthPoint="2900" Defense="300" Recovery="100" BCPerHit="3" MaxBC="27"/>
+	<Monster Index="1022" Name="Yeti" Image="yeti" MonsterRank="5" Level="6" Dam="530" HealthPoint="2900" Defense="300" Recovery="100" BCPerHit="3" MaxBC="27"/>
+	<Monster Index="1023" Name="Elite Yeti" Image="eliteyeti" MonsterRank="5" Level="6" Dam="530" HealthPoint="2900" Defense="300" Recovery="100" BCPerHit="3" MaxBC="27"/>
+	<Monster Index="1024" Name="Ice Queen" Image="icequeen" MonsterRank="5" Level="6" Dam="530" HealthPoint="2900" Defense="300" Recovery="100" BCPerHit="3" MaxBC="27"/>
+	<Monster Index="1025" Name="Lich" Image="lich" MonsterRank="5" Level="6" Dam="530" HealthPoint="2900" Defense="300" Recovery="100" BCPerHit="3" MaxBC="27"/>
+	<Monster Index="1026" Name="Thunder Lich" Image="thunderlich" MonsterRank="5" Level="16" Dam="530" HealthPoint="2900" Defense="400" Recovery="100" BCPerHit="3" MaxBC="27"/>
+	<Monster Index="1027" Name="Ghost" Image="ghost" MonsterRank="5" Level="16" Dam="530" HealthPoint="2900" Defense="400" Recovery="100" BCPerHit="3" MaxBC="27"/>
+	<Monster Index="1028" Name="Poison Bull" Image="poisonbull" MonsterRank="5" Level="16" Dam="530" HealthPoint="2900" Defense="400" Recovery="100" BCPerHit="3" MaxBC="27"/>
+	<Monster Index="1029" Name="Cursed Wizard" Image="cursedwizard" MonsterRank="5" Level="16" Dam="530" HealthPoint="2900" Defense="400" Recovery="100" BCPerHit="3" MaxBC="27"/>
 </MonsterList>
 

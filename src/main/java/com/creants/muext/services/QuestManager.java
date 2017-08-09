@@ -10,7 +10,6 @@ import java.util.Set;
 import org.apache.commons.lang.time.DateUtils;
 import org.springframework.beans.factory.InitializingBean;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
 
 import com.creants.muext.config.GiftEventConfig;
@@ -18,7 +17,6 @@ import com.creants.muext.config.QuestConfig;
 import com.creants.muext.dao.GameHeroRepository;
 import com.creants.muext.dao.QuestRepository;
 import com.creants.muext.dao.QuestStatsRepository;
-import com.creants.muext.dao.SequenceRepository;
 import com.creants.muext.entities.GameHero;
 import com.creants.muext.entities.quest.HeroQuest;
 import com.creants.muext.entities.quest.Quest;
@@ -31,7 +29,6 @@ import com.creants.muext.entities.quest.TaskType;
  */
 @Service
 public class QuestManager implements InitializingBean {
-	public static final String QUEST_ID_SEQ = "quest_id";
 	public static final int GROUP_MAIN_QUEST = 1;
 	public static final int GROUP_DAILY_QUEST = 2;
 	@Autowired
@@ -40,23 +37,14 @@ public class QuestManager implements InitializingBean {
 	private QuestStatsRepository questStatsRespository;
 	@Autowired
 	private QuestRepository questRepository;
-
 	@Autowired
-	private SequenceRepository sequenceRepository;
-
-	@Value("${firstDeploy}")
-	private boolean firstDeploy;
+	private AutoIncrementService autoIncrService;
 
 	private QuestConfig questConfig;
 
 
 	public void afterPropertiesSet() throws Exception {
 		questConfig = QuestConfig.getInstance();
-		// Chỉ tạo lần đầu khi deploy hệ thống
-		if (firstDeploy) {
-			sequenceRepository.createSequenceDocument(QUEST_ID_SEQ);
-		}
-		
 		GiftEventConfig.getInstance();
 	}
 
@@ -87,13 +75,23 @@ public class QuestManager implements InitializingBean {
 	}
 
 
+	public List<HeroQuest> getQuests(String gameHeroId, Integer[] questIds) {
+		return questStatsRespository.getQuests(gameHeroId, questIds);
+	}
+
+
+	public void save(List<HeroQuest> quests) {
+		questStatsRespository.save(quests);
+	}
+
+
 	public void registerQuestsFromHero(GameHero gameHero) {
 		List<HeroQuest> quests = new ArrayList<HeroQuest>();
 		for (int i = 0; i < 5; i++) {
 			HeroQuest quest = new HeroQuest();
 			quest.setHeroId(gameHero.getId());
 			quest.setQuestIndex(1);
-			quest.setId(sequenceRepository.getNextSequenceId(QUEST_ID_SEQ));
+			quest.setId(autoIncrService.genQuestId());
 			quest.setGroupId(GROUP_MAIN_QUEST);
 			quest.setCreateTime(System.currentTimeMillis());
 			quest.setTaskType(TaskType.MonsterKill.getId());
@@ -120,7 +118,7 @@ public class QuestManager implements InitializingBean {
 		HeroQuest quest = new HeroQuest();
 		quest.setHeroId(gameHero.getId());
 		quest.setQuestIndex(200);
-		quest.setId(sequenceRepository.getNextSequenceId(QUEST_ID_SEQ));
+		quest.setId(autoIncrService.genQuestId());
 		quest.setGroupId(GROUP_DAILY_QUEST);
 		quest.setCreateTime(currentTimeMillis);
 		quest.setTaskType(TaskType.WinCampain.getId());
@@ -136,7 +134,7 @@ public class QuestManager implements InitializingBean {
 		HeroQuest quest1 = new HeroQuest();
 		quest1.setHeroId(gameHero.getId());
 		quest1.setQuestIndex(201);
-		quest1.setId(sequenceRepository.getNextSequenceId(QUEST_ID_SEQ));
+		quest1.setId(autoIncrService.genQuestId());
 		quest1.setGroupId(GROUP_DAILY_QUEST);
 		quest1.setCreateTime(currentTimeMillis);
 		quest1.setTaskType(TaskType.WinChaos.getId());
@@ -170,8 +168,18 @@ public class QuestManager implements InitializingBean {
 	}
 
 
+	public List<HeroQuest> getQuests(String heroId, int groupId, boolean isFinish) {
+		return questStatsRespository.getQuests(heroId, groupId, isFinish);
+	}
+
+
 	private long getStartOfDateMilis() {
 		return DateUtils.truncate(new Date(), Calendar.DATE).getTime();
+	}
+
+
+	public List<HeroQuest> findDailyQuests(String gameHeroId, long startOfDateMilis, long endOfDateMilis) {
+		return questStatsRespository.findDailyQuests(gameHeroId, startOfDateMilis, endOfDateMilis);
 	}
 
 }

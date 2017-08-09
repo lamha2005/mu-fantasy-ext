@@ -3,11 +3,13 @@ package com.creants.muext.om;
 import java.util.ArrayList;
 import java.util.List;
 
+import com.creants.creants_2x.socket.gate.protocol.serialization.SerializableQAntType;
+
 /**
  * @author LamHM
  *
  */
-public class ItemPackageInfo {
+public class ItemPackageInfo implements SerializableQAntType{
 	public int index;
 	public List<ItemInfo> items;
 

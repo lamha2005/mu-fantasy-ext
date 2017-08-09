@@ -41,10 +41,23 @@ public class EquipmentBase extends ItemBase {
 	private Boolean upgarde;
 	@JacksonXmlProperty(localName = "Disassemble", isAttribute = true)
 	private Boolean disassemble;
+	@JacksonXmlProperty(localName = "Elemental", isAttribute = true)
+	private String elemental;
+	
+	@JacksonXmlProperty(localName = "lvupATK", isAttribute = true)
+	private int lvupATK;
+	@JacksonXmlProperty(localName = "lvupHP", isAttribute = true)
+	private int lvupHP;
+	@JacksonXmlProperty(localName = "lvupDEF", isAttribute = true)
+	private int lvupDEF;
+	@JacksonXmlProperty(localName = "lvupREC", isAttribute = true)
+	private int lvupREC;
+	@JacksonXmlProperty(localName = "Evovle", isAttribute = true)
+	private int evovle;
 
-	@JacksonXmlProperty(localName = "AvailableClass", isAttribute = true)
+	@JacksonXmlProperty(localName = "AvailableClassGroup", isAttribute = true)
 	private transient String availableHeroesString;
-	private int[] availableHeroes;
+	private int[] availableClassGroups;
 
 
 	public int getEquipSlot() {
@@ -117,13 +130,13 @@ public class EquipmentBase extends ItemBase {
 	}
 
 
-	public int[] getAvailableHeroes() {
-		return availableHeroes;
+	public int[] getAvailableClassGroups() {
+		return availableClassGroups;
 	}
 
 
-	public void setAvailableHeroes(int[] availableHeroes) {
-		this.availableHeroes = availableHeroes;
+	public void setAvailableClassGroups(int[] availableClassGroups) {
+		this.availableClassGroups = availableClassGroups;
 	}
 
 
@@ -174,6 +187,16 @@ public class EquipmentBase extends ItemBase {
 
 	public void setDisassemble(Boolean disassemble) {
 		this.disassemble = disassemble;
+	}
+
+
+	public String getElemental() {
+		return elemental;
+	}
+
+
+	public void setElemental(String elemental) {
+		this.elemental = elemental;
 	}
 
 

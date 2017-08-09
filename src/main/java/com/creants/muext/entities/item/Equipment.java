@@ -18,11 +18,17 @@ public class Equipment {
 	private int groupId;
 	private boolean lock;
 	private boolean wearing;
+	private int rank;
 	private int level;
 	private Integer gridIndex;
 	private Integer no;
 	@Transient
 	private EquipmentBase equipmentBase;
+
+
+	public Equipment() {
+		rank = 1;
+	}
 
 
 	public void setEquipmentBase(EquipmentBase equipmentBase) {
@@ -94,6 +100,16 @@ public class Equipment {
 
 	public void setLevel(int level) {
 		this.level = level;
+	}
+
+
+	public int getRank() {
+		return rank;
+	}
+
+
+	public void setRank(int rank) {
+		this.rank = rank;
 	}
 
 

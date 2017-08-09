@@ -46,4 +46,19 @@ public class BattleTeam {
 		teamList.add(team);
 	}
 
+
+	public Team getTeam(int index) {
+		return teamList.get(index);
+	}
+
+
+	public Team getMainTeam() {
+		return getTeam(0);
+	}
+
+
+	public List<Long> getMainTeamIds() {
+		return getTeam(0).getIdList();
+	}
+
 }

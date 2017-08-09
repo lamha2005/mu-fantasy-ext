@@ -1,8 +1,11 @@
 package com.creants.muext.services;
 
+import java.util.Arrays;
+
 import javax.ws.rs.core.MediaType;
 import javax.ws.rs.core.MultivaluedMap;
 
+import com.creants.creants_2x.socket.util.ConverterUtil;
 import com.sun.jersey.api.client.Client;
 import com.sun.jersey.api.client.ClientResponse;
 import com.sun.jersey.api.client.WebResource;
@@ -64,8 +67,14 @@ public class WebService {
 
 
 	public static void main(String[] args) {
-		String user = WebService.getInstance().verify(
-				"eyJhbGciOiJIUzI1NiJ9.eyJpZCI6IjI4NiIsImV4cCI6MTQ5Mzk3OTE1NSwiaXNzIjoiYXV0aDAiLCJ0dGwiOjg2NDAwMDAwMH0.o_IRbuqVe1MkJQ0GjB_Xmoch1x12_vc1i2fltlTTNC4");
-		System.out.println(user.toString());
+		// String user = WebService.getInstance().verify(
+		// "eyJhbGciOiJIUzI1NiJ9.eyJpZCI6IjI4NiIsImV4cCI6MTQ5Mzk3OTE1NSwiaXNzIjoiYXV0aDAiLCJ0dGwiOjg2NDAwMDAwMH0.o_IRbuqVe1MkJQ0GjB_Xmoch1x12_vc1i2fltlTTNC4");
+		// System.out.println(user.toString());
+
+		byte[] convertLong2Bytes = ConverterUtil.convertString2Bytes("Xin chào bà con");
+		System.out.println(Arrays.toString(convertLong2Bytes));
+		System.out.println(ConverterUtil.convertBytes2String(convertLong2Bytes));
+
+		System.out.println(ConverterUtil.convertBytes2String(new byte[]{88, 105, 110, 32, 99, 104, (byte) 224, 111, 32, 98, (byte) 224, 32, 99, 111, 110}));
 	}
 }

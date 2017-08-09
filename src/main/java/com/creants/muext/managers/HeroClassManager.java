@@ -2,6 +2,7 @@ package com.creants.muext.managers;
 
 import java.io.FileInputStream;
 import java.util.ArrayList;
+import java.util.Collection;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -13,16 +14,15 @@ import javax.xml.stream.XMLStreamReader;
 
 import org.springframework.beans.factory.InitializingBean;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
 
 import com.creants.muext.dao.HeroRepository;
-import com.creants.muext.dao.SequenceRepository;
 import com.creants.muext.entities.HeroBase;
 import com.creants.muext.entities.HeroClass;
 import com.creants.muext.entities.HeroClassType;
 import com.creants.muext.entities.Monster;
 import com.creants.muext.entities.skill.Skill;
+import com.creants.muext.services.AutoIncrementService;
 import com.fasterxml.jackson.dataformat.xml.XmlMapper;
 
 /**
@@ -31,17 +31,13 @@ import com.fasterxml.jackson.dataformat.xml.XmlMapper;
  */
 @Service
 public class HeroClassManager implements InitializingBean {
-	public static final String HERO_ID_SEQ = "hero_id";
 	private static final String HEROES_CONFIG = "resources/heroes.xml";
 	private static final XMLInputFactory f = XMLInputFactory.newFactory();
 
 	@Autowired
-	private SequenceRepository sequenceRepository;
+	private AutoIncrementService autoIncrService;
 	@Autowired
 	private HeroRepository heroRepository;
-
-	@Value("${firstDeploy}")
-	private boolean firstDeploy;
 
 	private Map<Integer, HeroBase> heroes;
 	private Map<Integer, Monster> monsters;
@@ -49,12 +45,6 @@ public class HeroClassManager implements InitializingBean {
 
 	@Override
 	public void afterPropertiesSet() throws Exception {
-		if (firstDeploy) {
-			sequenceRepository.createSequenceDocument(HERO_ID_SEQ);
-			sequenceRepository.setDefaultValue(HERO_ID_SEQ, 1000);
-			sequenceRepository.createSequenceDocument("hero_stage_id");
-		}
-
 		loadHeroes();
 
 		// TODO remove
@@ -62,8 +52,8 @@ public class HeroClassManager implements InitializingBean {
 	}
 
 
-	public long getNextHeroId() {
-		return sequenceRepository.getNextSequenceId(HERO_ID_SEQ);
+	public long genHeroId() {
+		return autoIncrService.genHeroId();
 	}
 
 
@@ -72,8 +62,8 @@ public class HeroClassManager implements InitializingBean {
 			heroes = new HashMap<>();
 			XMLStreamReader sr = f.createXMLStreamReader(new FileInputStream(HEROES_CONFIG));
 			XmlMapper mapper = new XmlMapper();
-			sr.next(); // to point to <Heros>
-			sr.next(); // to point to root-element under Heros
+			sr.next(); // to point to <Heroes>
+			sr.next(); // to point to root-element under Heroes
 
 			HeroBase heroBase = null;
 			while (sr.hasNext()) {
@@ -100,26 +90,55 @@ public class HeroClassManager implements InitializingBean {
 	 * @return
 	 */
 	public List<HeroClass> findHeroesByGameHeroId(String gameHeroId) {
+		// List<HeroClass> heroes =
+		// heroRepository.findHeroesByGameHeroId(gameHeroId, new
+		// Sort(Sort.Direction.ASC));
 		List<HeroClass> heroes = heroRepository.findHeroesByGameHeroId(gameHeroId);
 		for (HeroClass heroClass : heroes) {
 			heroClass.setHeroBase(getHeroBase(heroClass.getIndex()));
 			if (heroClass.getSkillList().size() <= 0) {
 				HeroBase heroBase = getHeroBase(heroClass.getIndex());
 				resetSkill(heroClass, heroBase.getSkills());
-				heroRepository.save(heroClass);
+				// heroRepository.save(heroClass);
 			}
 		}
 		return heroes;
 	}
 
 
+	public List<HeroClass> findHeroes(Collection<Long> heroIds) {
+		List<HeroClass> heroes = new ArrayList<>();
+		Iterable<HeroClass> findAll = heroRepository.findAll(heroIds);
+		for (HeroClass heroClass : findAll) {
+			heroClass.setHeroBase(getHeroBase(heroClass.getIndex()));
+			if (heroClass.getSkillList().size() <= 0) {
+				HeroBase heroBase = getHeroBase(heroClass.getIndex());
+				resetSkill(heroClass, heroBase.getSkills());
+				// heroRepository.save(heroClass);
+			}
+			heroes.add(heroClass);
+		}
+		return heroes;
+	}
+
+
 	public HeroClass findHeroById(long heroId) {
-		return heroRepository.findOne(heroId);
+		HeroClass hero = heroRepository.findOne(heroId);
+		if (hero == null)
+			return null;
+
+		hero.setHeroBase(getHeroBase(hero.getIndex()));
+		return hero;
 	}
 
 
 	public HeroBase getHeroBase(int index) {
 		return heroes.get(index);
+	}
+
+
+	public void remove(Collection<HeroClass> heroes) {
+		heroRepository.delete(heroes);
 	}
 
 
@@ -137,7 +156,7 @@ public class HeroClassManager implements InitializingBean {
 	public HeroClass createNewHero(String gameHeroId, HeroClassType type) {
 		HeroBase heroBase = getHeroBase(type.getId());
 		HeroClass heroClass = new HeroClass(heroBase);
-		heroClass.setId(getNextHeroId());
+		heroClass.setId(genHeroId());
 		heroClass.setGameHeroId(gameHeroId);
 		resetSkill(heroClass, heroBase.getSkills());
 		return heroClass;
@@ -146,7 +165,7 @@ public class HeroClassManager implements InitializingBean {
 
 	public HeroClass createNewHero(String gameHeroId, HeroBase heroBase) {
 		HeroClass heroClass = new HeroClass(heroBase);
-		heroClass.setId(getNextHeroId());
+		heroClass.setId(genHeroId());
 		heroClass.setGameHeroId(gameHeroId);
 		resetSkill(heroClass, heroBase.getSkills());
 		return heroClass;
@@ -188,7 +207,13 @@ public class HeroClassManager implements InitializingBean {
 	}
 
 
-	private void endowHero(String gameHeroId, HeroClassType type) {
+	/**
+	 * Xin cấp hero để test
+	 * 
+	 * @param gameHeroId
+	 * @param type
+	 */
+	public void endowHero(String gameHeroId, HeroClassType type) {
 		heroRepository.save(createNewHero(gameHeroId, type));
 	}
 

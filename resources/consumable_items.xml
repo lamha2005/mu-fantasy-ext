@@ -1,12 +1,35 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <ItemList>
-	<Item ItemGroup="11000" ItemIndex="11000" ItemName="HP Potion (Small)" Description="Restore 100 HP" ItemType="1" Overlap="30" EffectType="1" Icon="icon11000.png"/>
-	<Item ItemGroup="11000" ItemIndex="11001" ItemName="HP Potion (Medium)" Description="Restore 1000 HP" ItemType="1" Overlap="30" EffectType="1" Icon="icon11001.png"/>
-	<Item ItemGroup="11000" ItemIndex="11002" ItemName="HP Potion (Large)" Description="Restore 5000 HP" ItemType="1" Overlap="30" EffectType="1" Icon="icon11002.png"/>
-	<Item ItemGroup="11000" ItemIndex="11003" ItemName="Mana Potion (Small)" Description="Restore 100 MP" ItemType="1" Overlap="30" EffectType="1" Icon="icon11003.png"/>
-	<Item ItemGroup="11000" ItemIndex="11004" ItemName="Mana Potion (Medium)" Description="Restore 1000 MP" ItemType="1" Overlap="30" EffectType="1" Icon="icon11004.png"/>
-	<Item ItemGroup="11000" ItemIndex="11005" ItemName="Mana Potion (Large)" Description="Restore 5000 MP" ItemType="1" Overlap="30" EffectType="1" Icon="icon11005.png"/>
-	<Item ItemGroup="11000" ItemIndex="11006" ItemName="Soul" Description="A unique material in this word" ItemType="9" Overlap="1" Icon="icon11006.png"/>
-	<Item ItemGroup="11000" ItemIndex="11007" ItemName="Bless" Description="A unique material in this word" ItemType="9" Overlap="1" Icon="icon11007.png"/>
+	<Item ItemGroup="11000" ItemIndex="11000" ItemName="Bless" Description="A unique material" ItemType="9" Overlap="30" EffectType="1" Icon="bless.png"/>
+	<Item ItemGroup="11000" ItemIndex="11001" ItemName="Soul" Description="A unique material" ItemType="9" Overlap="30" EffectType="1" Icon="soul.png"/>
+	<Item ItemGroup="11000" ItemIndex="11002" ItemName="Chaos" Description="It is used in item combinations." ItemType="9" Overlap="30" EffectType="1" Icon="chaos.png"/>
+	<Item ItemGroup="11000" ItemIndex="11006" ItemName="Life" Description="A unique material" ItemType="9" Overlap="30" EffectType="1" Icon="life.png"/>
+	<Item ItemGroup="11000" ItemIndex="11007" ItemName="Creation" Description="A unique material" ItemType="9" Overlap="30" EffectType="1" Icon="creation.png"/>
+	<Item ItemGroup="11000" ItemIndex="11008" ItemName="Low refining stone" Description="A unique material" ItemType="9" Overlap="30" EffectType="1" Icon="refinestone1.png"/>
+	<Item ItemGroup="11000" ItemIndex="11009" ItemName="High refining stone" Description="A unique material" ItemType="9" Overlap="30" EffectType="1" Icon="refinestone2.png"/>
+	<Item ItemGroup="11000" ItemIndex="11010" ItemName="Rena" Description="A unique material" ItemType="9" Overlap="30" EffectType="1" Icon="rena.png"/>
+	<Item ItemGroup="11000" ItemIndex="11011" ItemName="Antidote" Description="Removes the effects of poison" ItemType="9" Overlap="30" EffectType="1" Icon="antidote.png"/>
+	<Item ItemGroup="11000" ItemIndex="11012" ItemName="Apple" Description="A unique material" ItemType="9" Overlap="30" EffectType="1" Icon="apple.png"/>
+	<Item ItemGroup="11000" ItemIndex="11013" ItemName="HP Potion (Small)" Description="Restore 100 HP" ItemType="1" Overlap="30" EffectType="1" Icon="icon11000.png"/>
+	<Item ItemGroup="11000" ItemIndex="11014" ItemName="HP Potion (Medium)" Description="Restore 1000 HP" ItemType="1" Overlap="30" EffectType="1" Icon="icon11001.png"/>
+	<Item ItemGroup="11000" ItemIndex="11015" ItemName="HP Potion (Large)" Description="Restore 5000 HP" ItemType="1" Overlap="30" EffectType="1" Icon="icon11002.png"/>
+	<Item ItemGroup="11000" ItemIndex="11016" ItemName="Ale" Description="Increase 10% ATK for 3 turns" ItemType="1" Overlap="30" EffectType="1" Icon="ale.png"/>
+	
+	<Item ItemGroup="11000" ItemIndex="11017" ItemName="Fire Experience Scroll" Description="Increase 4000 experience points" ItemType="1" Overlap="30" EffectType="1" Icon="fireexpscroll.png"/>
+	<Item ItemGroup="11000" ItemIndex="11018" ItemName="Fire Experience Book" Description="Increase 15000 experience points" ItemType="1" Overlap="30" EffectType="1" Icon="fireexpbook.png"/>
+	<Item ItemGroup="11000" ItemIndex="11019" ItemName="Fire Experience Tome" Description="Increase 50000 experience points" ItemType="1" Overlap="30" EffectType="1" Icon="fireexptome.png"/>
+
+	<Item ItemGroup="11000" ItemIndex="11020" ItemName="Water Experience Scroll" Description="Increase 4000 experience points" ItemType="1" Overlap="30" EffectType="1" Icon="waterexpscroll.png"/>
+	<Item ItemGroup="11000" ItemIndex="11021" ItemName="Water Experience Book" Description="Increase 15000 experience points" ItemType="1" Overlap="30" EffectType="1" Icon="waterexpbook.png"/>
+	<Item ItemGroup="11000" ItemIndex="11022" ItemName="Water Experience Tome" Description="Increase 50000 experience points" ItemType="1" Overlap="30" EffectType="1" Icon="waterexptome.png"/>
+
+	<Item ItemGroup="11000" ItemIndex="11023" ItemName="Earth Experience Scroll" Description="Increase 4000 experience points" ItemType="1" Overlap="30" EffectType="1" Icon="earthexpscroll.png"/>
+	<Item ItemGroup="11000" ItemIndex="11024" ItemName="Earth Experience Book" Description="Increase 15000 experience points" ItemType="1" Overlap="30" EffectType="1" Icon="earthexpbook.png"/>
+	<Item ItemGroup="11000" ItemIndex="11025" ItemName="Earth Experience Tome" Description="Increase 50000 experience points" ItemType="1" Overlap="30" EffectType="1" Icon="earthexptome.png"/>
+
+	<Item ItemGroup="11000" ItemIndex="11026" ItemName="Light Experience Scroll" Description="Increase 4000 experience points" ItemType="1" Overlap="30" EffectType="1" Icon="lightexpscroll.png"/>
+	<Item ItemGroup="11000" ItemIndex="11027" ItemName="Light Experience Book" Description="Increase 15000 experience points" ItemType="1" Overlap="30" EffectType="1" Icon="lightexpbook.png"/>
+	<Item ItemGroup="11000" ItemIndex="11028" ItemName="Light Experience Tome" Description="Increase 50000 experience points" ItemType="1" Overlap="30" EffectType="1" Icon="lightexptome.png"/>
+
 </ItemList>
 
