@@ -19,7 +19,7 @@ public class HeroItem implements SerializableQAntType {
 	@Indexed
 	private transient String gameHeroId;
 
-	public Integer heroId;
+	public Long heroId;
 	public String element;
 	public int itemGroup;
 
@@ -69,12 +69,12 @@ public class HeroItem implements SerializableQAntType {
 	}
 
 
-	public int getHeroId() {
+	public Long getHeroId() {
 		return heroId;
 	}
 
 
-	public void setHeroId(int heroId) {
+	public void setHeroId(Long heroId) {
 		this.heroId = heroId;
 	}
 
@@ -169,7 +169,7 @@ public class HeroItem implements SerializableQAntType {
 	}
 
 
-	public void takeOn(int heroId, int slotIndex) {
+	public void takeOn(Long heroId, int slotIndex) {
 		this.heroId = heroId;
 		this.slotIndex = slotIndex;
 	}

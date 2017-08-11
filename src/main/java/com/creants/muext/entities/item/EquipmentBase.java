@@ -1,15 +1,17 @@
 package com.creants.muext.entities.item;
 
 import com.creants.muext.entities.ItemBase;
+import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import com.fasterxml.jackson.dataformat.xml.annotation.JacksonXmlProperty;
 
 /**
  * @author LamHM
  *
  */
+@JsonIgnoreProperties(value = { "availableHeroesString", "equipSlotString" })
 public class EquipmentBase extends ItemBase {
 	@JacksonXmlProperty(localName = "EquipSlot", isAttribute = true)
-	private int equipSlot;
+	private String equipSlotString;
 	@JacksonXmlProperty(localName = "ItemRank", isAttribute = true)
 	private int itemRank;
 	@JacksonXmlProperty(localName = "SkillIndex", isAttribute = true)
@@ -25,16 +27,14 @@ public class EquipmentBase extends ItemBase {
 	private Integer atk;
 	@JacksonXmlProperty(localName = "HP", isAttribute = true)
 	private Integer hp;
-	@JacksonXmlProperty(localName = "MP", isAttribute = true)
-	private Integer mp;
+	@JacksonXmlProperty(localName = "REC", isAttribute = true)
+	private Integer rec;
 	@JacksonXmlProperty(localName = "DEF", isAttribute = true)
 	private Integer def;
 	@JacksonXmlProperty(localName = "BlessCost", isAttribute = true)
 	private Integer blessCost;
 	@JacksonXmlProperty(localName = "ZenCost", isAttribute = true)
 	private Integer zenCost;
-	@JacksonXmlProperty(localName = "RefunCost", isAttribute = true)
-	private Integer refunCost;
 	@JacksonXmlProperty(localName = "RecipeIndex", isAttribute = true)
 	private Integer recipeIndex;
 	@JacksonXmlProperty(localName = "Upgarde", isAttribute = true)
@@ -43,7 +43,7 @@ public class EquipmentBase extends ItemBase {
 	private Boolean disassemble;
 	@JacksonXmlProperty(localName = "Elemental", isAttribute = true)
 	private String elemental;
-	
+
 	@JacksonXmlProperty(localName = "lvupATK", isAttribute = true)
 	private int lvupATK;
 	@JacksonXmlProperty(localName = "lvupHP", isAttribute = true)
@@ -58,14 +58,25 @@ public class EquipmentBase extends ItemBase {
 	@JacksonXmlProperty(localName = "AvailableClassGroup", isAttribute = true)
 	private transient String availableHeroesString;
 	private int[] availableClassGroups;
+	private int[] equipSlot;
 
 
-	public int getEquipSlot() {
+	public String getEquipSlotString() {
+		return equipSlotString;
+	}
+
+
+	public void setEquipSlotString(String equipSlotString) {
+		this.equipSlotString = equipSlotString;
+	}
+
+
+	public int[] getEquipSlot() {
 		return equipSlot;
 	}
 
 
-	public void setEquipSlot(int equipSlot) {
+	public void setEquipSlot(int[] equipSlot) {
 		this.equipSlot = equipSlot;
 	}
 
@@ -100,13 +111,13 @@ public class EquipmentBase extends ItemBase {
 	}
 
 
-	public Integer getMp() {
-		return mp;
+	public Integer getRec() {
+		return rec;
 	}
 
 
-	public void setMp(Integer mp) {
-		this.mp = mp;
+	public void setRec(Integer rec) {
+		this.rec = rec;
 	}
 
 
@@ -157,16 +168,6 @@ public class EquipmentBase extends ItemBase {
 
 	public void setZenCost(Integer zenCost) {
 		this.zenCost = zenCost;
-	}
-
-
-	public Integer getRefunCost() {
-		return refunCost;
-	}
-
-
-	public void setRefunCost(Integer refunCost) {
-		this.refunCost = refunCost;
 	}
 
 

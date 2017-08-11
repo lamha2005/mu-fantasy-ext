@@ -16,7 +16,6 @@ import com.creants.muext.config.BossEventConfig;
 import com.creants.muext.controllers.ChatRequestHandler;
 import com.creants.muext.controllers.CreateRoomRequestHandler;
 import com.creants.muext.controllers.DisconnectEventHandler;
-import com.creants.muext.controllers.GetHeroListRequestHandler;
 import com.creants.muext.controllers.GetQuestListRequestHandler;
 import com.creants.muext.controllers.HeroRequestHandler;
 import com.creants.muext.controllers.ItemRequestHandler;
@@ -73,9 +72,8 @@ public class MuFantasyExtension extends QAntExtension {
 		addRequestHandler("cmd_boss_event_join", JoinBossEventRequestHandler.class);
 		addRequestHandler("cmd_summon", SummonRequestHandler.class);
 		addRequestHandler("cmd_get_events", GiftEventRequestHandler.class);
-		addRequestHandler("cmd_heroes", GetHeroListRequestHandler.class);
 		addRequestHandler("cmd_upd_battle_team", UpdateBattleTeamRequestHandler.class);
-		addRequestHandler("cmd_req_item", ItemRequestHandler.class);
+		addRequestHandler("cmd_item_req", ItemRequestHandler.class);
 		addRequestHandler("cmd_hero", HeroRequestHandler.class);
 
 		addRequestHandler("cmd_ccu", CCURequestHandler.class);

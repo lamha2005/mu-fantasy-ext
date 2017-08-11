@@ -14,6 +14,9 @@ public class ItemBase {
 	private int index;
 	@JacksonXmlProperty(localName = "ItemGroup", isAttribute = true)
 	private int groupId;
+
+	@JacksonXmlProperty(localName = "RefunCost", isAttribute = true)
+	private int refunCost;
 	@JacksonXmlProperty(localName = "ItemName", isAttribute = true)
 	private String name;
 
@@ -84,6 +87,16 @@ public class ItemBase {
 
 	public void setType(int type) {
 		this.type = type;
+	}
+
+
+	public int getRefunCost() {
+		return refunCost;
+	}
+
+
+	public void setRefunCost(int refunCost) {
+		this.refunCost = refunCost;
 	}
 
 }

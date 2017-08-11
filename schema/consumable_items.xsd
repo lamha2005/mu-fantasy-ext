@@ -1,0 +1,26 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<xs:schema xmlns:xs="http://www.w3.org/2001/XMLSchema">
+    <xs:element name="ItemList">
+        <xs:complexType>
+            <xs:sequence>
+                <xs:element ref="Item" minOccurs="0" maxOccurs="unbounded"/>
+            </xs:sequence>
+        </xs:complexType>
+    </xs:element>
+    <xs:element name="Item">
+        <xs:complexType>
+             <xs:attribute name="ItemGroup" type="xs:int"/>
+             <xs:attribute name="ItemIndex" type="xs:int"/>
+             <xs:attribute name="ItemName" type="xs:string"/>
+             <xs:attribute name="Description" type="xs:string"/>
+             <xs:attribute name="ItemType" type="xs:int"/>
+             <xs:attribute name="ItemRank" type="xs:int"/>
+             <xs:attribute name="Elemental" type="xs:string"/>
+             <xs:attribute name="Overlap" type="xs:int"/>
+             <xs:attribute name="SkillIndex" type="xs:int"/>
+             <xs:attribute name="Value" type="xs:float"/>
+             <xs:attribute name="RefunCost" type="xs:int"/>
+             <xs:attribute name="Icon" type="xs:string"/>
+        </xs:complexType>
+    </xs:element>
+</xs:schema>

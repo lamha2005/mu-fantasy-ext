@@ -1,5 +1,5 @@
 {
-	"zen_fee_per_slot":"100",
+	"zen_fee_per_slot":100,
 	"material_hero": {
 		"1":[500, 375, 100],
 		"2":[500, 375, 100],
@@ -12,7 +12,7 @@
 		"11019":[4000, 3000, 100]
 	},
 	
-	"quipment_less_rank_3":{
+	"equipment_less_rank_3":{
 		"2": {
 			"material":"",
 			"zen_cost":500,
@@ -85,7 +85,7 @@
 		}
 	},
 	
-	"quipment_greater_rank_3":{
+	"equipment_greater_rank_3":{
 		"2": {
 			"material":"",
 			"zen_cost":500,
@@ -94,67 +94,160 @@
 		"3":{
 			"material":"",
 			"zen_cost":1000,
-			"rate":100
+			"rate":90
 		},
 		"4":{
 			"material":"",
 			"zen_cost":2000,
-			"rate":100
+			"rate":80
 		},
 		"5":{
 			"material":"",
 			"zen_cost":4000,
-			"rate":100
+			"rate":70
 		},
 		"6":{
 			"material":"",
 			"zen_cost":8000,
-			"rate":100
+			"rate":60
 		},
 		"7":{
 			"material":"",
 			"zen_cost":10000,
-			"rate":100
+			"rate":50
 		},
 		"8":{
 			"material":"",
 			"zen_cost":15000,
-			"rate":100
+			"rate":45
 		},
 		"9":{
 			"material":"",
 			"zen_cost":30000,
-			"rate":100
+			"rate":40
 		},
 		"10":{
 			"material":"",
 			"zen_cost":50000,
-			"rate":100
+			"rate":35
 		},
 		"11":{
 			"material":"",
 			"zen_cost":50000,
-			"rate":100
+			"rate":30
 		},
 		"12":{
 			"material":"",
 			"zen_cost":50000,
-			"rate":100
+			"rate":25
 		},
 		"13":{
 			"material":"",
 			"zen_cost":50000,
-			"rate":100
+			"rate":20
 		},
 		"14":{
 			"material":"",
 			"zen_cost":50000,
-			"rate":100
+			"rate":15
 		},
 		"15":{
 			"material":"",
 			"zen_cost":50000,
-			"rate":100
+			"rate":10
 		}
+	},
+	
+	"equipment_level_up_rate":{
+		"2":{
+			"atk":5,
+			"hp":5,
+			"def":5,
+			"rec":5
+		},
+		"3":{
+			"atk":10,
+			"hp":10,
+			"def":10,
+			"rec":10
+		},
+		"4":{
+			"atk":15,
+			"hp":15,
+			"def":15,
+			"rec":15
+		},
+		"5":{
+			"atk":10,
+			"hp":10,
+			"def":10,
+			"rec":10
+		},
+		"6":{
+			"atk":30,
+			"hp":30,
+			"def":30,
+			"rec":30
+		},
+		"7":{
+			"atk":35,
+			"hp":35,
+			"def":35,
+			"rec":35
+		},
+		"8":{
+			"atk":40,
+			"hp":40,
+			"def":40,
+			"rec":40
+		},
+		"9":{
+			"atk":45,
+			"hp":45,
+			"def":45,
+			"rec":45
+		},
+		"10":{
+			"atk":55,
+			"hp":55,
+			"def":55,
+			"rec":55
+		},
+		"11":{
+			"atk":60,
+			"hp":60,
+			"def":60,
+			"rec":60
+		},
+		"12":{
+			"atk":65,
+			"hp":65,
+			"def":65,
+			"rec":65
+		},
+		"13":{
+			"atk":70,
+			"hp":70,
+			"def":70,
+			"rec":70
+		},
+		"14":{
+			"atk":80,
+			"hp":80,
+			"def":80,
+			"rec":80
+		},
+		"15":{
+			"atk":100,
+			"hp":100,
+			"def":100,
+			"rec":100
+		}
+	},
+	"equipment_evolution_rate":{
+		"2":10,
+		"3":25,
+		"4":50,
+		"5":100
 	}		
 }

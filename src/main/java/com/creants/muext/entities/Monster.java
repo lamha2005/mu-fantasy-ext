@@ -18,6 +18,8 @@ public class Monster implements SerializableQAntType {
 
 	@JacksonXmlProperty(localName = "Name", isAttribute = true)
 	public String name;
+	@JacksonXmlProperty(localName = "Map", isAttribute = true)
+	public String map;
 	@JacksonXmlProperty(localName = "Level", isAttribute = true)
 	public int level;
 	@JacksonXmlProperty(localName = "MonsterRank", isAttribute = true)
@@ -25,8 +27,10 @@ public class Monster implements SerializableQAntType {
 
 	@JacksonXmlProperty(localName = "Image", isAttribute = true)
 	public String img;
+	@JacksonXmlProperty(localName = "Type", isAttribute = true)
+	public String type;
 
-	@JacksonXmlProperty(localName = "Dam", isAttribute = true)
+	@JacksonXmlProperty(localName = "Damage", isAttribute = true)
 	public int dam;
 	@JacksonXmlProperty(localName = "HealthPoint", isAttribute = true)
 	public int hp;
@@ -41,6 +45,8 @@ public class Monster implements SerializableQAntType {
 
 	@JacksonXmlProperty(localName = "MaxBC", isAttribute = true)
 	public int maxBC;
+	@JacksonXmlProperty(localName = "EXPReward", isAttribute = true)
+	public int expReward;
 
 
 	public Monster() {
@@ -83,6 +89,16 @@ public class Monster implements SerializableQAntType {
 
 	public void setBcPerHit(int bcPerHit) {
 		this.bcPerHit = bcPerHit;
+	}
+
+
+	public String getType() {
+		return type;
+	}
+
+
+	public void setType(String type) {
+		this.type = type;
 	}
 
 
@@ -218,8 +234,28 @@ public class Monster implements SerializableQAntType {
 	// return result;
 	// }
 
+	public String getMap() {
+		return map;
+	}
+
+
+	public void setMap(String map) {
+		this.map = map;
+	}
+
+
 	public byte[] genX2Dam(int roundNo) {
 		return new byte[] {};
+	}
+
+
+	public int getExpReward() {
+		return expReward;
+	}
+
+
+	public void setExpReward(int expReward) {
+		this.expReward = expReward;
 	}
 
 }

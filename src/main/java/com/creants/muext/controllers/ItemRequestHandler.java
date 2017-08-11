@@ -8,14 +8,18 @@ import com.creants.creants_2x.socket.gate.entities.QAntArray;
 import com.creants.creants_2x.socket.gate.entities.QAntObject;
 import com.creants.creants_2x.socket.gate.wood.QAntUser;
 import com.creants.muext.Creants2XApplication;
+import com.creants.muext.config.ItemConfig;
 import com.creants.muext.entities.item.HeroItem;
+import com.creants.muext.exception.GameErrorCode;
 import com.creants.muext.managers.HeroItemManager;
+import com.creants.muext.services.MessageFactory;
 
 /**
  * @author LamHM
  *
  */
 public class ItemRequestHandler extends BaseClientRequestHandler {
+	private static final String CMD = "cmd_item_req";
 	private static final int TAKE_ON = 1;
 	private static final int TAKE_OFF = 2;
 	private static final int CONSUME_ITEM = 3;
@@ -33,6 +37,10 @@ public class ItemRequestHandler extends BaseClientRequestHandler {
 	@Override
 	public void handleClientRequest(QAntUser user, IQAntObject params) {
 		Integer action = params.getInt("act");
+		if (action == null) {
+			sendError(MessageFactory.createErrorMsg(CMD, GameErrorCode.LACK_OF_INFOMATION), user);
+			return;
+		}
 		switch (action) {
 			case TAKE_ON:
 				takeOn(user, params);
@@ -58,21 +66,84 @@ public class ItemRequestHandler extends BaseClientRequestHandler {
 
 
 	private void upgradeItem(QAntUser user, IQAntObject params) {
+		Long itemId = params.getLong("id");
+		if (itemId == null) {
+			sendError(MessageFactory.createErrorMsg(CMD, GameErrorCode.LACK_OF_INFOMATION), user);
+			return;
+		}
+
+		HeroItem item = heroItemManager.getItem(itemId, user.getName());
+		if (item == null) {
+			sendError(MessageFactory.createErrorMsg(CMD, GameErrorCode.NOT_EXIST_ITEM), user);
+			return;
+		}
+
+		boolean isEquipment = ItemConfig.getInstance().isEquipment(item.getIndex());
+		if (!isEquipment) {
+			sendError(MessageFactory.createErrorMsg(CMD, GameErrorCode.CAN_NOT_UPGRADE_ITEM), user);
+			return;
+		}
 
 	}
 
 
 	private void takeOn(QAntUser user, IQAntObject params) {
-		Long heroId = params.getLong("hero_id");
-		Integer itemIndex = params.getInt("item_index");
-		Integer slot = params.getInt("slot_index");
-		// TODO validate
+		Long heroId = params.getLong("heroId");
+		Long itemId = params.getLong("itemId");
+		Integer slot = params.getInt("slotIndex");
+		if (heroId == null || itemId == null || slot == null) {
+			sendError(MessageFactory.createErrorMsg(CMD, GameErrorCode.LACK_OF_INFOMATION), user);
+			return;
+		}
 
+		HeroItem item = heroItemManager.getItem(itemId, user.getName());
+		if (item == null || item.getHeroId() != null) {
+			sendError(MessageFactory.createErrorMsg(CMD, GameErrorCode.ITEM_IS_USING), user);
+			return;
+		}
+
+		QAntObject response = QAntObject.newInstance();
+		response.putInt("code", 1);
+		response.putInt("act", TAKE_ON);
+		response.putLong("heroId", heroId);
+		HeroItem itemBySlot = heroItemManager.getItemBySlot(slot, heroId);
+		if (itemBySlot != null) {
+			heroItemManager.takeOff(itemBySlot);
+			response.putLong("tk_off", itemBySlot.getId());
+		}
+		response.putLong("slotIndex", slot);
+		response.putLong("itemId", itemId);
+		heroItemManager.takeOn(item, heroId, slot);
+
+		send(CMD, response, user);
 	}
 
 
 	private void takeOff(QAntUser user, IQAntObject params) {
+		Long heroId = params.getLong("heroId");
+		Long itemId = params.getLong("itemId");
+		if (heroId == null || itemId == null) {
+			sendError(MessageFactory.createErrorMsg(CMD, GameErrorCode.LACK_OF_INFOMATION), user);
+			return;
+		}
 
+		// kết hợp itemId với gameHeroId 1 lần
+		HeroItem item = heroItemManager.getItem(itemId, user.getName(), heroId);
+		if (item == null) {
+			sendError(MessageFactory.createErrorMsg(CMD, GameErrorCode.NOT_EXIST_ITEM), user);
+			return;
+		}
+
+		QAntObject response = QAntObject.newInstance();
+		response.putInt("code", 1);
+		response.putInt("act", TAKE_OFF);
+		response.putLong("heroId", heroId);
+		response.putLong("itemId", itemId);
+		response.putLong("slotIndex", item.getSlotIndex());
+
+		heroItemManager.takeOff(item);
+
+		send(CMD, response, user);
 	}
 
 
@@ -89,7 +160,7 @@ public class ItemRequestHandler extends BaseClientRequestHandler {
 	private void getItem(QAntUser user, IQAntObject params) {
 		List<HeroItem> items = heroItemManager.getItems(user.getName());
 		if (items == null) {
-			send("cmd_get_items", null, user);
+			send(CMD, null, user);
 			return;
 		}
 
@@ -101,6 +172,6 @@ public class ItemRequestHandler extends BaseClientRequestHandler {
 		params = QAntObject.newInstance();
 		params.putQAntArray("items", qantArr);
 
-		send("cmd_get_items", params, user);
+		send(CMD, params, user);
 	}
 }

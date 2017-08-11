@@ -135,6 +135,7 @@ public class HeroRequestHandler extends BaseClientRequestHandler {
 		nextLevelInfo.putInt("hp", hero.getHp());
 		nextLevelInfo.putInt("def", hero.getDef());
 		nextLevelInfo.putInt("rec", hero.getRec());
+		nextLevelInfo.putLong("heroId", heroId);
 		response.putQAntObject("next_level", nextLevelInfo);
 		response.putInt("act", HERO_DETAIL);
 		send("cmd_hero", response, user);
@@ -177,6 +178,7 @@ public class HeroRequestHandler extends BaseClientRequestHandler {
 					}
 
 					fee = hero.getLevel() * UPGRADE_FEE;
+					List<HeroItem> heroItems = new ArrayList<>();
 					for (HeroClass heroClass : heroes) {
 						int incrExp = GameConfig.getInstance().getExpFromHero(heroClass.getRank(),
 								hero.getElement().equals(heroClass.getElement()));
@@ -189,6 +191,19 @@ public class HeroRequestHandler extends BaseClientRequestHandler {
 						}
 
 						exp += incrExp;
+
+						List<HeroItem> items = heroItemManager.getItems(gameHeroId);
+						if (items != null && items.size() > 0) {
+							heroItems.addAll(items);
+						}
+					}
+					
+					if(heroItems.size() > 0){
+						for (HeroItem heroItem : heroItems) {
+							heroItem.takeOff();
+						}
+						
+						heroItemManager.updateItem(heroItems);
 					}
 				}
 
@@ -255,8 +270,9 @@ public class HeroRequestHandler extends BaseClientRequestHandler {
 				heroClassManager.save(hero);
 
 				IQAntObject response = QAntObject.newInstance();
-				response.putInt("code", 1);
-				send("cmd_hero", response, user);
+				response.putInt("act", UPGRADE_LEVEL);
+				response.putQAntObject("hero", QAntObject.newFromObject(hero));
+				send(CMD, response, user);
 				QAntTracer.debug(HeroRequestHandler.class, "[DEBUG] upgradeLevel finish: " + gameHeroId);
 			}
 		});

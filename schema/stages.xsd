@@ -1,0 +1,28 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<xs:schema xmlns:xs="http://www.w3.org/2001/XMLSchema">
+    <xs:element name="StageList">
+        <xs:complexType>
+            <xs:sequence>
+                <xs:element ref="Stage" minOccurs="0" maxOccurs="unbounded"/>
+            </xs:sequence>
+        </xs:complexType>
+    </xs:element>
+    <xs:element name="Stage">
+        <xs:complexType>
+             <xs:attribute name="ChapterIndex" type="xs:int"/>
+             <xs:attribute name="ChapterName" type="xs:string"/>
+             <xs:attribute name="ChapterBG" type="xs:string"/>
+             <xs:attribute name="StageIndex" type="xs:int"/>
+             <xs:attribute name="StageName" type="xs:int"/>
+             <xs:attribute name="BattleBG" type="xs:int"/>
+             <xs:attribute name="StaminaCost" type="xs:int"/>
+             <xs:attribute name="MonsterIndex" type="xs:string"/>
+             <xs:attribute name="Formation" type="xs:string"/>
+             <xs:attribute name="FirstTimeReward" type="xs:string"/>
+             <xs:attribute name="RandomBonus" type="xs:string"/>
+             <xs:attribute name="ZenReward" type="xs:int"/>
+             <xs:attribute name="ExpReward" type="xs:int"/>
+             <xs:attribute name="ExpAccReward" type="xs:int"/>
+        </xs:complexType>
+    </xs:element>
+</xs:schema>

@@ -306,7 +306,9 @@ public class Stage implements SerializableQAntType {
 				item.setItemGroup(itemBase.getGroupId());
 				item.setItemBase(itemBase);
 				if (itemBase instanceof ConsumeableItemBase) {
+					ConsumeableItemBase consumeableItem = (ConsumeableItemBase) itemBase;
 					item.setOverlap(true);
+					item.setElement(consumeableItem.getElemental());
 				} else if (itemBase instanceof EquipmentBase) {
 					EquipmentBase equipmentBase = (EquipmentBase) itemBase;
 					item.setElement(equipmentBase.getElemental());

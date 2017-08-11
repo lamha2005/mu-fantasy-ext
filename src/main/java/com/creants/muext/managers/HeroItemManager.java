@@ -35,11 +35,40 @@ public class HeroItemManager implements InitializingBean {
 	@Override
 	public void afterPropertiesSet() throws Exception {
 		itemConfig = ItemConfig.getInstance();
+
+		// itemIndex/no#itemIndex/no
+//		 addItems("mus1#323", "7000/1");
+//		 addItems("mus1#317", "7000/1");
 	}
 
 
 	public List<HeroItem> getItems(String gameHeroId) {
 		return heroItemRep.findItemsByGameHeroId(gameHeroId);
+	}
+
+
+	public List<HeroItem> getItemByHeroId(long heroId) {
+		return heroItemRep.findItemsByHeroId(heroId);
+	}
+
+
+	public HeroItem getItem(long itemId) {
+		return heroItemRep.findOne(itemId);
+	}
+
+
+	public HeroItem getItem(long itemId, String gameHeroId) {
+		return heroItemRep.findItemByIdAndGameHeroId(itemId, gameHeroId);
+	}
+
+
+	public HeroItem getItem(long itemId, String gameHeroId, long heroId) {
+		return heroItemRep.findItemByIdAndGameHeroIdAndHeroId(itemId, gameHeroId, heroId);
+	}
+
+
+	public HeroItem getItemBySlot(int slotIndex, long heroId) {
+		return heroItemRep.findItemBySlotIndexAndHeroId(slotIndex, heroId);
 	}
 
 
@@ -62,6 +91,23 @@ public class HeroItemManager implements InitializingBean {
 
 	public void updateItem(Collection<HeroItem> heroItems) {
 		heroItemRep.save(heroItems);
+	}
+
+
+	public void updateItem(HeroItem heroItem) {
+		heroItemRep.save(heroItem);
+	}
+
+
+	public void takeOn(HeroItem heroItem, long heroId, int slot) {
+		heroItem.takeOn(heroId, slot);
+		heroItemRep.save(heroItem);
+	}
+
+
+	public void takeOff(HeroItem heroItem) {
+		heroItem.takeOff();
+		heroItemRep.save(heroItem);
 	}
 
 

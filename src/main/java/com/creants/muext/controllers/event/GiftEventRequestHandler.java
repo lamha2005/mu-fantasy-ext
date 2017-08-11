@@ -18,13 +18,21 @@ import com.creants.muext.services.MessageFactory;
  *
  */
 public class GiftEventRequestHandler extends BaseClientRequestHandler {
+	private static final String CMD = "cmd_get_events";
+	private static final int GET_CATEGORY_EVENT = 1;
+
 
 	@Override
 	public void handleClientRequest(QAntUser user, IQAntObject params) {
 		Integer revision = params.getInt("rvs");
 		if (revision == null) {
-			sendError(MessageFactory.createErrorMsg("cmd_get_events", GameErrorCode.LACK_OF_INFOMATION), user);
+			sendError(MessageFactory.createErrorMsg(CMD, GameErrorCode.LACK_OF_INFOMATION), user);
 			return;
+		}
+
+		Integer action = params.getInt("act");
+		if (action == null) {
+			action = -1;
 		}
 
 		if (revision != GiftEventConfig.getInstance().getRevison()) {
@@ -42,7 +50,7 @@ public class GiftEventRequestHandler extends BaseClientRequestHandler {
 			eventArr.addQAntObject(QAntObject.newFromObject(giftEventBase));
 		}
 
-		response.putQAntArray("gift_events", eventArr);
+		response.putQAntArray(CMD, eventArr);
 		return response;
 	}
 

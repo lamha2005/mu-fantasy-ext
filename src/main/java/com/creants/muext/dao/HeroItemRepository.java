@@ -16,4 +16,16 @@ public interface HeroItemRepository extends MongoRepository<HeroItem, Long> {
 
 
 	List<HeroItem> findItemsByIsOverlap(boolean isOverlap);
+
+
+	HeroItem findItemBySlotIndexAndHeroId(int slotIndex, long heroId);
+
+
+	List<HeroItem> findItemsByHeroId(long heroId);
+
+
+	HeroItem findItemByIdAndGameHeroId(long itemId, String gameHeroId);
+
+
+	HeroItem findItemByIdAndGameHeroIdAndHeroId(long itemId, String gameHeroId, long heroId);
 }

@@ -71,6 +71,15 @@ public class ItemConfig {
 	}
 
 
+	public boolean isEquipment(int itemIndex) {
+		ItemBase item = getItem(itemIndex);
+		if (item == null)
+			return false;
+
+		return item instanceof EquipmentBase;
+	}
+
+
 	private void loadEquipment() {
 		try {
 			XMLStreamReader sr = f.createXMLStreamReader(new FileInputStream(EQUIPMENT_CONFIG));
@@ -88,6 +97,15 @@ public class ItemConfig {
 						availableClassGroups[i] = Integer.parseInt(items[i]);
 					}
 					equipment.setAvailableClassGroups(availableClassGroups);
+
+					String equipSlotString = equipment.getEquipSlotString();
+					String[] slotArr = StringUtils.split(equipSlotString, "#");
+					int[] availableSlots = new int[slotArr.length];
+					for (int i = 0; i < slotArr.length; i++) {
+						availableSlots[i] = Integer.parseInt(slotArr[i]);
+					}
+					equipment.setEquipSlot(availableSlots);
+
 					equipment.setType(EQUIPMENT_ITEM);
 
 					itemMap.put(equipment.getIndex(), equipment);
