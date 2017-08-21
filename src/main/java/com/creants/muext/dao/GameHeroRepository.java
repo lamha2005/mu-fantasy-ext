@@ -11,4 +11,5 @@ import com.creants.muext.entities.GameHero;
  */
 @Repository
 public interface GameHeroRepository extends MongoRepository<GameHero, String> {
+
 }

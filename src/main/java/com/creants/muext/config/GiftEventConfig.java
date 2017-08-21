@@ -80,4 +80,7 @@ public class GiftEventConfig {
 		return new ArrayList<>(gifts.values());
 	}
 
+	public GiftEventBase getDailyGiftEvent(){
+		return getEvent(0);
+	}
 }

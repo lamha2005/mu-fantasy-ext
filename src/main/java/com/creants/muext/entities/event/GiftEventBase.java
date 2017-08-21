@@ -45,9 +45,10 @@ public class GiftEventBase implements SerializableQAntType {
 			String[] packageArr = StringUtils.split(giftStr, "#");
 			for (int i = 0; i < packageArr.length; i++) {
 				ItemPackageInfo newPackage = new ItemPackageInfo();
-				newPackage.setIndex(i + 1);
+				newPackage.setIndex(i);
 
 				String pk = packageArr[i];
+				newPackage.setItemListString(pk);
 				String[] itemArr = StringUtils.split(pk, ",");
 				for (int j = 0; j < itemArr.length; j++) {
 					String itemStr = itemArr[j];
@@ -64,6 +65,11 @@ public class GiftEventBase implements SerializableQAntType {
 			QAntTracer.error(GiftEventBase.class, "Gift event resource data fail! " + giftStr);
 			throw new RuntimeException();
 		}
+	}
+
+
+	public ItemPackageInfo getPackage(int index) {
+		return itemPackages.get(index);
 	}
 
 

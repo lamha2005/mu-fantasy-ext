@@ -1,4 +1,4 @@
-package com.creants.muext.controllers.event;
+package com.creants.muext.controllers;
 
 import java.util.List;
 
@@ -24,7 +24,7 @@ import com.creants.muext.services.MessageFactory;
  * @author LamHM
  *
  */
-public class GiftEventRequestHandler extends BaseClientRequestHandler {
+public class RankRequestHandler extends BaseClientRequestHandler {
 	private static final String CMD = "cmd_gift_events";
 	private static final int GET_CATEGORY_EVENT = 1;
 	private static final int CLAIM_GIFT_PACKAGE = 2;
@@ -32,7 +32,7 @@ public class GiftEventRequestHandler extends BaseClientRequestHandler {
 	private HeroItemManager itemManager;
 
 
-	public GiftEventRequestHandler() {
+	public RankRequestHandler() {
 		giftRepository = Creants2XApplication.getBean(GiftEventRepository.class);
 		itemManager = Creants2XApplication.getBean(HeroItemManager.class);
 	}
@@ -42,32 +42,35 @@ public class GiftEventRequestHandler extends BaseClientRequestHandler {
 	public void handleClientRequest(QAntUser user, IQAntObject params) {
 		Integer revision = params.getInt("rvs");
 		if (revision == null) {
-			revision = -1;
+			sendError(MessageFactory.createErrorMsg(CMD, GameErrorCode.LACK_OF_INFOMATION), user);
+			return;
 		}
 
 		Integer action = params.getInt("act");
 		if (action == null) {
-			action = GET_CATEGORY_EVENT;
+			action = 1;
 		}
 
 		switch (action) {
 			case GET_CATEGORY_EVENT:
-				getCategoryEvent(user, revision);
+				getCategoryEvent(user);
 				break;
 			case CLAIM_GIFT_PACKAGE:
 				processClaimGift(user, params);
 				break;
 
 			default:
-				getCategoryEvent(user, revision);
+				getCategoryEvent(user);
 				break;
 		}
 
+		if (revision != GiftEventConfig.getInstance().getRevison()) {
+
+		}
 	}
 
 
 	private void processClaimGift(QAntUser user, IQAntObject params) {
-		params.removeElement("rvs");
 		Integer giftIndex = params.getInt("giftIndex");
 		HeroGift heroGift = giftRepository.findOne(user.getName());
 		GiftInfo gift = heroGift.getGift(giftIndex);
@@ -83,31 +86,26 @@ public class GiftEventRequestHandler extends BaseClientRequestHandler {
 			sendError(MessageFactory.createErrorMsg(CMD, GameErrorCode.LACK_OF_INFOMATION), user);
 			return;
 		}
-		gift.setLastUpdateTime(System.currentTimeMillis());
 
 		GiftEventBase event = GiftEventConfig.getInstance().getEvent(giftIndex);
 		ItemPackageInfo itemPackage = event.getPackage(giftIndex);
 
 		List<HeroItem> addItems = itemManager.addItems(user.getName(), itemPackage.getItemListString());
-		params.putInt("act", CLAIM_GIFT_PACKAGE);
-		params.putInt("code", 1);
-		params.putLong("lastUpdateTime", gift.getLastUpdateTime());
+		IQAntObject response = QAntObject.newInstance();
+		response.putInt("act", CLAIM_GIFT_PACKAGE);
 		IQAntArray itemArr = QAntArray.newInstance();
 		for (HeroItem heroItem : addItems) {
 			itemArr.addQAntObject(QAntObject.newFromObject(heroItem));
 		}
-		params.putQAntArray("items", itemArr);
-		send(CMD, params, user);
+		response.putQAntArray("items", itemArr);
+		send(CMD, response, user);
 
-		gift.addClaimed(packageIndex);
+		claimList.remove(packageIndex);
 		giftRepository.save(heroGift);
 	}
 
 
-	private void getCategoryEvent(QAntUser user, int revision) {
-		if (revision == GiftEventConfig.getInstance().getRevison()) {
-			return;
-		}
+	private void getCategoryEvent(QAntUser user) {
 		List<GiftEventBase> events = GiftEventConfig.getInstance().getEvents();
 
 		IQAntObject response = QAntObject.newInstance();
@@ -118,7 +116,6 @@ public class GiftEventRequestHandler extends BaseClientRequestHandler {
 
 		response.putQAntArray(CMD, eventArr);
 		response.putInt("act", GET_CATEGORY_EVENT);
-		response.putInt("rvs", GiftEventConfig.getInstance().getRevison());
 		send(CMD, response, user);
 	}
 

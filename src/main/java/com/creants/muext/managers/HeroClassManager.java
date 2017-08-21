@@ -163,7 +163,17 @@ public class HeroClassManager implements InitializingBean {
 	}
 
 
-	public HeroClass createNewHero(String gameHeroId, HeroBase heroBase) {
+	public HeroClass createNewHero(String gameHeroId, HeroClassType type, int level) {
+		HeroBase heroBase = getHeroBase(type.getId());
+		HeroClass heroClass = new HeroClass(heroBase, level);
+		heroClass.setId(genHeroId());
+		heroClass.setGameHeroId(gameHeroId);
+		resetSkill(heroClass, heroBase.getSkills());
+		return heroClass;
+	}
+
+
+	private HeroClass createNewHero(String gameHeroId, HeroBase heroBase) {
 		HeroClass heroClass = new HeroClass(heroBase);
 		heroClass.setId(genHeroId());
 		heroClass.setGameHeroId(gameHeroId);

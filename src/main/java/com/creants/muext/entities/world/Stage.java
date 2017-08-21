@@ -24,7 +24,7 @@ import com.fasterxml.jackson.dataformat.xml.annotation.JacksonXmlProperty;
  *
  */
 @JsonInclude(Include.NON_NULL)
-@JsonIgnoreProperties(value = { "rewards", "bonus", "rewardItems" })
+@JsonIgnoreProperties(value = { "rewards", "bonus", "rewardItems", "firstTimeRewardString", "randomBonusString" })
 public class Stage implements SerializableQAntType {
 	@JacksonXmlProperty(localName = "StageIndex", isAttribute = true)
 	public int index;
@@ -57,16 +57,16 @@ public class Stage implements SerializableQAntType {
 	public transient String monsterIndex;
 
 	@JacksonXmlProperty(localName = "FirstTimeReward", isAttribute = true)
-	public transient String firstTimeReward;
+	public transient String firstTimeRewardString;
+
+	@JacksonXmlProperty(localName = "RandomBonus", isAttribute = true)
+	public transient String randomBonusString;
 
 	@JacksonXmlProperty(localName = "ZenReward", isAttribute = true)
 	public transient Integer zenReward;
 
 	@JacksonXmlProperty(localName = "SweepTimes", isAttribute = true)
 	public int sweepTimes;
-
-	@JacksonXmlProperty(localName = "RandomBonus", isAttribute = true)
-	public transient String randomBonus;
 
 	@JacksonXmlProperty(localName = "ExpReward", isAttribute = true)
 	public transient int expReward;
@@ -76,6 +76,8 @@ public class Stage implements SerializableQAntType {
 
 	private transient Map<Integer, Integer> monsterCountMap;
 	private transient List<Integer[]> roundList;
+	private transient List<String> firstTimeReward;
+	private transient List<String> randomBonus;
 
 	private List<HeroItem> rewards;
 	private List<HeroItem> bonus;
@@ -85,8 +87,24 @@ public class Stage implements SerializableQAntType {
 		monsterCountMap = new HashMap<>();
 		roundList = new ArrayList<>();
 		readMonsterIndex();
-		rewards = splitItem(firstTimeReward);
-		bonus = splitItem(randomBonus);
+		rewards = splitItem(firstTimeRewardString);
+		bonus = splitItem(randomBonusString);
+
+		firstTimeReward = splitRewardString(firstTimeRewardString);
+		randomBonus = splitRewardString(randomBonusString);
+	}
+
+
+	private List<String> splitRewardString(String rewardString) {
+		List<String> rewardList = new ArrayList<>();
+		if (StringUtils.isNotBlank(rewardString)) {
+			String[] split = StringUtils.split(rewardString, "#");
+			for (int i = 0; i < split.length; i++) {
+				rewardList.add(split[i]);
+			}
+		}
+
+		return rewardList;
 	}
 
 
@@ -200,8 +218,8 @@ public class Stage implements SerializableQAntType {
 	}
 
 
-	public String getFirstTimeReward() {
-		return firstTimeReward;
+	public String getFirstTimeRewardString() {
+		return firstTimeRewardString;
 	}
 
 
@@ -215,8 +233,8 @@ public class Stage implements SerializableQAntType {
 	}
 
 
-	public String getRandomBonus() {
-		return randomBonus;
+	public String getRandomBonusString() {
+		return randomBonusString;
 	}
 
 
@@ -279,6 +297,16 @@ public class Stage implements SerializableQAntType {
 
 	public List<HeroItem> getBonus() {
 		return bonus;
+	}
+
+
+	public List<String> getFirstTimeReward() {
+		return firstTimeReward;
+	}
+
+
+	public List<String> getRandomBonus() {
+		return randomBonus;
 	}
 
 

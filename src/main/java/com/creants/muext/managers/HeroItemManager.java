@@ -37,8 +37,8 @@ public class HeroItemManager implements InitializingBean {
 		itemConfig = ItemConfig.getInstance();
 
 		// itemIndex/no#itemIndex/no
-//		 addItems("mus1#323", "7000/1");
-//		 addItems("mus1#317", "7000/1");
+		// addItems("mus1#323", "7000/1");
+		// addItems("mus1#317", "7000/1");
 	}
 
 
@@ -132,13 +132,13 @@ public class HeroItemManager implements InitializingBean {
 		if (items == null || items.size() <= 0)
 			return new ArrayList<>();
 
-		List<HeroItem> heroItems = heroItemRep.findItemsByIsOverlap(true);
+		List<HeroItem> heroItems = heroItemRep.findItemsByGameHeroIdAndIsOverlap(gameHeroId, true);
 		List<HeroItem> itemsUpdate = new ArrayList<>();
 
-		Map<HeroItem, Integer> overlapItems = new HashMap<>();
+		Map<Integer, Integer> overlapItems = new HashMap<>();
 		for (HeroItem item : items) {
 			if (heroItems.contains(item) && item.isOverlap()) {
-				overlapItems.put(item, item.getNo());
+				overlapItems.put(item.getIndex(), item.getNo());
 			}
 		}
 
@@ -151,7 +151,7 @@ public class HeroItemManager implements InitializingBean {
 		// cập nhật số lượng item cho overlap
 		if (overlapItems.size() > 0) {
 			for (HeroItem heroItem : heroItems) {
-				Integer no = overlapItems.get(heroItem);
+				Integer no = overlapItems.get(heroItem.getIndex());
 				if (no != null) {
 					heroItem.incr(no);
 					itemsUpdate.add(heroItem);
@@ -171,8 +171,11 @@ public class HeroItemManager implements InitializingBean {
 				String[] split = StringUtils.split(items[i], "/");
 				itemsReward.add(new int[] { Integer.parseInt(split[0]), Integer.parseInt(split[1]) });
 			}
+
+			return convertToItem(itemsReward);
 		}
-		return convertToItem(itemsReward);
+
+		return new ArrayList<>();
 	}
 
 

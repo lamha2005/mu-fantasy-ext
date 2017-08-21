@@ -17,7 +17,7 @@ public class HeroItem implements SerializableQAntType {
 	@Id
 	public long id;
 	@Indexed
-	private transient String gameHeroId;
+	private String gameHeroId;
 
 	public Long heroId;
 	public String element;

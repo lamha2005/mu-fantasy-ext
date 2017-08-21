@@ -1,0 +1,36 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<xs:schema xmlns:xs="http://www.w3.org/2001/XMLSchema">
+    <xs:element name="SkillList">
+        <xs:complexType>
+            <xs:sequence>
+                <xs:element ref="Skill" minOccurs="0" maxOccurs="unbounded"/>
+            </xs:sequence>
+        </xs:complexType>
+    </xs:element>
+    <xs:element name="Skill">
+        <xs:complexType>
+             <xs:attribute name="Index" type="xs:int"/>
+             <xs:attribute name="Name" type="xs:string"/>
+             <xs:attribute name="Description" type="xs:string"/>
+             <xs:attribute name="SkillType" type="xs:string"/>
+             <xs:attribute name="SkillRank" type="xs:string"/>
+             <xs:attribute name="MaxLVofSkill" type="xs:int"/>
+             <xs:attribute name="ManaCost" type="xs:int"/>
+             <xs:attribute name="Cooldown" type="xs:int"/>
+             <xs:attribute name="TargetType" type="xs:string"/>
+             <xs:attribute name="Affects" type="xs:string"/>
+             <xs:attribute name="Damage" type="xs:int"/>
+             <xs:attribute name="LvUpDamage" type="xs:int"/>
+             <xs:attribute name="EffectIndex" type="xs:int"/>
+             <xs:attribute name="EffectValue" type="xs:int"/>
+             <xs:attribute name="LvUpValue" type="xs:float"/>
+             <xs:attribute name="Durations" type="xs:int"/>
+             <xs:attribute name="BattlePower" type="xs:int"/>
+             <xs:attribute name="LvUpBattlePower" type="xs:int"/>
+             <xs:attribute name="StatusImage" type="xs:string"/>
+             <xs:attribute name="CastSound" type="xs:string"/>
+             <xs:attribute name="EffectSound" type="xs:string"/>
+             <xs:attribute name="HitSound" type="xs:string"/>
+        </xs:complexType>
+    </xs:element>
+</xs:schema>

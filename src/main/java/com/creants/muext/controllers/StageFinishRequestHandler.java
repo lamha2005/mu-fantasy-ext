@@ -97,7 +97,7 @@ public class StageFinishRequestHandler extends BaseClientRequestHandler {
 
 		// xử lý trả thưởng
 		boolean isFirstTime = !heroStage.isClear();
-		String randomBonus = stage.getRandomBonus();
+		String randomBonus = stage.getRandomBonusString();
 		QAntTracer.debug(this.getClass(), "=======================> Random Bonus: " + randomBonus);
 		List<HeroItem> bonusItems = heroItemManager.addItems(gameHeroId, randomBonus);
 		for (HeroItem heroItem : bonusItems) {

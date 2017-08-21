@@ -14,6 +14,7 @@ import javax.xml.stream.XMLStreamReader;
 import org.apache.commons.lang.StringUtils;
 
 import com.creants.muext.entities.ItemBase;
+import com.creants.muext.entities.ext.SortItemExt;
 import com.creants.muext.entities.item.ConsumeableItemBase;
 import com.creants.muext.entities.item.EquipmentBase;
 import com.fasterxml.jackson.databind.ObjectMapper;
@@ -24,6 +25,9 @@ import com.fasterxml.jackson.dataformat.xml.XmlMapper;
  *
  */
 public class ItemConfig {
+	public static final String SEPERATE_OTHER_ITEM = "#";
+	public static final String SEPERATE_ITEM_NO = "/";
+
 	private static final int CONSUMABLE_ITEM = 1;
 	private static final int EQUIPMENT_ITEM = 2;
 	private static final String COMSUMEABLE_ITEM_CONFIG = "resources/consumable_items.xml";
@@ -91,7 +95,7 @@ public class ItemConfig {
 				try {
 					equipment = mapper.readValue(sr, EquipmentBase.class);
 					String availableClassString = equipment.getAvailableHeroesString();
-					String[] items = StringUtils.split(availableClassString, "#");
+					String[] items = StringUtils.split(availableClassString, SEPERATE_OTHER_ITEM);
 					int[] availableClassGroups = new int[items.length];
 					for (int i = 0; i < items.length; i++) {
 						availableClassGroups[i] = Integer.parseInt(items[i]);
@@ -117,6 +121,40 @@ public class ItemConfig {
 		} catch (Exception e) {
 			e.printStackTrace();
 		}
+	}
+
+
+	public List<SortItemExt> splitItem(String itemArrString) {
+		if (StringUtils.isBlank(itemArrString))
+			return null;
+
+		List<int[]> itemsReward = new ArrayList<>();
+		if (StringUtils.isNotBlank(itemArrString)) {
+			String[] items = StringUtils.split(itemArrString, SEPERATE_OTHER_ITEM);
+			for (int i = 0; i < items.length; i++) {
+				String[] split = StringUtils.split(items[i], SEPERATE_ITEM_NO);
+				itemsReward.add(new int[] { Integer.parseInt(split[0]), Integer.parseInt(split[1]) });
+			}
+		}
+
+		return convertToItem(itemsReward);
+	}
+
+
+	private List<SortItemExt> convertToItem(List<int[]> items) {
+		List<SortItemExt> itemList = new ArrayList<>();
+		if (items.size() > 0) {
+			for (int[] ir : items) {
+				ItemBase itemBase = ItemConfig.getInstance().getItem(ir[0]);
+				SortItemExt item = new SortItemExt();
+				item.setNo(ir[1]);
+				item.setIndex(itemBase.getIndex());
+				item.setName(itemBase.getName());
+				item.setIcon(itemBase.getIcon());
+				itemList.add(item);
+			}
+		}
+		return itemList;
 	}
 
 

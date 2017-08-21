@@ -1,0 +1,12 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<NPCList>
+	<GameHero Id="mus1#1#npc" Name="Long Chó Điên" Level="10" UserId="-1">
+		<HeroList>
+			<HeroClass ClassIndex="100" CharRank="4" Level="10"/>
+			<HeroClass ClassIndex="100" CharRank="4" Level="10"/>
+			<HeroClass ClassIndex="100" CharRank="4" Level="10"/>
+			<HeroClass ClassIndex="100" CharRank="4" Level="10"/>
+		</HeroList>
+	</GameHero>
+</NPCList>
+

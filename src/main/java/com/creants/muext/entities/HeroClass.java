@@ -69,6 +69,14 @@ public class HeroClass implements SerializableQAntType {
 	}
 
 
+	public HeroClass(HeroBase heroBase, int level) {
+		this.level = level;
+		skillList = new ArrayList<>();
+		this.heroBase = heroBase;
+		initBaseInfo();
+	}
+
+
 	private void initBaseInfo() {
 		name = heroBase.getName();
 		index = heroBase.getIndex();

@@ -9,8 +9,9 @@ import com.creants.creants_2x.socket.gate.protocol.serialization.SerializableQAn
  * @author LamHM
  *
  */
-public class ItemPackageInfo implements SerializableQAntType{
+public class ItemPackageInfo implements SerializableQAntType {
 	public int index;
+	private transient String itemListString;
 	public List<ItemInfo> items;
 
 
@@ -26,6 +27,16 @@ public class ItemPackageInfo implements SerializableQAntType{
 
 	public void setIndex(int index) {
 		this.index = index;
+	}
+
+
+	public String getItemListString() {
+		return itemListString;
+	}
+
+
+	public void setItemListString(String itemListString) {
+		this.itemListString = itemListString;
 	}
 
 

@@ -135,7 +135,7 @@ public class HeroRequestHandler extends BaseClientRequestHandler {
 		nextLevelInfo.putInt("hp", hero.getHp());
 		nextLevelInfo.putInt("def", hero.getDef());
 		nextLevelInfo.putInt("rec", hero.getRec());
-		nextLevelInfo.putLong("heroId", heroId);
+		nextLevelInfo.putLong("id", heroId);
 		response.putQAntObject("next_level", nextLevelInfo);
 		response.putInt("act", HERO_DETAIL);
 		send("cmd_hero", response, user);

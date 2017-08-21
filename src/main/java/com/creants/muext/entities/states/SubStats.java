@@ -11,37 +11,12 @@ import com.fasterxml.jackson.dataformat.xml.annotation.JacksonXmlProperty;
  * 
  */
 public class SubStats implements SerializableQAntType {
-	@JacksonXmlProperty(localName = "Accuracy", isAttribute = true)
-	private float acc;
-	@JacksonXmlProperty(localName = "CriticalChance", isAttribute = true)
+	@JacksonXmlProperty(localName = "CRIT", isAttribute = true)
 	private float critch;
-	@JacksonXmlProperty(localName = "DefenseensePenetration", isAttribute = true)
-	private int defpe;
-
 	@JacksonXmlProperty(localName = "MaxMP", isAttribute = true)
 	private int maxMp;
 	@JacksonXmlProperty(localName = "MPRec", isAttribute = true)
 	private int mpRec;
-
-
-	public int getDefpe() {
-		return defpe;
-	}
-
-
-	public void setDefpe(int defpe) {
-		this.defpe = defpe;
-	}
-
-
-	public float getAcc() {
-		return acc;
-	}
-
-
-	public void setAcc(float acc) {
-		this.acc = acc;
-	}
 
 
 	public float getCritch() {

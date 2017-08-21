@@ -14,6 +14,8 @@ public class AutoIncrementService implements InitializingBean {
 	public static final String HERO_ID = "hero_id";
 	public static final String QUEST_ID = "quest_id";
 	public static final String ITEM_ID = "item_id";
+	public static final String MAIL_ID = "mail_id";
+	public static final String NPC_ID = "npc_id";
 
 	@Value("${firstDeploy}")
 	private boolean firstDeploy;
@@ -29,10 +31,12 @@ public class AutoIncrementService implements InitializingBean {
 			sequenceRepository.createSequenceDocument(HERO_STAGE_ID);
 			sequenceRepository.createSequenceDocument(QUEST_ID);
 			sequenceRepository.createSequenceDocument(ITEM_ID);
+			sequenceRepository.createSequenceDocument(MAIL_ID);
 
 			sequenceRepository.setDefaultValue(HERO_ID, 1000);
 		}
-		
+		sequenceRepository.createSequenceDocument(NPC_ID);
+
 		StageConfig.getInstance();
 	}
 
@@ -54,6 +58,16 @@ public class AutoIncrementService implements InitializingBean {
 
 	public long genItemId() {
 		return sequenceRepository.getNextSequenceId(ITEM_ID);
+	}
+
+
+	public long genMailId() {
+		return sequenceRepository.getNextSequenceId(MAIL_ID);
+	}
+
+
+	public long genNPCId() {
+		return sequenceRepository.getNextSequenceId(NPC_ID);
 	}
 
 }

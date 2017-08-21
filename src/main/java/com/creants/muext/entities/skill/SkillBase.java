@@ -25,23 +25,31 @@ public class SkillBase {
 	@JacksonXmlProperty(localName = "Cooldown", isAttribute = true)
 	private int cooldown;
 	@JacksonXmlProperty(localName = "SkillType", isAttribute = true)
-	private int skillType;
+	private String skillType;
 	@JacksonXmlProperty(localName = "TargetType", isAttribute = true)
-	private int targetType;
+	private String targetType;
 	@JacksonXmlProperty(localName = "Affects", isAttribute = true)
-	private int affects;
+	private String affects;
+	@JacksonXmlProperty(localName = "MaxLVofSkill", isAttribute = true)
+	private int maxLVofSkill;
+	@JacksonXmlProperty(localName = "Damage", isAttribute = true)
+	private int damage;
+	@JacksonXmlProperty(localName = "LvUpDamage", isAttribute = true)
+	private int lvUpDamage;
+	@JacksonXmlProperty(localName = "Durations", isAttribute = true)
+	private int durations;
+	@JacksonXmlProperty(localName = "LvUpValue", isAttribute = true)
+	private float lvUpValue;
 	@JacksonXmlProperty(localName = "EffectIndex", isAttribute = true)
-	private String effectIndex;
+	private int effectIndex;
 	@JacksonXmlProperty(localName = "EffectValue", isAttribute = true)
-	private String effectValue;
+	private int effectValue;
+	@JacksonXmlProperty(localName = "BattlePower", isAttribute = true)
+	private int battlePower;
+	@JacksonXmlProperty(localName = "LvUpBattlePower", isAttribute = true)
+	private int lvUpBattlePower;
 	@JacksonXmlProperty(localName = "ValueGrowth", isAttribute = true)
 	private String valueGrowth;
-	@JacksonXmlProperty(localName = "CastImage", isAttribute = true)
-	private String castImage;
-	@JacksonXmlProperty(localName = "EffectImage", isAttribute = true)
-	private String effectImage;
-	@JacksonXmlProperty(localName = "HitImage", isAttribute = true)
-	private String hitImage;
 	@JacksonXmlProperty(localName = "StatusImage", isAttribute = true)
 	private String statusImage;
 	@JacksonXmlProperty(localName = "CastSound", isAttribute = true)
@@ -50,6 +58,8 @@ public class SkillBase {
 	private String effectSound;
 	@JacksonXmlProperty(localName = "HitSound", isAttribute = true)
 	private String hitSound;
+	@JacksonXmlProperty(localName = "SkillRank", isAttribute = true)
+	private String skillRank;
 
 
 	public int getIndex() {
@@ -102,52 +112,72 @@ public class SkillBase {
 	}
 
 
-	public int getSkillType() {
+	public String getSkillType() {
 		return skillType;
 	}
 
 
-	public void setSkillType(int skillType) {
+	public void setSkillType(String skillType) {
 		this.skillType = skillType;
 	}
 
 
-	public int getTargetType() {
+	public String getTargetType() {
 		return targetType;
 	}
 
 
-	public void setTargetType(int targetType) {
+	public void setTargetType(String targetType) {
 		this.targetType = targetType;
 	}
 
 
-	public int getAffects() {
+	public String getAffects() {
 		return affects;
 	}
 
 
-	public void setAffects(int affects) {
+	public void setAffects(String affects) {
 		this.affects = affects;
 	}
 
 
-	public String getEffectIndex() {
+	public int getLvUpDamage() {
+		return lvUpDamage;
+	}
+
+
+	public void setLvUpDamage(int lvUpDamage) {
+		this.lvUpDamage = lvUpDamage;
+	}
+
+
+	public float getLvUpValue() {
+		return lvUpValue;
+	}
+
+
+	public void setLvUpValue(float lvUpValue) {
+		this.lvUpValue = lvUpValue;
+	}
+
+
+	public int getEffectIndex() {
 		return effectIndex;
 	}
 
 
-	public void setEffectIndex(String effectIndex) {
+	public void setEffectIndex(int effectIndex) {
 		this.effectIndex = effectIndex;
 	}
 
 
-	public String getEffectValue() {
+	public int getEffectValue() {
 		return effectValue;
 	}
 
 
-	public void setEffectValue(String effectValue) {
+	public void setEffectValue(int effectValue) {
 		this.effectValue = effectValue;
 	}
 
@@ -162,33 +192,33 @@ public class SkillBase {
 	}
 
 
-	public String getCastImage() {
-		return castImage;
+	public int getDurations() {
+		return durations;
 	}
 
 
-	public void setCastImage(String castImage) {
-		this.castImage = castImage;
+	public void setDurations(int durations) {
+		this.durations = durations;
 	}
 
 
-	public String getEffectImage() {
-		return effectImage;
+	public int getBattlePower() {
+		return battlePower;
 	}
 
 
-	public void setEffectImage(String effectImage) {
-		this.effectImage = effectImage;
+	public void setBattlePower(int battlePower) {
+		this.battlePower = battlePower;
 	}
 
 
-	public String getHitImage() {
-		return hitImage;
+	public int getLvUpBattlePower() {
+		return lvUpBattlePower;
 	}
 
 
-	public void setHitImage(String hitImage) {
-		this.hitImage = hitImage;
+	public void setLvUpBattlePower(int lvUpBattlePower) {
+		this.lvUpBattlePower = lvUpBattlePower;
 	}
 
 
@@ -229,6 +259,36 @@ public class SkillBase {
 
 	public void setHitSound(String hitSound) {
 		this.hitSound = hitSound;
+	}
+
+
+	public String getSkillRank() {
+		return skillRank;
+	}
+
+
+	public void setSkillRank(String skillRank) {
+		this.skillRank = skillRank;
+	}
+
+
+	public int getMaxLVofSkill() {
+		return maxLVofSkill;
+	}
+
+
+	public void setMaxLVofSkill(int maxLVofSkill) {
+		this.maxLVofSkill = maxLVofSkill;
+	}
+
+
+	public int getDamage() {
+		return damage;
+	}
+
+
+	public void setDamage(int damage) {
+		this.damage = damage;
 	}
 
 }

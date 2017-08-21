@@ -1,31 +1,36 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <HeroeList>
-	<Hero ClassGroup="100" ClassIndex="100" Name="Dragon Dark Knight" Element="Fire" CharRank="4" SkillIndex="1000#1001">
-		<BaseStats PhysicAttack="550" HealthPoint="1100" Defense="400" Recovery="350"/>
-		<SubStats Accuracy="0.05" CriticalChance="0.8" DefenseensePenetration="10" MaxMP="1000" MPRec="40"/>
-		<LevelUpStats LvUpATK="7" LvUpHP="1" LvUpDEF="5" LvUpREC="0.5"/>
+	<Hero ClassGroup="100" ClassIndex="100" Name="Dragon Dark Knight" Element="Fire" CharRank="3" SkillIndex="1007#7000" LeaderSkill="9015">
+		<BaseStats PhysicAttack="1250" HealthPoint="2500" Defense="625" Recovery="500"/>
+		<SubStats CRIT="0.05" MaxMP="500" MPRec="62"/>
+		<LevelUpStats LvUpATK="20" LvUpHP="40" LvUpDEF="10" LvUpREC="8"/>
 	</Hero>
-	<Hero ClassGroup="100" ClassIndex="101" Name="Great Dragon Dark Knight" Element="Fire" CharRank="5" SkillIndex="1000#1001#1002">
-		<BaseStats PhysicAttack="2500" HealthPoint="2200" Defense="1000" Recovery="700"/>
-		<SubStats Accuracy="0.05" CriticalChance="0.8" DefenseensePenetration="10" MaxMP="1000" MPRec="40"/>
-		<LevelUpStats LvUpATK="8" LvUpHP="2" LvUpDEF="3" LvUpREC="1"/>
+	<Hero ClassGroup="100" ClassIndex="101" Name="Great Dragon Dark Knight" Element="Fire" CharRank="4" SkillIndex="1007#7001" LeaderSkill="9016">
+		<BaseStats PhysicAttack="1500" HealthPoint="3000" Defense="750" Recovery="600"/>
+		<SubStats CRIT="0.05" MaxMP="500" MPRec="75"/>
+		<LevelUpStats LvUpATK="20" LvUpHP="40" LvUpDEF="10" LvUpREC="8"/>
 	</Hero>
-	<Hero ClassGroup="100" ClassIndex="102" Name="Blue Dragon Knight" Element="Fire" CharRank="5" SkillIndex="1000#1001#1002">
-		<BaseStats PhysicAttack="2500" HealthPoint="2200" Defense="1000" Recovery="700"/>
-		<SubStats Accuracy="0.05" CriticalChance="0.8" DefenseensePenetration="10" MaxMP="1000" MPRec="40"/>
-		<LevelUpStats LvUpATK="8" LvUpHP="2" LvUpDEF="3" LvUpREC="1"/>
+	<Hero ClassGroup="100" ClassIndex="102" Name="Blue Dragon Knight" Element="Fire" CharRank="3" SkillIndex="1010#7002" LeaderSkill="9017">
+		<BaseStats PhysicAttack="1125" HealthPoint="2750" Defense="563" Recovery="813"/>
+		<SubStats CRIT="0.05" MaxMP="480" MPRec="87"/>
+		<LevelUpStats LvUpATK="18" LvUpHP="44" LvUpDEF="9" LvUpREC="13"/>
+	</Hero>
+	<Hero ClassGroup="100" ClassIndex="103" Name="Green Dragon Knight" Element="Earth" CharRank="3" SkillIndex="1010#7003" LeaderSkill="9015">
+		<BaseStats PhysicAttack="1188" HealthPoint="2625" Defense="688" Recovery="563"/>
+		<SubStats CRIT="0.05" MaxMP="550" MPRec="75"/>
+		<LevelUpStats LvUpATK="19" LvUpHP="42" LvUpDEF="11" LvUpREC="9"/>
 	</Hero>
 	
-	<Hero ClassGroup="200" ClassIndex="200" Name="Legendary Dark Wizard" Element="Water" CharRank="4" SkillIndex="">
-		<BaseStats PhysicAttack="1100" HealthPoint="2000" Defense="600" Recovery="150"/>
-		<SubStats Accuracy="0.05" CriticalChance="0.8" DefenseensePenetration="10" MaxMP="1000" MPRec="180"/>
-		<LevelUpStats LvUpATK="1" LvUpHP="7" LvUpDEF="2" LvUpREC="4"/>
+	<Hero ClassGroup="200" ClassIndex="200" Name="Legendary Dark Wizard" Element="Water" CharRank="4" SkillIndex="2007#7002" LeaderSkill="9016">
+		<BaseStats PhysicAttack="1350" HealthPoint="3300" Defense="675" Recovery="975"/>
+		<SubStats CRIT="0.05" MaxMP="480" MPRec="105"/>
+		<LevelUpStats LvUpATK="18" LvUpHP="44" LvUpDEF="9" LvUpREC="13"/>
 	</Hero>
 	
-	<Hero ClassGroup="300" ClassIndex="300" Name="Iris Fairy Elf" Element="Earth" CharRank="4" SkillIndex="1002#1003">
-		<BaseStats PhysicAttack="1000" HealthPoint="2500" Defense="600" Recovery="1000"/>
-		<SubStats Accuracy="0.05" CriticalChance="0.8" DefenseensePenetration="10" MaxMP="1000" MPRec="130"/>
-		<LevelUpStats LvUpATK="3" LvUpHP="5" LvUpDEF="3" LvUpREC="3"/>
+	<Hero ClassGroup="300" ClassIndex="300" Name="Iris Fairy Elf" Element="Earth" CharRank="4" SkillIndex="3001#7003" LeaderSkill="9017">
+		<BaseStats PhysicAttack="1425" HealthPoint="3150" Defense="825" Recovery="675"/>
+		<SubStats CRIT="0.05" MaxMP="550" MPRec="90"/>
+		<LevelUpStats LvUpATK="19" LvUpHP="42" LvUpDEF="11" LvUpREC="9"/>
 	</Hero>
 </HeroeList>
 

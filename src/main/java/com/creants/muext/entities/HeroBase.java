@@ -24,6 +24,9 @@ public class HeroBase extends Character {
 	@JacksonXmlProperty(localName = "SkillIndex", isAttribute = true)
 	private String skillIndex;
 
+	@JacksonXmlProperty(localName = "LeaderSkill", isAttribute = true)
+	private String leaderSkill;
+
 
 	public int getIndex() {
 		return index;
@@ -72,6 +75,16 @@ public class HeroBase extends Character {
 
 	public void setClassGroup(int classGroup) {
 		this.classGroup = classGroup;
+	}
+
+
+	public String getLeaderSkill() {
+		return leaderSkill;
+	}
+
+
+	public void setLeaderSkill(String leaderSkill) {
+		this.leaderSkill = leaderSkill;
 	}
 
 

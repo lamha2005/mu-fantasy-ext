@@ -5,6 +5,7 @@ import java.time.temporal.ChronoUnit;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Calendar;
+import java.util.Collection;
 import java.util.Date;
 import java.util.List;
 import java.util.Map;
@@ -25,14 +26,17 @@ import com.creants.creants_2x.socket.gate.wood.QAntUser;
 import com.creants.muext.Creants2XApplication;
 import com.creants.muext.admin.managers.AdminManager;
 import com.creants.muext.config.GiftEventConfig;
+import com.creants.muext.config.MailConfig;
 import com.creants.muext.config.StageConfig;
 import com.creants.muext.dao.BattleTeamRepository;
 import com.creants.muext.dao.GameHeroRepository;
 import com.creants.muext.dao.GiftEventRepository;
 import com.creants.muext.dao.HeroStageRepository;
+import com.creants.muext.dao.MailRepository;
 import com.creants.muext.entities.BattleTeam;
 import com.creants.muext.entities.GameHero;
 import com.creants.muext.entities.HeroClass;
+import com.creants.muext.entities.Mail;
 import com.creants.muext.entities.Team;
 import com.creants.muext.entities.event.GiftEventBase;
 import com.creants.muext.entities.event.GiftInfo;
@@ -67,6 +71,7 @@ public class JoinZoneEventHandler extends BaseServerEventHandler {
 	private AutoIncrementService autoIncrementService;
 	private HeroItemManager heroItemManager;
 	private GiftEventRepository giftEventRepository;
+	private MailRepository mailRepository;
 
 
 	public JoinZoneEventHandler() {
@@ -79,6 +84,7 @@ public class JoinZoneEventHandler extends BaseServerEventHandler {
 		battleTeamRepository = Creants2XApplication.getBean(BattleTeamRepository.class);
 		heroItemManager = Creants2XApplication.getBean(HeroItemManager.class);
 		giftEventRepository = Creants2XApplication.getBean(GiftEventRepository.class);
+		mailRepository = Creants2XApplication.getBean(MailRepository.class);
 	}
 
 
@@ -89,10 +95,13 @@ public class JoinZoneEventHandler extends BaseServerEventHandler {
 		long creantsUserId = user.getCreantsUserId();
 		String gameHeroId = user.getName();
 
+		IQAntObject response = new QAntObject();
+		boolean isNewAccount = false;
 		GameHero gameHero = gameHeroRep.findOne(gameHeroId);
 		if (gameHero == null) {
 			gameHero = createNewGameHero(gameHeroId, creantsUserId);
 			user.setProperty(UserHelper.GAME_HERO_NAME, gameHero.getName());
+			isNewAccount = true;
 		} else {
 			List<HeroClass> heroes = heroManager.findHeroesByGameHeroId(gameHeroId);
 			gameHero.setHeroes(heroes);
@@ -101,12 +110,12 @@ public class JoinZoneEventHandler extends BaseServerEventHandler {
 			gameHero.setItems(items);
 		}
 
+		processMail(user, response, isNewAccount);
 		updateStamina(user, gameHero);
 
 		// main quest
 		List<HeroQuest> mainQuests = questManager.getQuests(gameHeroId, QuestManager.GROUP_MAIN_QUEST, false);
-		IQAntObject params = new QAntObject();
-		params.putQAntObject("game_hero", QAntObject.newFromObject(gameHero));
+		response.putQAntObject("game_hero", QAntObject.newFromObject(gameHero));
 		IQAntArray questArr = QAntArray.newInstance();
 		IQAntObject mainQuest = QAntObject.newInstance();
 		mainQuest.putInt("gid", QuestManager.GROUP_MAIN_QUEST);
@@ -126,7 +135,7 @@ public class JoinZoneEventHandler extends BaseServerEventHandler {
 		dailyQuest.putUtfString("n", "Nhiệm vụ hàng ngày");
 		dailyQuest.putInt("no", dailyQuestList.size());
 		questArr.addQAntObject(dailyQuest);
-		params.putQAntArray("quests", questArr);
+		response.putQAntArray("quests", questArr);
 
 		// team
 		BattleTeam battleTeam = battleTeamRepository.findOne(gameHeroId);
@@ -139,22 +148,57 @@ public class JoinZoneEventHandler extends BaseServerEventHandler {
 			teamObj.putLongArray("heroes", new ArrayList<Long>(Arrays.asList(team.getHeroes())));
 			teamArr.addQAntObject(teamObj);
 		}
-		params.putQAntArray("teams", teamArr);
+		response.putQAntArray("teams", teamArr);
 
 		// event
-		params.putInt("event_no", 10);
-		params.putLong("login_time", user.getLoginTime());
+		response.putInt("event_no", 10);
+		response.putLong("login_time", user.getLoginTime());
 
 		// process gift
-		processGiftEvent(user, params);
-		send("join_game", params, user);
+		processGiftEvent(user, response);
+		send("join_game", response, user);
 
 		adminManager.incrAndNotifyCCU();
 		return;
 	}
 
 
-	private void processGiftEvent(QAntUser user, IQAntObject params) {
+	private void processMail(QAntUser user, IQAntObject response, boolean isNewAccount) {
+		if (isNewAccount) {
+			List<Mail> mailList = new ArrayList<>(2);
+			MailConfig instance = MailConfig.getInstance();
+			String gameHeroId = user.getName();
+			Mail welcomeMail = new Mail(gameHeroId, instance.getWelcomeMail());
+			welcomeMail.setGameHeroId(gameHeroId);
+			welcomeMail.setId(autoIncrementService.genMailId());
+			mailList.add(welcomeMail);
+
+			Mail welcomeGift = new Mail(gameHeroId, instance.getWelcomeGiftMail());
+			welcomeGift.setGameHeroId(gameHeroId);
+			welcomeGift.setId(autoIncrementService.genMailId());
+			mailList.add(welcomeGift);
+			mailRepository.save(mailList);
+			return;
+		}
+
+		List<Mail> mails = mailRepository.findByGameHeroIdAndReadIsFalse(user.getName());
+		QAntObject mailObj = QAntObject.newInstance();
+
+		if (mails != null && mails.size() > 0) {
+			mailObj.putInt("noti", mails.size());
+			Collection<Long> mailCol = new ArrayList<>(mails.size());
+			for (Mail mail : mails) {
+				mailCol.add(mail.getId());
+			}
+
+			mailObj.putLongArray("ids", mailCol);
+		}
+
+		response.putQAntObject("mails", mailObj);
+	}
+
+
+	private void processGiftEvent(QAntUser user, IQAntObject response) {
 		long currentTimeMillis = System.currentTimeMillis();
 		HeroGift heroGift = giftEventRepository.findOne(user.getName());
 		if (heroGift == null || heroGift.isEmpty()) {
@@ -162,7 +206,7 @@ public class JoinZoneEventHandler extends BaseServerEventHandler {
 			heroGift.setGameHeroId(user.getName());
 
 			// Daily gift
-			GiftInfo giftInfo = new GiftInfo(giftEventConfig.getEvent(0));
+			GiftInfo giftInfo = new GiftInfo(giftEventConfig.getDailyGiftEvent());
 			giftInfo.setAnchorTime(currentTimeMillis);
 			heroGift.addGiftInfo(giftInfo);
 		}
@@ -170,8 +214,7 @@ public class JoinZoneEventHandler extends BaseServerEventHandler {
 		heroGift.setRevision(giftEventConfig.getRevison());
 
 		IQAntObject giftEventObj = QAntObject.newInstance();
-		params.putQAntObject("gift_event", giftEventObj);
-		giftEventObj.putInt("rvs", heroGift.getRevision());
+		response.putQAntObject("gift_event", giftEventObj);
 
 		Map<Integer, GiftInfo> giftEventMap = heroGift.getGiftEventMap();
 		int giftNotification = 0;
@@ -184,6 +227,7 @@ public class JoinZoneEventHandler extends BaseServerEventHandler {
 					boolean over7Day = isOver7Day(new Date(giftInfo.getAnchorTime()), new Date(currentTimeMillis));
 					if (over7Day) {
 						giftInfo.reset();
+						giftNotification++;
 					}
 
 					long curDate = DateUtils.truncate(new Date(), Calendar.DATE).getTime();
@@ -204,6 +248,8 @@ public class JoinZoneEventHandler extends BaseServerEventHandler {
 		}
 		giftEventObj.putQAntArray("gifts", giftArr);
 		giftEventObj.putInt("noti", giftNotification);
+
+		response.putQAntObject("daily_gift", QAntObject.newFromObject(giftEventConfig.getDailyGiftEvent()));
 		giftEventRepository.save(heroGift);
 	}
 

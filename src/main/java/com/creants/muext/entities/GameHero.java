@@ -19,7 +19,6 @@ public class GameHero implements SerializableQAntType {
 	@Id
 	public String id;
 	public long userId;
-	public transient String serverName;
 	public String avatar;
 	public String name;
 	public int level;
@@ -34,6 +33,7 @@ public class GameHero implements SerializableQAntType {
 	public int vipLevel;
 	public int vipPoint;
 	public int maxVipPoint;
+	public boolean isNPC;
 
 	@Transient
 	public List<HeroClass> heroes;
@@ -108,16 +108,6 @@ public class GameHero implements SerializableQAntType {
 
 	public void setMaxStamina(int maxStamina) {
 		this.maxStamina = maxStamina;
-	}
-
-
-	public String getServerName() {
-		return serverName;
-	}
-
-
-	public void setServerName(String serverName) {
-		this.serverName = serverName;
 	}
 
 
@@ -245,6 +235,16 @@ public class GameHero implements SerializableQAntType {
 
 	public void setAvatar(String avatar) {
 		this.avatar = avatar;
+	}
+
+
+	public boolean isNPC() {
+		return isNPC;
+	}
+
+
+	public void setNPC(boolean isNPC) {
+		this.isNPC = isNPC;
 	}
 
 }

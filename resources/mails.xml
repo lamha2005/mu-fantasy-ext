@@ -1,0 +1,6 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<MailList>
+	<Mail Index="100" Type="noti" Sender="Mu Admin" Title="Chào Mừng Tân Thủ" Content="Chào mừng tân thủ đến với lục địa MU" ExpireAfterSeconds="86400"/>
+	<Mail Index="101" Type="gift"  Sender="Mu Admin" Title="Quà Tân Thủ" Content="Hãy mang hành lý của mình để chu du đại lục nào" ExpireAfterSeconds="86400" Gift="11012/2#11011/2" Zen="10000"/>
+</MailList>
+

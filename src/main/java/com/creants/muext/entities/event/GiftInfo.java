@@ -37,8 +37,10 @@ public class GiftInfo implements SerializableQAntType {
 	public void reset() {
 		claimed = new ArrayList<>();
 		claim = new ArrayList<>();
-		isClaim = false;
 		anchorTime = System.currentTimeMillis();
+		// nhận ngày đầu tiên
+		setClaim(true);
+		claimNextPackage();
 	}
 
 
@@ -61,7 +63,6 @@ public class GiftInfo implements SerializableQAntType {
 			return false;
 		}
 
-		claimed.add(packageIndex);
 		claim.add(packageIndex);
 		return true;
 	}
@@ -119,6 +120,11 @@ public class GiftInfo implements SerializableQAntType {
 
 	public List<Integer> getClaim() {
 		return claim;
+	}
+	
+	public void addClaimed(Integer index){
+		this.claimed.add(index);
+		this.claim.remove(index);
 	}
 
 
