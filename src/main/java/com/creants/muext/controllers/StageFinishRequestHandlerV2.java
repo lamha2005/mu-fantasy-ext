@@ -1,6 +1,7 @@
 package com.creants.muext.controllers;
 
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.Set;
@@ -13,6 +14,7 @@ import com.creants.creants_2x.socket.gate.entities.QAntArray;
 import com.creants.creants_2x.socket.gate.entities.QAntObject;
 import com.creants.creants_2x.socket.gate.wood.QAntUser;
 import com.creants.muext.Creants2XApplication;
+import com.creants.muext.config.ItemConfig;
 import com.creants.muext.config.StageConfig;
 import com.creants.muext.dao.BattleTeamRepository;
 import com.creants.muext.dao.GameHeroRepository;
@@ -20,6 +22,7 @@ import com.creants.muext.dao.HeroStageRepository;
 import com.creants.muext.entities.BattleTeam;
 import com.creants.muext.entities.GameHero;
 import com.creants.muext.entities.HeroClass;
+import com.creants.muext.entities.item.HeroConsumeableItem;
 import com.creants.muext.entities.item.HeroItem;
 import com.creants.muext.entities.quest.HeroQuest;
 import com.creants.muext.entities.quest.Task;
@@ -38,6 +41,7 @@ import com.creants.muext.services.QuestManager;
  * @author LamHa
  */
 public class StageFinishRequestHandlerV2 extends BaseClientRequestHandler {
+	private static final String CMD = "cmd_stage_finish";
 	private static final int UNLOCK_NEW_STAGE = 1;
 	private GameHeroRepository repository;
 	private MatchManager matchManager;
@@ -64,10 +68,35 @@ public class StageFinishRequestHandlerV2 extends BaseClientRequestHandler {
 	@Override
 	public void handleClientRequest(QAntUser user, IQAntObject params) {
 		String gameHeroId = user.getName();
+
+		List<HeroConsumeableItem> useItems = null;
+		IQAntArray itemArr = params.getCASArray("use_items");
+		if (itemArr != null && itemArr.size() > 0) {
+			int size = itemArr.size();
+			Map<Long, Integer> itemIds = new HashMap<>();
+			for (int i = 0; i < size; i++) {
+				IQAntObject itemObj = itemArr.getQAntObject(i);
+				itemIds.put(itemObj.getLong("id"), itemObj.getInt("no"));
+			}
+
+			useItems = heroItemManager.useItems(gameHeroId, itemIds);
+		}
+
 		Boolean isWin = params.getBool("win");
 		if (!isWin) {
 			matchManager.removeMatch(gameHeroId);
-			send("cmd_mission_finish", QAntObject.newInstance(), user);
+			QAntObject response = QAntObject.newInstance();
+			if (useItems != null) {
+				QAntArray itemUdpArr = QAntArray.newInstance();
+				for (HeroItem heroItem : useItems) {
+					itemUdpArr.addQAntObject(QAntObject.newFromObject(heroItem));
+				}
+				QAntObject updateObj = QAntObject.newInstance();
+				updateObj.putQAntArray("items", itemUdpArr);
+				response.putQAntObject("update", updateObj);
+			}
+
+			send(CMD, response, user);
 			return;
 		}
 
@@ -83,8 +112,9 @@ public class StageFinishRequestHandlerV2 extends BaseClientRequestHandler {
 		HeroStage heroStage = heroStageRepository.findStageByHeroIdAndIndex(gameHeroId, stageIndex);
 		boolean isFirstTime = !heroStage.isClear();
 
-		QAntObject response = processReward(user, params, stage, isFirstTime);
-		send("cmd_stage_finish", response, user);
+		// xử lý trả thưởng
+		QAntObject response = processReward(user, stage, isFirstTime);
+		send(CMD, response, user);
 
 		notifyAssetChange(user, stage);
 		processHeroStage(user, heroStage);
@@ -130,8 +160,7 @@ public class StageFinishRequestHandlerV2 extends BaseClientRequestHandler {
 	}
 
 
-	private QAntObject processReward(QAntUser user, IQAntObject params, Stage stage, boolean isFirstTime) {
-		System.out.println("[ERROR] is first time: " + isFirstTime);
+	private QAntObject processReward(QAntUser user, Stage stage, boolean isFirstTime) {
 		long startTime = System.currentTimeMillis();
 		QAntObject response = QAntObject.newInstance();
 		QAntObject reward = QAntObject.newInstance();
@@ -156,17 +185,18 @@ public class StageFinishRequestHandlerV2 extends BaseClientRequestHandler {
 		}
 		reward.putQAntArray("incr_exp", incrExp);
 
+		ItemConfig itemInstance = ItemConfig.getInstance();
 		List<HeroItem> updateItems = new ArrayList<>();
 		if (isFirstTime) {
 			List<HeroItem> rewardItems = stage.getRewards();
 			if (rewardItems.size() > 0) {
-				reward.putQAntArray("items", buildShortItemInfo(rewardItems));
+				reward.putQAntArray("items", itemInstance.buildShortItemInfo(rewardItems));
 				updateItems.addAll(rewardItems);
 			}
 		}
 
 		if (bonusItems.size() > 0) {
-			reward.putQAntArray("items_bonus", buildShortItemInfo(bonusItems));
+			reward.putQAntArray("items_bonus", itemInstance.buildShortItemInfo(bonusItems));
 			updateItems.addAll(bonusItems);
 		}
 
@@ -198,20 +228,6 @@ public class StageFinishRequestHandlerV2 extends BaseClientRequestHandler {
 		System.out.println("-----------------------> delta: " + (System.currentTimeMillis() - startTime));
 
 		return response;
-	}
-
-
-	private QAntArray buildShortItemInfo(List<HeroItem> bonusItems) {
-		QAntArray items = QAntArray.newInstance();
-		QAntObject obj = null;
-		for (HeroItem heroItem : bonusItems) {
-			obj = QAntObject.newInstance();
-			obj.putInt("itemGroup", heroItem.getItemGroup());
-			obj.putInt("index", heroItem.getIndex());
-			obj.putInt("no", heroItem.getNo());
-			items.addQAntObject(obj);
-		}
-		return items;
 	}
 
 

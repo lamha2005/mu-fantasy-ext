@@ -38,6 +38,8 @@ public class HeroClassManager implements InitializingBean {
 	private AutoIncrementService autoIncrService;
 	@Autowired
 	private HeroRepository heroRepository;
+	@Autowired
+	private HeroItemManager itemManager;
 
 	private Map<Integer, HeroBase> heroes;
 	private Map<Integer, Monster> monsters;
@@ -96,11 +98,6 @@ public class HeroClassManager implements InitializingBean {
 		List<HeroClass> heroes = heroRepository.findHeroesByGameHeroId(gameHeroId);
 		for (HeroClass heroClass : heroes) {
 			heroClass.setHeroBase(getHeroBase(heroClass.getIndex()));
-			if (heroClass.getSkillList().size() <= 0) {
-				HeroBase heroBase = getHeroBase(heroClass.getIndex());
-				resetSkill(heroClass, heroBase.getSkills());
-				// heroRepository.save(heroClass);
-			}
 		}
 		return heroes;
 	}
@@ -111,11 +108,18 @@ public class HeroClassManager implements InitializingBean {
 		Iterable<HeroClass> findAll = heroRepository.findAll(heroIds);
 		for (HeroClass heroClass : findAll) {
 			heroClass.setHeroBase(getHeroBase(heroClass.getIndex()));
-			if (heroClass.getSkillList().size() <= 0) {
-				HeroBase heroBase = getHeroBase(heroClass.getIndex());
-				resetSkill(heroClass, heroBase.getSkills());
-				// heroRepository.save(heroClass);
-			}
+			heroes.add(heroClass);
+		}
+		return heroes;
+	}
+
+
+	public List<HeroClass> findHeroesFullInfo(Collection<Long> heroIds) {
+		List<HeroClass> heroes = new ArrayList<>();
+		Iterable<HeroClass> heroIter = heroRepository.findAll(heroIds);
+		for (HeroClass heroClass : heroIter) {
+			heroClass.setHeroBase(getHeroBase(heroClass.getIndex()));
+			heroClass.setEquipments(itemManager.getTakeOnEquipments(heroClass.getId()));
 			heroes.add(heroClass);
 		}
 		return heroes;

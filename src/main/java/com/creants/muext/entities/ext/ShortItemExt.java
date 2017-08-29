@@ -6,11 +6,9 @@ import com.creants.creants_2x.socket.gate.protocol.serialization.SerializableQAn
  * @author LamHM
  *
  */
-public class SortItemExt implements SerializableQAntType {
-	private int index;
-	private int no;
-	private String name;
-	private String icon;
+public class ShortItemExt implements SerializableQAntType {
+	public int index;
+	public int no;
 
 
 	public int getIndex() {
@@ -30,26 +28,6 @@ public class SortItemExt implements SerializableQAntType {
 
 	public void setNo(int no) {
 		this.no = no;
-	}
-
-
-	public String getName() {
-		return name;
-	}
-
-
-	public void setName(String name) {
-		this.name = name;
-	}
-
-
-	public String getIcon() {
-		return icon;
-	}
-
-
-	public void setIcon(String icon) {
-		this.icon = icon;
 	}
 
 }

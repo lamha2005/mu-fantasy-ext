@@ -13,6 +13,8 @@ import com.creants.muext.config.ItemConfig;
 import com.creants.muext.entities.ItemBase;
 import com.creants.muext.entities.item.ConsumeableItemBase;
 import com.creants.muext.entities.item.EquipmentBase;
+import com.creants.muext.entities.item.HeroConsumeableItem;
+import com.creants.muext.entities.item.HeroEquipment;
 import com.creants.muext.entities.item.HeroItem;
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import com.fasterxml.jackson.annotation.JsonInclude;
@@ -328,20 +330,18 @@ public class Stage implements SerializableQAntType {
 		if (items.size() > 0) {
 			for (int[] ir : items) {
 				ItemBase itemBase = ItemConfig.getInstance().getItem(ir[0]);
-				HeroItem item = new HeroItem();
-				item.setNo(ir[1]);
-				item.setIndex(itemBase.getIndex());
-				item.setItemGroup(itemBase.getGroupId());
-				item.setItemBase(itemBase);
 				if (itemBase instanceof ConsumeableItemBase) {
-					ConsumeableItemBase consumeableItem = (ConsumeableItemBase) itemBase;
-					item.setOverlap(true);
-					item.setElement(consumeableItem.getElemental());
+					HeroConsumeableItem consItem = new HeroConsumeableItem();
+					consItem.setIndex(itemBase.getIndex());
+					consItem.setItemGroup(itemBase.getGroupId());
+					consItem.setOverlap(true);
+					consItem.setElement(itemBase.getElemental());
+					consItem.setNo(ir[1]);
+					consItem.setItemBase((ConsumeableItemBase) itemBase);
+					itemList.add(consItem);
 				} else if (itemBase instanceof EquipmentBase) {
-					EquipmentBase equipmentBase = (EquipmentBase) itemBase;
-					item.setElement(equipmentBase.getElemental());
+					itemList.add(new HeroEquipment((EquipmentBase) itemBase));
 				}
-				itemList.add(item);
 			}
 		}
 		return itemList;

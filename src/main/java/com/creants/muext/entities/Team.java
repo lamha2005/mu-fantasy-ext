@@ -69,4 +69,16 @@ public class Team implements SerializableQAntType {
 		return heroIds;
 	}
 
+
+	public List<Long> getHeroIds() {
+		List<Long> heroIds = new ArrayList<>();
+		for (int i = 0; i < heroes.length; i++) {
+			Long id = heroes[i];
+			if (id > 0) {
+				heroIds.add(id);
+			}
+		}
+		return heroIds;
+	}
+
 }

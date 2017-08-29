@@ -61,4 +61,14 @@ public class BattleTeam {
 		return getTeam(0).getIdList();
 	}
 
+
+	public List<Long> getMainHeroes() {
+		return getTeam(0).getHeroIds();
+	}
+
+
+	public Long[] getMainTeamArray() {
+		return getTeam(0).getHeroes();
+	}
+
 }

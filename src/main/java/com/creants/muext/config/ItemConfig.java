@@ -13,10 +13,13 @@ import javax.xml.stream.XMLStreamReader;
 
 import org.apache.commons.lang.StringUtils;
 
+import com.creants.creants_2x.socket.gate.entities.QAntArray;
+import com.creants.creants_2x.socket.gate.entities.QAntObject;
 import com.creants.muext.entities.ItemBase;
-import com.creants.muext.entities.ext.SortItemExt;
+import com.creants.muext.entities.ext.ShortItemExt;
 import com.creants.muext.entities.item.ConsumeableItemBase;
 import com.creants.muext.entities.item.EquipmentBase;
+import com.creants.muext.entities.item.HeroItem;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.dataformat.xml.XmlMapper;
 
@@ -124,7 +127,7 @@ public class ItemConfig {
 	}
 
 
-	public List<SortItemExt> splitItem(String itemArrString) {
+	public List<ShortItemExt> splitItem(String itemArrString) {
 		if (StringUtils.isBlank(itemArrString))
 			return null;
 
@@ -141,16 +144,27 @@ public class ItemConfig {
 	}
 
 
-	private List<SortItemExt> convertToItem(List<int[]> items) {
-		List<SortItemExt> itemList = new ArrayList<>();
+	public QAntArray buildShortItemInfo(List<HeroItem> bonusItems) {
+		QAntArray items = QAntArray.newInstance();
+		QAntObject obj = null;
+		for (HeroItem heroItem : bonusItems) {
+			obj = QAntObject.newInstance();
+			obj.putInt("index", heroItem.getIndex());
+			obj.putInt("no", heroItem.getNo());
+			items.addQAntObject(obj);
+		}
+		return items;
+	}
+
+
+	private List<ShortItemExt> convertToItem(List<int[]> items) {
+		List<ShortItemExt> itemList = new ArrayList<>();
 		if (items.size() > 0) {
 			for (int[] ir : items) {
 				ItemBase itemBase = ItemConfig.getInstance().getItem(ir[0]);
-				SortItemExt item = new SortItemExt();
+				ShortItemExt item = new ShortItemExt();
 				item.setNo(ir[1]);
 				item.setIndex(itemBase.getIndex());
-				item.setName(itemBase.getName());
-				item.setIcon(itemBase.getIcon());
 				itemList.add(item);
 			}
 		}

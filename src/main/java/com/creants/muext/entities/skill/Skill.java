@@ -11,6 +11,16 @@ public class Skill implements SerializableQAntType {
 	public int level;
 
 
+	public Skill() {
+	}
+
+
+	public Skill(int index, int level) {
+		this.index = index;
+		this.level = level;
+	}
+
+
 	public int getIndex() {
 		return index;
 	}

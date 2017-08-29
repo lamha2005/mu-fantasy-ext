@@ -20,6 +20,9 @@ public class ItemBase {
 	@JacksonXmlProperty(localName = "ItemName", isAttribute = true)
 	private String name;
 
+	@JacksonXmlProperty(localName = "Elemental", isAttribute = true)
+	private String elemental;
+
 	@JacksonXmlProperty(localName = "Imagefile", isAttribute = true)
 	@JsonInclude(JsonInclude.Include.NON_NULL)
 	private String img;
@@ -57,6 +60,16 @@ public class ItemBase {
 
 	public void setName(String name) {
 		this.name = name;
+	}
+
+
+	public String getElemental() {
+		return elemental;
+	}
+
+
+	public void setElemental(String elemental) {
+		this.elemental = elemental;
 	}
 
 

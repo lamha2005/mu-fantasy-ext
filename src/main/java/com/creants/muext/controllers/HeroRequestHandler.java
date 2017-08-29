@@ -23,7 +23,8 @@ import com.creants.muext.entities.BattleTeam;
 import com.creants.muext.entities.GameHero;
 import com.creants.muext.entities.HeroClass;
 import com.creants.muext.entities.Team;
-import com.creants.muext.entities.item.HeroItem;
+import com.creants.muext.entities.item.HeroConsumeableItem;
+import com.creants.muext.entities.item.HeroEquipment;
 import com.creants.muext.exception.GameErrorCode;
 import com.creants.muext.managers.HeroClassManager;
 import com.creants.muext.managers.HeroItemManager;
@@ -168,18 +169,18 @@ public class HeroRequestHandler extends BaseClientRequestHandler {
 					return;
 				}
 
-				Collection<Long> heroIds = params.getLongArray("heroIds");
-				List<HeroClass> heroes = new ArrayList<>();
-				if (heroIds != null && heroIds.size() > 0) {
-					heroes = heroClassManager.findHeroes(heroIds);
-					if (heroes.size() != heroIds.size()) {
+				Collection<Long> consumHeroIds = params.getLongArray("heroIds");
+				List<HeroClass> consumHeroes = new ArrayList<>();
+				if (consumHeroIds != null && consumHeroIds.size() > 0) {
+					consumHeroes = heroClassManager.findHeroes(consumHeroIds);
+					if (consumHeroes.size() != consumHeroIds.size()) {
 						sendError(MessageFactory.createErrorMsg(CMD, GameErrorCode.CAN_NOT_FIND_HERO), user);
 						return;
 					}
 
 					fee = hero.getLevel() * UPGRADE_FEE;
-					List<HeroItem> heroItems = new ArrayList<>();
-					for (HeroClass heroClass : heroes) {
+					List<HeroEquipment> heroEquipments = new ArrayList<>();
+					for (HeroClass heroClass : consumHeroes) {
 						int incrExp = GameConfig.getInstance().getExpFromHero(heroClass.getRank(),
 								hero.getElement().equals(heroClass.getElement()));
 
@@ -192,46 +193,42 @@ public class HeroRequestHandler extends BaseClientRequestHandler {
 
 						exp += incrExp;
 
-						List<HeroItem> items = heroItemManager.getItems(gameHeroId);
-						if (items != null && items.size() > 0) {
-							heroItems.addAll(items);
+						List<HeroEquipment> equipment = heroItemManager.getTakeOnEquipments(heroClass.getId());
+						if (equipment != null && equipment.size() > 0) {
+							heroEquipments.addAll(equipment);
 						}
 					}
-					
-					if(heroItems.size() > 0){
-						for (HeroItem heroItem : heroItems) {
+
+					if (heroEquipments.size() > 0) {
+						for (HeroEquipment heroItem : heroEquipments) {
 							heroItem.takeOff();
 						}
-						
-						heroItemManager.updateItem(heroItems);
+
+						heroItemManager.updateEquipments(heroEquipments);
 					}
 				}
 
-				List<HeroItem> removeItems = new ArrayList<>();
-				List<HeroItem> heroItems = new ArrayList<>();
-				IQAntArray itemArr = params.getCASArray("items");
-				if (itemArr != null && itemArr.size() > 0) {
+				List<HeroConsumeableItem> consumeableItems = new ArrayList<>();
+				IQAntArray consumeItemArr = params.getCASArray("items");
+				if (consumeItemArr != null && consumeItemArr.size() > 0) {
 					fee += hero.getLevel() * UPGRADE_FEE;
 					Map<Long, Integer> updateMap = new HashMap<>();
-					for (int i = 0; i < itemArr.size(); i++) {
-						IQAntObject item = itemArr.getQAntObject(i);
+					for (int i = 0; i < consumeItemArr.size(); i++) {
+						IQAntObject item = consumeItemArr.getQAntObject(i);
 						Long itemId = item.getLong("id");
 						Integer itemNo = item.getInt("no");
 						updateMap.put(itemId, itemNo);
 					}
 
-					heroItems = heroItemManager.getItems(updateMap.keySet());
-					if (heroItems.size() != itemArr.size()) {
+					consumeableItems = heroItemManager.getConsumeableItems(gameHeroId, updateMap.keySet());
+					if (consumeableItems.size() != consumeItemArr.size()) {
 						// TODO send err
 						return;
 					}
 
-					for (HeroItem heroItem : heroItems) {
+					for (HeroConsumeableItem heroItem : consumeableItems) {
 						Integer no = updateMap.get(heroItem.getId());
 						heroItem.decr(no);
-						if (heroItem.getNo() <= 0) {
-							removeItems.add(heroItem);
-						}
 
 						int incrExp = GameConfig.getInstance().getExpFromItem(heroItem.getIndex(),
 								hero.getElement().equals(heroItem.getElement()));
@@ -250,16 +247,12 @@ public class HeroRequestHandler extends BaseClientRequestHandler {
 					return;
 				}
 
-				if (heroes.size() > 0) {
-					heroClassManager.remove(heroes);
+				if (consumHeroes.size() > 0) {
+					heroClassManager.remove(consumHeroes);
 				}
 
-				if (removeItems.size() > 0) {
-					heroItemManager.removeItems(removeItems);
-				}
-
-				if (heroItems.removeAll(removeItems)) {
-					heroItemManager.updateItem(heroItems);
+				if (consumeableItems.size() > 0) {
+					heroItemManager.updateConsumeableItem(consumeableItems);
 				}
 
 				GameHero gameHero = gameHeroRepository.findOne(gameHeroId);

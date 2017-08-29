@@ -14,8 +14,6 @@ public class ConsumeableItemBase extends ItemBase implements IConsumeableItem {
 	private int itemRank;
 	@JacksonXmlProperty(localName = "SkillIndex", isAttribute = true)
 	private int skillIndex;
-	@JacksonXmlProperty(localName = "Elemental", isAttribute = true)
-	private String elemental;
 	@JacksonXmlProperty(localName = "Overlap", isAttribute = true)
 	private int overlap;
 	@JacksonXmlProperty(localName = "EffectType", isAttribute = true)
@@ -43,16 +41,6 @@ public class ConsumeableItemBase extends ItemBase implements IConsumeableItem {
 
 	public void setItemRank(int itemRank) {
 		this.itemRank = itemRank;
-	}
-
-
-	public String getElemental() {
-		return elemental;
-	}
-
-
-	public void setElemental(String elemental) {
-		this.elemental = elemental;
 	}
 
 

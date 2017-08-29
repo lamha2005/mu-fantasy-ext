@@ -16,6 +16,7 @@ import com.creants.muext.entities.HeroClass;
 public interface HeroRepository extends MongoRepository<HeroClass, Long> {
 
 	List<HeroClass> findHeroesByGameHeroId(String gameHeroId);
-	List<HeroClass> findHeroesByGameHeroId(String gameHeroId, Sort sort);
 
+
+	List<HeroClass> findHeroesByGameHeroId(String gameHeroId, Sort sort);
 }

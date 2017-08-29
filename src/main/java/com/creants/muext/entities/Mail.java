@@ -10,7 +10,7 @@ import org.springframework.data.mongodb.core.index.Indexed;
 import com.creants.creants_2x.socket.gate.protocol.serialization.SerializableQAntType;
 import com.creants.muext.config.ItemConfig;
 import com.creants.muext.entities.ext.MailActionExt;
-import com.creants.muext.entities.ext.SortItemExt;
+import com.creants.muext.entities.ext.ShortItemExt;
 
 /**
  * @author LamHM
@@ -35,7 +35,7 @@ public class Mail implements SerializableQAntType {
 	private Map<String, Object> properties;
 	private String giftString;
 	private Long zen;
-	private List<SortItemExt> items;
+	private List<ShortItemExt> items;
 	private List<MailActionExt> actions;
 
 
@@ -189,12 +189,12 @@ public class Mail implements SerializableQAntType {
 	}
 
 
-	public List<SortItemExt> getItems() {
+	public List<ShortItemExt> getItems() {
 		return items;
 	}
 
 
-	public void setItems(List<SortItemExt> items) {
+	public void setItems(List<ShortItemExt> items) {
 		this.items = items;
 	}
 

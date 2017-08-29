@@ -1,0 +1,33 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<xs:schema xmlns:xs="http://www.w3.org/2001/XMLSchema">
+    <xs:element name="HeroeList">
+        <xs:complexType>
+            <xs:sequence>
+                <xs:element ref="Hero" minOccurs="0" maxOccurs="unbounded"/>
+            </xs:sequence>
+        </xs:complexType>
+    </xs:element>
+    <xs:element name="Hero">
+        <xs:complexType>
+             <xs:attribute name="ClassGroup" type="xs:int"/>
+             <xs:attribute name="ClassIndex" type="xs:int"/>
+             <xs:attribute name="CharClass" type="xs:string"/>
+             <xs:attribute name="Element" type="xs:string"/>
+             <xs:attribute name="CharRank" type="xs:int"/>
+             <xs:attribute name="PhysicAttack" type="xs:int"/>
+             <xs:attribute name="HealthPoint" type="xs:int"/>
+             <xs:attribute name="Defense" type="xs:int"/>
+             <xs:attribute name="Recovery" type="xs:int"/>
+             <xs:attribute name="CRIT" type="xs:float"/>
+             <xs:attribute name="MaxMP" type="xs:int"/>
+             <xs:attribute name="MPRec" type="xs:int"/>
+             <xs:attribute name="LvUpATK" type="xs:int"/>
+             <xs:attribute name="LvUpHP" type="xs:int"/>
+             <xs:attribute name="LvUpDEF" type="xs:int"/>
+             <xs:attribute name="LvUpREC" type="xs:int"/>
+             <xs:attribute name="SkillIndex" type="xs:string"/>
+             <xs:attribute name="LeaderSkill" type="xs:string"/>
+             <xs:attribute name="EvolveTo" type="xs:string"/>
+        </xs:complexType>
+    </xs:element>
+</xs:schema>

@@ -9,6 +9,7 @@ import com.creants.creants_2x.socket.gate.entities.QAntObject;
 import com.creants.creants_2x.socket.gate.wood.QAntUser;
 import com.creants.muext.Creants2XApplication;
 import com.creants.muext.config.ItemConfig;
+import com.creants.muext.entities.item.HeroEquipment;
 import com.creants.muext.entities.item.HeroItem;
 import com.creants.muext.exception.GameErrorCode;
 import com.creants.muext.managers.HeroItemManager;
@@ -72,7 +73,7 @@ public class ItemRequestHandler extends BaseClientRequestHandler {
 			return;
 		}
 
-		HeroItem item = heroItemManager.getItem(itemId, user.getName());
+		HeroItem item = heroItemManager.getEquipment(itemId, user.getName());
 		if (item == null) {
 			sendError(MessageFactory.createErrorMsg(CMD, GameErrorCode.NOT_EXIST_ITEM), user);
 			return;
@@ -96,7 +97,7 @@ public class ItemRequestHandler extends BaseClientRequestHandler {
 			return;
 		}
 
-		HeroItem item = heroItemManager.getItem(itemId, user.getName());
+		HeroEquipment item = heroItemManager.getEquipment(itemId, user.getName());
 		if (item == null || item.getHeroId() != null) {
 			sendError(MessageFactory.createErrorMsg(CMD, GameErrorCode.ITEM_IS_USING), user);
 			return;
@@ -106,10 +107,10 @@ public class ItemRequestHandler extends BaseClientRequestHandler {
 		response.putInt("code", 1);
 		response.putInt("act", TAKE_ON);
 		response.putLong("heroId", heroId);
-		HeroItem itemBySlot = heroItemManager.getItemBySlot(slot, heroId);
-		if (itemBySlot != null) {
-			heroItemManager.takeOff(itemBySlot);
-			response.putLong("tk_off", itemBySlot.getId());
+		HeroEquipment equipment = heroItemManager.getEquipmentBySlot(slot, heroId);
+		if (equipment != null) {
+			heroItemManager.takeOff(equipment);
+			response.putLong("tk_off", equipment.getId());
 		}
 		response.putLong("slotIndex", slot);
 		response.putLong("itemId", itemId);
@@ -128,8 +129,8 @@ public class ItemRequestHandler extends BaseClientRequestHandler {
 		}
 
 		// kết hợp itemId với gameHeroId 1 lần
-		HeroItem item = heroItemManager.getItem(itemId, user.getName(), heroId);
-		if (item == null) {
+		HeroEquipment equipment = heroItemManager.getEquipment(itemId, user.getName(), heroId);
+		if (equipment == null) {
 			sendError(MessageFactory.createErrorMsg(CMD, GameErrorCode.NOT_EXIST_ITEM), user);
 			return;
 		}
@@ -139,9 +140,9 @@ public class ItemRequestHandler extends BaseClientRequestHandler {
 		response.putInt("act", TAKE_OFF);
 		response.putLong("heroId", heroId);
 		response.putLong("itemId", itemId);
-		response.putLong("slotIndex", item.getSlotIndex());
+		response.putLong("slotIndex", equipment.getSlotIndex());
 
-		heroItemManager.takeOff(item);
+		heroItemManager.takeOff(equipment);
 
 		send(CMD, response, user);
 	}

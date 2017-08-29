@@ -1,5 +1,6 @@
 package com.creants.muext.entities;
 
+import java.util.ArrayList;
 import java.util.List;
 
 import org.springframework.data.annotation.Id;
@@ -43,6 +44,7 @@ public class GameHero implements SerializableQAntType {
 
 	public GameHero() {
 		maxStamina = 100;
+		items = new ArrayList<HeroItem>();
 	}
 
 

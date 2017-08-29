@@ -10,10 +10,12 @@ import com.creants.creants_2x.socket.gate.entities.QAntObject;
 import com.creants.creants_2x.socket.gate.wood.QAntUser;
 import com.creants.muext.Creants2XApplication;
 import com.creants.muext.config.GiftEventConfig;
+import com.creants.muext.config.ItemConfig;
 import com.creants.muext.dao.GiftEventRepository;
 import com.creants.muext.entities.event.GiftEventBase;
 import com.creants.muext.entities.event.GiftInfo;
 import com.creants.muext.entities.event.HeroGift;
+import com.creants.muext.entities.ext.ShortItemExt;
 import com.creants.muext.entities.item.HeroItem;
 import com.creants.muext.exception.GameErrorCode;
 import com.creants.muext.managers.HeroItemManager;
@@ -86,9 +88,10 @@ public class GiftEventRequestHandler extends BaseClientRequestHandler {
 		gift.setLastUpdateTime(System.currentTimeMillis());
 
 		GiftEventBase event = GiftEventConfig.getInstance().getEvent(giftIndex);
-		ItemPackageInfo itemPackage = event.getPackage(giftIndex);
+		ItemPackageInfo itemPackage = event.getPackage(packageIndex);
 
-		List<HeroItem> addItems = itemManager.addItems(user.getName(), itemPackage.getItemListString());
+		String itemListString = itemPackage.getItemListString();
+		List<HeroItem> addItems = itemManager.addItems(user.getName(), itemListString);
 		params.putInt("act", CLAIM_GIFT_PACKAGE);
 		params.putInt("code", 1);
 		params.putLong("lastUpdateTime", gift.getLastUpdateTime());
@@ -97,6 +100,14 @@ public class GiftEventRequestHandler extends BaseClientRequestHandler {
 			itemArr.addQAntObject(QAntObject.newFromObject(heroItem));
 		}
 		params.putQAntArray("items", itemArr);
+
+		List<ShortItemExt> itemsInfo = ItemConfig.getInstance().splitItem(itemListString);
+		IQAntArray itemsInfoArr = QAntArray.newInstance();
+		for (ShortItemExt sortItemExt : itemsInfo) {
+			itemsInfoArr.addQAntObject(QAntObject.newFromObject(sortItemExt));
+		}
+		params.putQAntArray("items_info", itemsInfoArr);
+
 		send(CMD, params, user);
 
 		gift.addClaimed(packageIndex);

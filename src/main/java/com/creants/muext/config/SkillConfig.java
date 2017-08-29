@@ -53,6 +53,7 @@ public class SkillConfig {
 			while (sr.hasNext()) {
 				try {
 					skill = mapper.readValue(sr, SkillBase.class);
+					skill.convertBaseInfo();
 					skillMap.put(skill.getIndex(), skill);
 				} catch (NoSuchElementException e) {
 

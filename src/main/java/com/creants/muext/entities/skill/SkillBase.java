@@ -1,7 +1,9 @@
 package com.creants.muext.entities.skill;
 
+import org.apache.commons.lang.StringUtils;
 import org.springframework.data.annotation.Transient;
 
+import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import com.fasterxml.jackson.annotation.JsonInclude;
 import com.fasterxml.jackson.annotation.JsonInclude.Include;
 import com.fasterxml.jackson.dataformat.xml.annotation.JacksonXmlProperty;
@@ -11,6 +13,7 @@ import com.fasterxml.jackson.dataformat.xml.annotation.JacksonXmlProperty;
  *
  */
 @JsonInclude(Include.NON_NULL)
+@JsonIgnoreProperties(value = { "lvUpValueString", "effectIndexString", "effectValueString" })
 public class SkillBase {
 	@JacksonXmlProperty(localName = "Index", isAttribute = true)
 	private int index;
@@ -39,11 +42,11 @@ public class SkillBase {
 	@JacksonXmlProperty(localName = "Durations", isAttribute = true)
 	private int durations;
 	@JacksonXmlProperty(localName = "LvUpValue", isAttribute = true)
-	private float lvUpValue;
+	private String lvUpValueString;
 	@JacksonXmlProperty(localName = "EffectIndex", isAttribute = true)
-	private int effectIndex;
+	private String effectIndexString;
 	@JacksonXmlProperty(localName = "EffectValue", isAttribute = true)
-	private int effectValue;
+	private String effectValueString;
 	@JacksonXmlProperty(localName = "BattlePower", isAttribute = true)
 	private int battlePower;
 	@JacksonXmlProperty(localName = "LvUpBattlePower", isAttribute = true)
@@ -60,6 +63,43 @@ public class SkillBase {
 	private String hitSound;
 	@JacksonXmlProperty(localName = "SkillRank", isAttribute = true)
 	private String skillRank;
+
+	private float[] lvUpValue;
+	private int[] effectIndex;
+	private int[] effectValue;
+
+
+	public void convertBaseInfo() {
+		String[] lvUpValueItems = StringUtils.split(lvUpValueString, "#");
+		if (lvUpValueItems == null) {
+			lvUpValue = new float[] { 0 };
+		} else {
+			lvUpValue = new float[lvUpValueItems.length];
+			for (int i = 0; i < lvUpValueItems.length; i++) {
+				lvUpValue[i] = Float.parseFloat(lvUpValueItems[i]);
+			}
+		}
+
+		String[] effectIndexItems = StringUtils.split(effectIndexString, "#");
+		if (effectIndexItems == null) {
+			effectIndex = new int[] { 0 };
+		} else {
+			effectIndex = new int[effectIndexItems.length];
+			for (int i = 0; i < effectIndexItems.length; i++) {
+				effectIndex[i] = Integer.parseInt(effectIndexItems[i]);
+			}
+		}
+
+		String[] effectValueItems = StringUtils.split(effectValueString, "#");
+		if (effectValueItems == null) {
+			effectValue = new int[] { 0 };
+		} else {
+			effectValue = new int[effectValueItems.length];
+			for (int i = 0; i < effectValueItems.length; i++) {
+				effectValue[i] = Integer.parseInt(effectValueItems[i]);
+			}
+		}
+	}
 
 
 	public int getIndex() {
@@ -152,33 +192,33 @@ public class SkillBase {
 	}
 
 
-	public float getLvUpValue() {
-		return lvUpValue;
+	public String getLvUpValueString() {
+		return lvUpValueString;
 	}
 
 
-	public void setLvUpValue(float lvUpValue) {
-		this.lvUpValue = lvUpValue;
+	public void setLvUpValueString(String lvUpValueString) {
+		this.lvUpValueString = lvUpValueString;
 	}
 
 
-	public int getEffectIndex() {
-		return effectIndex;
+	public String getEffectIndexString() {
+		return effectIndexString;
 	}
 
 
-	public void setEffectIndex(int effectIndex) {
-		this.effectIndex = effectIndex;
+	public void setEffectIndexString(String effectIndexString) {
+		this.effectIndexString = effectIndexString;
 	}
 
 
-	public int getEffectValue() {
-		return effectValue;
+	public String getEffectValueString() {
+		return effectValueString;
 	}
 
 
-	public void setEffectValue(int effectValue) {
-		this.effectValue = effectValue;
+	public void setEffectValueString(String effectValueString) {
+		this.effectValueString = effectValueString;
 	}
 
 
@@ -289,6 +329,21 @@ public class SkillBase {
 
 	public void setDamage(int damage) {
 		this.damage = damage;
+	}
+
+
+	public float[] getLvUpValue() {
+		return lvUpValue;
+	}
+
+
+	public int[] getEffectIndex() {
+		return effectIndex;
+	}
+
+
+	public int[] getEffectValue() {
+		return effectValue;
 	}
 
 }

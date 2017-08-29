@@ -1,8 +1,10 @@
 package com.creants.muext.managers;
 
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.Collection;
 import java.util.HashMap;
+import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
 
@@ -11,11 +13,14 @@ import org.springframework.beans.factory.InitializingBean;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import com.creants.creants_2x.core.util.QAntTracer;
 import com.creants.muext.config.ItemConfig;
 import com.creants.muext.dao.HeroItemRepository;
 import com.creants.muext.entities.ItemBase;
 import com.creants.muext.entities.item.ConsumeableItemBase;
 import com.creants.muext.entities.item.EquipmentBase;
+import com.creants.muext.entities.item.HeroConsumeableItem;
+import com.creants.muext.entities.item.HeroEquipment;
 import com.creants.muext.entities.item.HeroItem;
 import com.creants.muext.services.AutoIncrementService;
 
@@ -25,7 +30,7 @@ import com.creants.muext.services.AutoIncrementService;
  */
 @Service
 public class HeroItemManager implements InitializingBean {
-	private ItemConfig itemConfig;
+	private static final ItemConfig itemConfig = ItemConfig.getInstance();
 	@Autowired
 	private HeroItemRepository heroItemRep;
 	@Autowired
@@ -34,8 +39,6 @@ public class HeroItemManager implements InitializingBean {
 
 	@Override
 	public void afterPropertiesSet() throws Exception {
-		itemConfig = ItemConfig.getInstance();
-
 		// itemIndex/no#itemIndex/no
 		// addItems("mus1#323", "7000/1");
 		// addItems("mus1#317", "7000/1");
@@ -43,71 +46,83 @@ public class HeroItemManager implements InitializingBean {
 
 
 	public List<HeroItem> getItems(String gameHeroId) {
-		return heroItemRep.findItemsByGameHeroId(gameHeroId);
+		return heroItemRep.findAllByGameHeroId(gameHeroId);
 	}
 
 
-	public List<HeroItem> getItemByHeroId(long heroId) {
-		return heroItemRep.findItemsByHeroId(heroId);
+	public List<HeroEquipment> getTakeOnEquipments(long heroId) {
+		return heroItemRep.findTakeOnEquipmentsByHeroId(heroId);
 	}
 
 
-	public HeroItem getItem(long itemId) {
-		return heroItemRep.findOne(itemId);
+	public HeroEquipment getEquipment(long itemId, String gameHeroId) {
+		return heroItemRep.findEquipmentByIdAndGameHeroId(itemId, gameHeroId);
 	}
 
 
-	public HeroItem getItem(long itemId, String gameHeroId) {
-		return heroItemRep.findItemByIdAndGameHeroId(itemId, gameHeroId);
+	public HeroEquipment getEquipment(long itemId, String gameHeroId, long heroId) {
+		return heroItemRep.findEquipmentByIdAndGameHeroIdAndHeroId(itemId, gameHeroId, heroId);
 	}
 
 
-	public HeroItem getItem(long itemId, String gameHeroId, long heroId) {
-		return heroItemRep.findItemByIdAndGameHeroIdAndHeroId(itemId, gameHeroId, heroId);
+	public HeroEquipment getEquipmentBySlot(int slotIndex, long heroId) {
+		return heroItemRep.findEquipmentBySlotIndexAndHeroId(slotIndex, heroId);
 	}
 
 
-	public HeroItem getItemBySlot(int slotIndex, long heroId) {
-		return heroItemRep.findItemBySlotIndexAndHeroId(slotIndex, heroId);
-	}
+	public List<HeroConsumeableItem> useItems(String gameHeroId, Map<Long, Integer> items) {
+		List<HeroConsumeableItem> consumeableItems = getConsumeableItems(gameHeroId, items.keySet());
+		if (consumeableItems == null) {
+			QAntTracer.warn(this.getClass(), "useItems not found, gameHeroId: " + gameHeroId);
+			return new ArrayList<>();
+		}
 
-
-	public List<HeroItem> getItems(Collection<Long> itemIds) {
-		List<HeroItem> heroItems = new ArrayList<>();
-		Iterable<HeroItem> findAll = heroItemRep.findAll(itemIds);
-		if (findAll != null) {
-			for (HeroItem heroItem : findAll) {
-				heroItems.add(heroItem);
+		if (consumeableItems != null) {
+			for (HeroConsumeableItem heroItem : consumeableItems) {
+				heroItem.useItem(items.get(heroItem.getId()));
 			}
 		}
-		return heroItems;
+
+		QAntTracer.debug(this.getClass(),
+				"userItems gameHeroId: " + gameHeroId + "/itemIds:" + items.keySet() + "/no:" + items.values());
+		return heroItemRep.save(consumeableItems);
 	}
 
 
-	public void removeItems(Collection<HeroItem> heroItems) {
-		heroItemRep.delete(heroItems);
+	public List<HeroConsumeableItem> getConsumeableItems(String gameHeroId, Collection<Long> itemIds) {
+		List<HeroConsumeableItem> result = new ArrayList<>();
+		Iterable<HeroItem> findAll = heroItemRep.findAll(itemIds);
+		Iterator<HeroItem> iterator = findAll.iterator();
+		while (iterator.hasNext()) {
+			HeroConsumeableItem consItem = (HeroConsumeableItem) iterator.next();
+			if (!consItem.getGameHeroId().equals(gameHeroId)) {
+				// TODO throw exception
+			}
+			result.add(consItem);
+		}
+		return result;
 	}
 
 
-	public void updateItem(Collection<HeroItem> heroItems) {
-		heroItemRep.save(heroItems);
+	public void updateEquipments(Collection<HeroEquipment> heroEquipments) {
+		heroItemRep.save(heroEquipments);
 	}
 
 
-	public void updateItem(HeroItem heroItem) {
-		heroItemRep.save(heroItem);
+	public void updateConsumeableItem(Collection<HeroConsumeableItem> items) {
+		heroItemRep.save(items);
 	}
 
 
-	public void takeOn(HeroItem heroItem, long heroId, int slot) {
-		heroItem.takeOn(heroId, slot);
-		heroItemRep.save(heroItem);
+	public void takeOn(HeroEquipment equipment, long heroId, int slot) {
+		equipment.takeOn(heroId, slot);
+		heroItemRep.save(equipment);
 	}
 
 
-	public void takeOff(HeroItem heroItem) {
-		heroItem.takeOff();
-		heroItemRep.save(heroItem);
+	public void takeOff(HeroEquipment heroEquipment) {
+		heroEquipment.takeOff();
+		heroItemRep.save(heroEquipment);
 	}
 
 
@@ -117,9 +132,7 @@ public class HeroItemManager implements InitializingBean {
 	 */
 	public List<HeroItem> addItems(String gameHeroId, String itemArrString) {
 		try {
-			List<HeroItem> items = splitItem(itemArrString);
-			addItems(gameHeroId, items);
-			return items;
+			return addItems(gameHeroId, splitItem(itemArrString));
 		} catch (Exception e) {
 			e.printStackTrace();
 		}
@@ -132,25 +145,29 @@ public class HeroItemManager implements InitializingBean {
 		if (items == null || items.size() <= 0)
 			return new ArrayList<>();
 
-		List<HeroItem> heroItems = heroItemRep.findItemsByGameHeroIdAndIsOverlap(gameHeroId, true);
+		List<HeroConsumeableItem> heroOverlapItems = heroItemRep.findConsumeableItemsByGameHeroId(gameHeroId);
 		List<HeroItem> itemsUpdate = new ArrayList<>();
 
 		Map<Integer, Integer> overlapItems = new HashMap<>();
-		for (HeroItem item : items) {
-			if (heroItems.contains(item) && item.isOverlap()) {
+		Iterator<HeroItem> iterator = items.iterator();
+		while (iterator.hasNext()) {
+			HeroItem item = iterator.next();
+			if (heroOverlapItems.contains(item)) {
 				overlapItems.put(item.getIndex(), item.getNo());
+				iterator.remove();
 			}
 		}
 
 		// lưu item mới
-		items.removeAll(overlapItems.keySet());
 		for (HeroItem item : items) {
-			itemsUpdate.add(new HeroItem(autoIncrService.genItemId(), gameHeroId, item));
+			item.setId(autoIncrService.genItemId());
+			item.setGameHeroId(gameHeroId);
+			itemsUpdate.add(item);
 		}
 
 		// cập nhật số lượng item cho overlap
 		if (overlapItems.size() > 0) {
-			for (HeroItem heroItem : heroItems) {
+			for (HeroConsumeableItem heroItem : heroOverlapItems) {
 				Integer no = overlapItems.get(heroItem.getIndex());
 				if (no != null) {
 					heroItem.incr(no);
@@ -163,7 +180,7 @@ public class HeroItemManager implements InitializingBean {
 	}
 
 
-	public List<HeroItem> splitItem(String itemArrString) {
+	private List<HeroItem> splitItem(String itemArrString) {
 		List<int[]> itemsReward = new ArrayList<>();
 		if (StringUtils.isNotBlank(itemArrString)) {
 			String[] items = StringUtils.split(itemArrString, "#");
@@ -171,11 +188,8 @@ public class HeroItemManager implements InitializingBean {
 				String[] split = StringUtils.split(items[i], "/");
 				itemsReward.add(new int[] { Integer.parseInt(split[0]), Integer.parseInt(split[1]) });
 			}
-
-			return convertToItem(itemsReward);
 		}
-
-		return new ArrayList<>();
+		return convertToItem(itemsReward);
 	}
 
 
@@ -184,41 +198,21 @@ public class HeroItemManager implements InitializingBean {
 		if (items.size() > 0) {
 			for (int[] ir : items) {
 				ItemBase itemBase = itemConfig.getItem(ir[0]);
-				HeroItem item = new HeroItem();
-				item.setNo(ir[1]);
-				item.setIndex(itemBase.getIndex());
-				item.setItemGroup(itemBase.getGroupId());
-				item.setItemBase(itemBase);
 				if (itemBase instanceof ConsumeableItemBase) {
-					item.setOverlap(true);
+					HeroConsumeableItem consItem = new HeroConsumeableItem();
+					consItem.setIndex(itemBase.getIndex());
+					consItem.setItemGroup(itemBase.getGroupId());
+					consItem.setOverlap(true);
+					consItem.setElement(itemBase.getElemental());
+					consItem.setNo(ir[1]);
+					consItem.setItemBase((ConsumeableItemBase) itemBase);
+					itemList.add(consItem);
 				} else if (itemBase instanceof EquipmentBase) {
-					EquipmentBase equipmentBase = (EquipmentBase) itemBase;
-					item.setElement(equipmentBase.getElemental());
+					itemList.add(new HeroEquipment((EquipmentBase) itemBase));
 				}
-				itemList.add(item);
 			}
 		}
 		return itemList;
 	}
 
-
-	public static void main(String[] args) {
-		List<HeroItem> heroItems = new ArrayList<>();
-		HeroItem heroItem1 = new HeroItem();
-		heroItem1.setItemGroup(10);
-		heroItem1.setIndex(100);
-		heroItems.add(heroItem1);
-
-		HeroItem heroItem2 = new HeroItem();
-		heroItem2.setItemGroup(11);
-		heroItem2.setIndex(101);
-		heroItem2.setGameHeroId("test1000");
-		heroItems.add(heroItem2);
-
-		HeroItem heroItem3 = new HeroItem();
-		heroItem3.setItemGroup(11);
-		heroItem3.setIndex(101);
-		System.out.println(heroItems.size());
-
-	}
 }

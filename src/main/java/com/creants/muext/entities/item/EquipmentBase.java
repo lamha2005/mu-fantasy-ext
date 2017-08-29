@@ -41,17 +41,15 @@ public class EquipmentBase extends ItemBase {
 	private Boolean upgarde;
 	@JacksonXmlProperty(localName = "Disassemble", isAttribute = true)
 	private Boolean disassemble;
-	@JacksonXmlProperty(localName = "Elemental", isAttribute = true)
-	private String elemental;
 
 	@JacksonXmlProperty(localName = "lvupATK", isAttribute = true)
-	private int lvupATK;
+	private int lvUpATK;
 	@JacksonXmlProperty(localName = "lvupHP", isAttribute = true)
-	private int lvupHP;
+	private int lvUpHP;
 	@JacksonXmlProperty(localName = "lvupDEF", isAttribute = true)
-	private int lvupDEF;
+	private int lvUpDEF;
 	@JacksonXmlProperty(localName = "lvupREC", isAttribute = true)
-	private int lvupREC;
+	private int lvUpREC;
 	@JacksonXmlProperty(localName = "Evovle", isAttribute = true)
 	private int evovle;
 
@@ -191,16 +189,6 @@ public class EquipmentBase extends ItemBase {
 	}
 
 
-	public String getElemental() {
-		return elemental;
-	}
-
-
-	public void setElemental(String elemental) {
-		this.elemental = elemental;
-	}
-
-
 	public int getItemRank() {
 		return itemRank;
 	}
@@ -238,6 +226,26 @@ public class EquipmentBase extends ItemBase {
 
 	public void setTwoHanded(Boolean twoHanded) {
 		this.twoHanded = twoHanded;
+	}
+
+
+	public int getLvUpATK() {
+		return lvUpATK;
+	}
+
+
+	public int getLvUpHP() {
+		return lvUpHP;
+	}
+
+
+	public int getLvUpDEF() {
+		return lvUpDEF;
+	}
+
+
+	public int getLvUpREC() {
+		return lvUpREC;
 	}
 
 

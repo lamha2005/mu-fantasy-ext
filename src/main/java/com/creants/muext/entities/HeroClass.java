@@ -11,9 +11,8 @@ import org.springframework.data.mongodb.core.mapping.Document;
 
 import com.creants.creants_2x.socket.gate.protocol.serialization.SerializableQAntType;
 import com.creants.muext.config.GameConfig;
+import com.creants.muext.entities.item.HeroEquipment;
 import com.creants.muext.entities.skill.Skill;
-import com.creants.muext.entities.states.AdditionLevelUpStats;
-import com.creants.muext.entities.states.BaseStats;
 
 /**
  * @author LamHM
@@ -53,17 +52,21 @@ public class HeroClass implements SerializableQAntType {
 
 	public int skillPoint;
 	public List<Skill> skillList;
+	@Transient
+	private transient List<HeroEquipment> equipments;
 
 
 	public HeroClass() {
 		level = 1;
 		skillList = new ArrayList<>();
+		equipments = new ArrayList<>();
 	}
 
 
 	public HeroClass(HeroBase heroBase) {
 		level = 1;
 		skillList = new ArrayList<>();
+		equipments = new ArrayList<>();
 		this.heroBase = heroBase;
 		initBaseInfo();
 	}
@@ -72,6 +75,7 @@ public class HeroClass implements SerializableQAntType {
 	public HeroClass(HeroBase heroBase, int level) {
 		this.level = level;
 		skillList = new ArrayList<>();
+		equipments = new ArrayList<>();
 		this.heroBase = heroBase;
 		initBaseInfo();
 	}
@@ -82,8 +86,8 @@ public class HeroClass implements SerializableQAntType {
 		index = heroBase.getIndex();
 		rank = heroBase.getRank();
 		classGroup = heroBase.getClassGroup();
-		maxMp = heroBase.getSubStats().getMaxMp();
-		mpRec = heroBase.getSubStats().getMpRec();
+		maxMp = heroBase.getMaxMp();
+		mpRec = heroBase.getMpRec();
 		element = heroBase.getElement();
 		maxExp = GameConfig.getInstance().getMaxExp(level + 1);
 		updateBaseStats();
@@ -272,13 +276,21 @@ public class HeroClass implements SerializableQAntType {
 	}
 
 
+	public List<HeroEquipment> getEquipments() {
+		return equipments;
+	}
+
+
+	public void setEquipments(List<HeroEquipment> equipments) {
+		this.equipments = equipments;
+	}
+
+
 	private void updateBaseStats() {
-		BaseStats baseStats = heroBase.getBaseStats();
-		AdditionLevelUpStats levelUpStats = heroBase.getLevelUpStats();
-		atk = baseStats.getAtk() + (level - 1) * levelUpStats.getAtk();
-		hp = baseStats.getHp() + (level - 1) * levelUpStats.getHp();
-		def = (int) (baseStats.getDef() + (level - 1) * levelUpStats.getDef());
-		rec = (int) (baseStats.getRec() + (level - 1) * levelUpStats.getRec());
+		atk = heroBase.getAtk() + (level - 1) * heroBase.getLvUpATK();
+		hp = heroBase.getHp() + (level - 1) * heroBase.getLvUpHP();
+		def = (int) (heroBase.getDef() + (level - 1) * heroBase.getLvUpDEF());
+		rec = (int) (heroBase.getRec() + (level - 1) * heroBase.getLvUpREC());
 		this.skillPoint++;
 	}
 
@@ -290,8 +302,8 @@ public class HeroClass implements SerializableQAntType {
 		exp += value;
 		boolean isLevelUp = false;
 		while (exp >= maxExp) {
-			exp -= maxExp;
 			levelUp(1);
+			exp -= maxExp;
 			maxExp = GameConfig.getInstance().getMaxExp(level);
 			isLevelUp = true;
 		}
@@ -304,7 +316,7 @@ public class HeroClass implements SerializableQAntType {
 		Random rd = new Random();
 		int attackNo = roundNo * 20;
 
-		int chance = (int) (heroBase.getSubStats().getCritch() * 100);
+		int chance = (int) (heroBase.getCritch() * 100);
 		float critRate = GameConfig.getInstance().getCritRate(chance);
 		List<Byte> critList = new ArrayList<Byte>();
 		int count = 1;
@@ -330,6 +342,18 @@ public class HeroClass implements SerializableQAntType {
 		}
 
 		return result;
+	}
+
+
+	public int getPower() {
+		int heroPower = atk * 3 + def + hp + rec / 5;
+		if (equipments.size() > 0) {
+			for (HeroEquipment equipment : equipments) {
+				heroPower += equipment.getPower();
+			}
+		}
+
+		return heroPower;
 	}
 
 }

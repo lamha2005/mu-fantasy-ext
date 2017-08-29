@@ -5,6 +5,8 @@ import java.util.List;
 import org.springframework.data.mongodb.repository.MongoRepository;
 import org.springframework.stereotype.Repository;
 
+import com.creants.muext.entities.item.HeroConsumeableItem;
+import com.creants.muext.entities.item.HeroEquipment;
 import com.creants.muext.entities.item.HeroItem;
 
 /**
@@ -12,20 +14,33 @@ import com.creants.muext.entities.item.HeroItem;
  */
 @Repository
 public interface HeroItemRepository extends MongoRepository<HeroItem, Long> {
-	List<HeroItem> findItemsByGameHeroId(String gameHeroId);
+	List<HeroItem> findAllByGameHeroId(String gameHeroId);
 
 
-	List<HeroItem> findItemsByGameHeroIdAndIsOverlap(String gameHeroId, boolean isOverlap);
+	List<HeroConsumeableItem> findConsumeableItemsByGameHeroId(String gameHeroId);
 
 
-	HeroItem findItemBySlotIndexAndHeroId(int slotIndex, long heroId);
+	List<HeroEquipment> findEquipmentsByGameHeroId(String gameHeroId);
 
 
-	List<HeroItem> findItemsByHeroId(long heroId);
+	HeroEquipment findEquipmentBySlotIndexAndHeroId(int slotIndex, long heroId);
 
 
-	HeroItem findItemByIdAndGameHeroId(long itemId, String gameHeroId);
+	HeroEquipment findEquipmentByIdAndGameHeroIdAndHeroId(long itemId, String gameHeroId, long heroId);
 
 
-	HeroItem findItemByIdAndGameHeroIdAndHeroId(long itemId, String gameHeroId, long heroId);
+	HeroEquipment findEquipmentByIdAndGameHeroId(long itemId, String gameHeroId);
+
+
+	List<HeroEquipment> findTakeOnEquipmentsByHeroId(long heroId);
+
+	// List<HeroEquipment> updateEquipment(Collection<HeroEquipment>
+	// heroEquipments);
+
+	// List<HeroItem> updateHeroItem(Collection<HeroItem> heroItems);
+
+	// HeroEquipment updateEquipment(HeroEquipment heroEquipment);
+
+	// List<HeroConsumeableItem>
+	// updateConsumeableItems(Collection<HeroConsumeableItem> heroItems);
 }

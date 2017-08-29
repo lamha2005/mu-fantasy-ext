@@ -32,10 +32,10 @@ public class AutoIncrementService implements InitializingBean {
 			sequenceRepository.createSequenceDocument(QUEST_ID);
 			sequenceRepository.createSequenceDocument(ITEM_ID);
 			sequenceRepository.createSequenceDocument(MAIL_ID);
+			sequenceRepository.createSequenceDocument(NPC_ID);
 
 			sequenceRepository.setDefaultValue(HERO_ID, 1000);
 		}
-		sequenceRepository.createSequenceDocument(NPC_ID);
 
 		StageConfig.getInstance();
 	}

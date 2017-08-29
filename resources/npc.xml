@@ -1,12 +1,124 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<NPCList>
-	<GameHero Id="mus1#1#npc" Name="Long Chó Điên" Level="10" UserId="-1">
+<NPCList Revision="1">
+	<NPCGameHero Id="mus1#1#npc" Name="Long Chó Điên 1" Level="10" UserId="-1">
 		<HeroList>
-			<HeroClass ClassIndex="100" CharRank="4" Level="10"/>
-			<HeroClass ClassIndex="100" CharRank="4" Level="10"/>
-			<HeroClass ClassIndex="100" CharRank="4" Level="10"/>
-			<HeroClass ClassIndex="100" CharRank="4" Level="10"/>
+			<NPCHeroClass ClassIndex="100" CharRank="4" Level="10"/>
+			<NPCHeroClass ClassIndex="102" CharRank="2" Level="12"/>
+			<NPCHeroClass ClassIndex="300" CharRank="2" Level="11"/>
+			<NPCHeroClass ClassIndex="103" CharRank="3" Level="11"/>
 		</HeroList>
-	</GameHero>
+	</NPCGameHero>
+	<NPCGameHero Id="mus1#2#npc" Name="VFF óc chó 1" Level="11" UserId="-1">
+		<HeroList>
+			<NPCHeroClass ClassIndex="100" CharRank="4" Level="15"/>
+			<NPCHeroClass ClassIndex="102" CharRank="2" Level="15"/>
+			<NPCHeroClass ClassIndex="300" CharRank="2" Level="15"/>
+			<NPCHeroClass ClassIndex="103" CharRank="3" Level="15"/>
+		</HeroList>
+	</NPCGameHero>
+	<NPCGameHero Id="mus1#3#npc" Name="Long Chó Điên 3" Level="12" UserId="-1">
+		<HeroList>
+			<NPCHeroClass ClassIndex="100" CharRank="4" Level="17"/>
+			<NPCHeroClass ClassIndex="102" CharRank="2" Level="17"/>
+			<NPCHeroClass ClassIndex="300" CharRank="2" Level="17"/>
+			<NPCHeroClass ClassIndex="103" CharRank="3" Level="17"/>
+		</HeroList>
+	</NPCGameHero>
+	<NPCGameHero Id="mus1#4#npc" Name="Long Chó Điên 4" Level="13" UserId="-1">
+		<HeroList>
+			<NPCHeroClass ClassIndex="100" CharRank="4" Level="20"/>
+			<NPCHeroClass ClassIndex="102" CharRank="2" Level="20"/>
+			<NPCHeroClass ClassIndex="300" CharRank="2" Level="20"/>
+			<NPCHeroClass ClassIndex="103" CharRank="3" Level="20"/>
+		</HeroList>
+	</NPCGameHero>
+	<NPCGameHero Id="mus1#5#npc" Name="VFF óc chó 2" Level="14" UserId="-1">
+		<HeroList>
+			<NPCHeroClass ClassIndex="100" CharRank="4" Level="25"/>
+			<NPCHeroClass ClassIndex="102" CharRank="2" Level="25"/>
+			<NPCHeroClass ClassIndex="300" CharRank="2" Level="25"/>
+			<NPCHeroClass ClassIndex="103" CharRank="3" Level="25"/>
+		</HeroList>
+	</NPCGameHero>
+	<NPCGameHero Id="mus1#6#npc" Name="Long Chó Điên 6" Level="15" UserId="-1">
+		<HeroList>
+			<NPCHeroClass ClassIndex="100" CharRank="4" Level="30"/>
+			<NPCHeroClass ClassIndex="102" CharRank="2" Level="30"/>
+			<NPCHeroClass ClassIndex="300" CharRank="2" Level="30"/>
+			<NPCHeroClass ClassIndex="103" CharRank="3" Level="30"/>
+		</HeroList>
+	</NPCGameHero>
+	<NPCGameHero Id="mus1#7#npc" Name="VFF óc chó 3" Level="16" UserId="-1">
+		<HeroList>
+			<NPCHeroClass ClassIndex="100" CharRank="4" Level="35"/>
+			<NPCHeroClass ClassIndex="102" CharRank="2" Level="35"/>
+			<NPCHeroClass ClassIndex="300" CharRank="2" Level="35"/>
+			<NPCHeroClass ClassIndex="103" CharRank="3" Level="35"/>
+		</HeroList>
+	</NPCGameHero>
+	<NPCGameHero Id="mus1#8#npc" Name="Long Chó Điên 8" Level="17" UserId="-1">
+		<HeroList>
+			<NPCHeroClass ClassIndex="100" CharRank="4" Level="40"/>
+			<NPCHeroClass ClassIndex="102" CharRank="2" Level="40"/>
+			<NPCHeroClass ClassIndex="300" CharRank="2" Level="40"/>
+			<NPCHeroClass ClassIndex="103" CharRank="3" Level="40"/>
+		</HeroList>
+	</NPCGameHero>
+	<NPCGameHero Id="mus1#9#npc" Name="Long Chó Điên 9" Level="18" UserId="-1">
+		<HeroList>
+			<NPCHeroClass ClassIndex="100" CharRank="4" Level="45"/>
+			<NPCHeroClass ClassIndex="102" CharRank="2" Level="45"/>
+			<NPCHeroClass ClassIndex="300" CharRank="2" Level="45"/>
+			<NPCHeroClass ClassIndex="103" CharRank="3" Level="45"/>
+		</HeroList>
+	</NPCGameHero>
+	<NPCGameHero Id="mus1#10#npc" Name="Long Chó Điên 10" Level="19" UserId="-1">
+		<HeroList>
+			<NPCHeroClass ClassIndex="100" CharRank="4" Level="50"/>
+			<NPCHeroClass ClassIndex="102" CharRank="2" Level="50"/>
+			<NPCHeroClass ClassIndex="300" CharRank="2" Level="50"/>
+			<NPCHeroClass ClassIndex="103" CharRank="3" Level="50"/>
+		</HeroList>
+	</NPCGameHero>
+	<NPCGameHero Id="mus1#11#npc" Name="Long Chó Điên 11" Level="20" UserId="-1">
+		<HeroList>
+			<NPCHeroClass ClassIndex="100" CharRank="4" Level="60"/>
+			<NPCHeroClass ClassIndex="102" CharRank="2" Level="60"/>
+			<NPCHeroClass ClassIndex="300" CharRank="2" Level="60"/>
+			<NPCHeroClass ClassIndex="103" CharRank="3" Level="60"/>
+		</HeroList>
+	</NPCGameHero>
+	<NPCGameHero Id="mus1#12#npc" Name="Long Chó Điên 12" Level="21" UserId="-1">
+		<HeroList>
+			<NPCHeroClass ClassIndex="100" CharRank="4" Level="65"/>
+			<NPCHeroClass ClassIndex="102" CharRank="2" Level="60"/>
+			<NPCHeroClass ClassIndex="300" CharRank="2" Level="60"/>
+			<NPCHeroClass ClassIndex="103" CharRank="3" Level="60"/>
+		</HeroList>
+	</NPCGameHero>
+	<NPCGameHero Id="mus1#13#npc" Name="Long Chó Điên 13" Level="22" UserId="-1">
+		<HeroList>
+			<NPCHeroClass ClassIndex="100" CharRank="4" Level="60"/>
+			<NPCHeroClass ClassIndex="102" CharRank="2" Level="60"/>
+			<NPCHeroClass ClassIndex="103" CharRank="2" Level="60"/>
+			<NPCHeroClass ClassIndex="103" CharRank="3" Level="60"/>
+		</HeroList>
+	</NPCGameHero>
+	<NPCGameHero Id="mus1#14#npc" Name="Long Chó Điên 14" Level="23" UserId="-1">
+		<HeroList>
+			<NPCHeroClass ClassIndex="100" CharRank="4" Level="65"/>
+			<NPCHeroClass ClassIndex="102" CharRank="2" Level="65"/>
+			<NPCHeroClass ClassIndex="300" CharRank="2" Level="65"/>
+			<NPCHeroClass ClassIndex="103" CharRank="3" Level="65"/>
+		</HeroList>
+	</NPCGameHero>
+	<NPCGameHero Id="mus1#15#npc" Name="Long Chó Điên 15" Level="24" UserId="-1">
+		<HeroList>
+			<NPCHeroClass ClassIndex="100" CharRank="4" Level="65"/>
+			<NPCHeroClass ClassIndex="102" CharRank="2" Level="65"/>
+			<NPCHeroClass ClassIndex="300" CharRank="2" Level="65"/>
+			<NPCHeroClass ClassIndex="103" CharRank="3" Level="65"/>
+		</HeroList>
+	</NPCGameHero>
 </NPCList>
 
