@@ -1,0 +1,23 @@
+<?xml version="1.0" encoding="UTF-8" standalone="yes"?>
+<ChaosStageList>
+	<ChaosStage Index="1" BattlePower="50-70" ZenReward="20000" ChestReward="11012/2#11011/1" BonusZenS="16000" BonusZenA="10000" BonusZenB="6000" BonusZenC="3000" BonusZenD="1000"/>
+	<ChaosStage Index="2" BattlePower="55-75" ZenReward="30000" ChestReward="11012/2#11011/2" BonusZenS="24000" BonusZenA="15000" BonusZenB="9000" BonusZenC="4500" BonusZenD="1500"/>
+	<ChaosStage Index="3" BattlePower="60-80" ZenReward="50000" ChestReward="11012/2#11011/3" BonusZenS="40000" BonusZenA="25000" BonusZenB="15000" BonusZenC="7500" BonusZenD="2500"/>
+	<ChaosStage Index="4" BattlePower="65-85" ZenReward="80000" ChestReward="11012/2#11011/4" BonusZenS="64000" BonusZenA="40000" BonusZenB="24000" BonusZenC="12000" BonusZenD="4000"/>
+	<ChaosStage Index="5" BattlePower="70-90" ZenReward="100000" ChaosPointReward="10" ChestReward="11012/2#11011/5" BonusZenS="80000" BonusZenA="50000" BonusZenB="30000" BonusZenC="15000" BonusZenD="5000"/>
+	<ChaosStage Index="6" BattlePower="75-95" ZenReward="120000" ChestReward="11012/2#11011/6" BonusZenS="96000" BonusZenA="60000" BonusZenB="36000" BonusZenC="18000" BonusZenD="6000"/>
+	<ChaosStage Index="7" BattlePower="80-100" ZenReward="150000" ChestReward="11012/2#11011/7" BonusZenS="120000" BonusZenA="75000" BonusZenB="45000" BonusZenC="22500" BonusZenD="7500"/>
+	<ChaosStage Index="8" BattlePower="85-105" ZenReward="180000" ChestReward="11012/2#11011/8" BonusZenS="144000" BonusZenA="90000" BonusZenB="54000" BonusZenC="27000" BonusZenD="9000"/>
+	<ChaosStage Index="9" BattlePower="90-110" ZenReward="200000" ChestReward="11012/2#11011/9" BonusZenS="160000" BonusZenA="100000" BonusZenB="60000" BonusZenC="30000" BonusZenD="10000"/>
+	<ChaosStage Index="10" BattlePower="95-115" ZenReward="240000" ChaosPointReward="20" ChestReward="11012/2#11011/10" BonusZenS="192000" BonusZenA="120000" BonusZenB="72000" BonusZenC="36000" BonusZenD="12000"/>
+	<ChaosStage Index="11" BattlePower="100-120" ZenReward="280000" ChestReward="11012/2#11011/11" BonusZenS="224000" BonusZenA="140000" BonusZenB="84000" BonusZenC="42000" BonusZenD="14000"/>
+	<ChaosStage Index="12" BattlePower="105-125" ZenReward="300000" ChestReward="11012/2#11011/12" BonusZenS="240000" BonusZenA="150000" BonusZenB="90000" BonusZenC="45000" BonusZenD="15000"/>
+	<ChaosStage Index="13" BattlePower="110-130" ZenReward="350000" ChestReward="11012/2#11011/13" BonusZenS="280000" BonusZenA="175000" BonusZenB="105000" BonusZenC="52500" BonusZenD="17500"/>
+	<ChaosStage Index="14" BattlePower="115-135" ZenReward="380000" ChestReward="11012/2#11011/14" BonusZenS="304000" BonusZenA="190000" BonusZenB="114000" BonusZenC="57000" BonusZenD="19000"/>
+	<ChaosStage Index="15" BattlePower="120-140" ZenReward="400000" ChaosPointReward="30" ChestReward="11012/2#11011/15" BonusZenS="320000" BonusZenA="200000" BonusZenB="120000" BonusZenC="60000" BonusZenD="20000"/>
+	<ChaosStage Index="16" BattlePower="125-145" ZenReward="450000" ChestReward="11012/2#11011/16" BonusZenS="360000" BonusZenA="225000" BonusZenB="135000" BonusZenC="67500" BonusZenD="22500"/>
+	<ChaosStage Index="17" BattlePower="130-150" ZenReward="480000" ChestReward="11012/2#11011/17" BonusZenS="384000" BonusZenA="240000" BonusZenB="144000" BonusZenC="72000" BonusZenD="24000"/>
+	<ChaosStage Index="18" BattlePower="135-155" ZenReward="500000" ChestReward="11012/2#11011/18" BonusZenS="400000" BonusZenA="250000" BonusZenB="150000" BonusZenC="75000" BonusZenD="25000"/>
+	<ChaosStage Index="19" BattlePower="140-160" ZenReward="550000" ChestReward="11012/2#11011/19" BonusZenS="440000" BonusZenA="275000" BonusZenB="165000" BonusZenC="82500" BonusZenD="27500"/>
+	<ChaosStage Index="20" BattlePower="150-200" ZenReward="600000" ChaosPointReward="50" ChestReward="11012/2#11011/20" BonusZenS="480000" BonusZenA="300000" BonusZenB="180000" BonusZenC="90000" BonusZenD="30000"/>
+</ChaosStageList>

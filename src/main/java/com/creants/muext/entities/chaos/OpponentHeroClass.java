@@ -16,7 +16,7 @@ import com.creants.muext.entities.skill.Skill;
  * @author LamHM
  *
  */
-public class ChaosHeroClass implements SerializableQAntType {
+public class OpponentHeroClass implements SerializableQAntType {
 	@Id
 	public long id;
 	public String name;
@@ -36,13 +36,13 @@ public class ChaosHeroClass implements SerializableQAntType {
 	public List<Skill> skillList;
 
 
-	public ChaosHeroClass() {
+	public OpponentHeroClass() {
 		level = 1;
 		skillList = new ArrayList<>();
 	}
 
 
-	public ChaosHeroClass(HeroClass heroClass) {
+	public OpponentHeroClass(HeroClass heroClass) {
 		id = heroClass.getId();
 		name = heroClass.getName();
 		level = heroClass.getLevel();

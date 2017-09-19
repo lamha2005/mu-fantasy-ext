@@ -24,7 +24,7 @@ public class JoinGameRequestHandler extends BaseClientRequestHandler {
 		List<Room> uRooms = getParentExtension().getParentZone().getRoomList();
 
 		QAntObject resObj = QAntObject.newInstance();
-		resObj.putUtfString("c", "cmd_join_game");
+		resObj.putUtfString("c", ExtensionEvent.CMD_JOIN_GAME);
 
 		List<RoomInfo> rooms = new ArrayList<RoomInfo>();
 		for (Room r : uRooms) {
@@ -44,7 +44,7 @@ public class JoinGameRequestHandler extends BaseClientRequestHandler {
 		} catch (JsonProcessingException e) {
 			e.printStackTrace();
 		}
-		
+
 		Response response = new Response();
 		response.setId(SystemRequest.CallExtension.getId());
 		response.setTargetController((byte) 1);

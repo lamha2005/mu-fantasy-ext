@@ -35,11 +35,11 @@ public class GiftEventConfig {
 
 
 	private GiftEventConfig() {
-		loadStage();
+		loadGiftEvent();
 	}
 
 
-	public void loadStage() {
+	public void loadGiftEvent() {
 		try {
 			gifts = new HashMap<>();
 			XMLStreamReader sr = f.createXMLStreamReader(new FileInputStream(GIFT_EVENTS_CONFIG));

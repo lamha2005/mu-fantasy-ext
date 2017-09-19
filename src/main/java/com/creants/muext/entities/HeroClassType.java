@@ -9,7 +9,9 @@ public enum HeroClassType {
 	GREAT_DARK_KNIGHT(101, "Great Dragon Dark Knight", "Chiến Binh"),
 	BLUE_KNIGHT(102, "Blue Dragon Knight", "Chiến Binh"),
 	DARK_WIZARD(200, "Legendary Dark Wizard", "Pháp Sư"),
-	FAIRY_ELF(300, "Iris Fairy Elf", "Tiên Nữ");
+	FAIRY_ELF(300, "Iris Fairy Elf", "Tiên Nữ"),
+	Storm_Fighter(400, "Storm Fighter", ""),
+	Sacred_Fighter(402, "Sacred Fighter", "");
 
 	public int id;
 	public String name;

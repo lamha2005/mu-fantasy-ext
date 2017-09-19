@@ -1,14 +1,12 @@
 package com.creants.muext.managers;
 
 import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.Collection;
 import java.util.HashMap;
 import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
 
-import org.apache.commons.lang.StringUtils;
 import org.springframework.beans.factory.InitializingBean;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -16,9 +14,6 @@ import org.springframework.stereotype.Service;
 import com.creants.creants_2x.core.util.QAntTracer;
 import com.creants.muext.config.ItemConfig;
 import com.creants.muext.dao.HeroItemRepository;
-import com.creants.muext.entities.ItemBase;
-import com.creants.muext.entities.item.ConsumeableItemBase;
-import com.creants.muext.entities.item.EquipmentBase;
 import com.creants.muext.entities.item.HeroConsumeableItem;
 import com.creants.muext.entities.item.HeroEquipment;
 import com.creants.muext.entities.item.HeroItem;
@@ -41,32 +36,56 @@ public class HeroItemManager implements InitializingBean {
 	public void afterPropertiesSet() throws Exception {
 		// itemIndex/no#itemIndex/no
 		// addItems("mus1#323", "7000/1");
-		// addItems("mus1#317", "7000/1");
+		// addItems("mus1#317", "11017/3#11018/3#11019/3");
+		// addItems("mus1#317", "1001/1");
+		// addItems("mus1#323", "11013/1");
+		// addItems("mus1#317",
+		// "11032/5#11033/10#11034/15#11035/20#11036/10#11037/10");
 	}
 
 
 	public List<HeroItem> getItems(String gameHeroId) {
-		return heroItemRep.findAllByGameHeroId(gameHeroId);
+		List<HeroItem> items = heroItemRep.findAllByGameHeroId(gameHeroId);
+		items.forEach(heroItem -> {
+			heroItem.setItemBase(itemConfig.getItem(heroItem.getIndex()));
+		});
+		return items;
 	}
 
 
 	public List<HeroEquipment> getTakeOnEquipments(long heroId) {
-		return heroItemRep.findTakeOnEquipmentsByHeroId(heroId);
+		List<HeroEquipment> items = heroItemRep.findTakeOnEquipmentsByHeroId(heroId);
+		items.forEach(heroItem -> {
+			heroItem.setItemBase(itemConfig.getItem(heroItem.getIndex()));
+		});
+		return items;
 	}
 
 
 	public HeroEquipment getEquipment(long itemId, String gameHeroId) {
-		return heroItemRep.findEquipmentByIdAndGameHeroId(itemId, gameHeroId);
+		HeroEquipment equipment = heroItemRep.findEquipmentByIdAndGameHeroId(itemId, gameHeroId);
+		if (equipment != null) {
+			equipment.setItemBase(itemConfig.getItem(equipment.getIndex()));
+		}
+		return equipment;
 	}
 
 
 	public HeroEquipment getEquipment(long itemId, String gameHeroId, long heroId) {
-		return heroItemRep.findEquipmentByIdAndGameHeroIdAndHeroId(itemId, gameHeroId, heroId);
+		HeroEquipment equipment = heroItemRep.findEquipmentByIdAndGameHeroIdAndHeroId(itemId, gameHeroId, heroId);
+		if (equipment != null) {
+			equipment.setItemBase(itemConfig.getItem(equipment.getIndex()));
+		}
+		return equipment;
 	}
 
 
 	public HeroEquipment getEquipmentBySlot(int slotIndex, long heroId) {
-		return heroItemRep.findEquipmentBySlotIndexAndHeroId(slotIndex, heroId);
+		HeroEquipment equipment = heroItemRep.findEquipmentBySlotIndexAndHeroId(slotIndex, heroId);
+		if (equipment != null) {
+			equipment.setItemBase(itemConfig.getItem(equipment.getIndex()));
+		}
+		return equipment;
 	}
 
 
@@ -80,6 +99,9 @@ public class HeroItemManager implements InitializingBean {
 		if (consumeableItems != null) {
 			for (HeroConsumeableItem heroItem : consumeableItems) {
 				heroItem.useItem(items.get(heroItem.getId()));
+				if (heroItem.getNo() <= 0) {
+					// TODO add to remove
+				}
 			}
 		}
 
@@ -132,7 +154,7 @@ public class HeroItemManager implements InitializingBean {
 	 */
 	public List<HeroItem> addItems(String gameHeroId, String itemArrString) {
 		try {
-			return addItems(gameHeroId, splitItem(itemArrString));
+			return addItems(gameHeroId, itemConfig.splitItemToHeroItem(itemArrString));
 		} catch (Exception e) {
 			e.printStackTrace();
 		}
@@ -145,7 +167,7 @@ public class HeroItemManager implements InitializingBean {
 		if (items == null || items.size() <= 0)
 			return new ArrayList<>();
 
-		List<HeroConsumeableItem> heroOverlapItems = heroItemRep.findConsumeableItemsByGameHeroId(gameHeroId);
+		List<HeroConsumeableItem> heroOverlapItems = heroItemRep.findItemsByGameHeroIdAndIsOverlapIsTrue(gameHeroId);
 		List<HeroItem> itemsUpdate = new ArrayList<>();
 
 		Map<Integer, Integer> overlapItems = new HashMap<>();
@@ -177,42 +199,6 @@ public class HeroItemManager implements InitializingBean {
 		}
 
 		return heroItemRep.save(itemsUpdate);
-	}
-
-
-	private List<HeroItem> splitItem(String itemArrString) {
-		List<int[]> itemsReward = new ArrayList<>();
-		if (StringUtils.isNotBlank(itemArrString)) {
-			String[] items = StringUtils.split(itemArrString, "#");
-			for (int i = 0; i < items.length; i++) {
-				String[] split = StringUtils.split(items[i], "/");
-				itemsReward.add(new int[] { Integer.parseInt(split[0]), Integer.parseInt(split[1]) });
-			}
-		}
-		return convertToItem(itemsReward);
-	}
-
-
-	private List<HeroItem> convertToItem(List<int[]> items) {
-		List<HeroItem> itemList = new ArrayList<>();
-		if (items.size() > 0) {
-			for (int[] ir : items) {
-				ItemBase itemBase = itemConfig.getItem(ir[0]);
-				if (itemBase instanceof ConsumeableItemBase) {
-					HeroConsumeableItem consItem = new HeroConsumeableItem();
-					consItem.setIndex(itemBase.getIndex());
-					consItem.setItemGroup(itemBase.getGroupId());
-					consItem.setOverlap(true);
-					consItem.setElement(itemBase.getElemental());
-					consItem.setNo(ir[1]);
-					consItem.setItemBase((ConsumeableItemBase) itemBase);
-					itemList.add(consItem);
-				} else if (itemBase instanceof EquipmentBase) {
-					itemList.add(new HeroEquipment((EquipmentBase) itemBase));
-				}
-			}
-		}
-		return itemList;
 	}
 
 }

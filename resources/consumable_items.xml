@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="UTF-8" standalone="yes"?>
 <ItemList>
-	<Item ItemGroup="11000" ItemIndex="11000" ItemName="Bless" Description="A unique material" ItemType="9" ItemRank="5" RefunCost="2250" Icon="bless.png"/>
+	<Item ItemGroup="11000" ItemIndex="11999" ItemName="Bless" Description="A unique material" ItemType="9" ItemRank="5" RefunCost="2250" Icon="bless.png"/>
 	<Item ItemGroup="11000" ItemIndex="11001" ItemName="Soul" Description="A unique material" ItemType="6" ItemRank="5" Overlap="10" RefunCost="1500" Icon="soul.png"/>
 	<Item ItemGroup="11000" ItemIndex="11002" ItemName="Chaos" Description="It is used in item combinations." ItemType="6" ItemRank="5" Overlap="10" RefunCost="1500" Icon="chaos.png"/>
 	<Item ItemGroup="11000" ItemIndex="11006" ItemName="Life" Description="A unique material" ItemType="6" ItemRank="5" Overlap="10" RefunCost="1500" Icon="life.png"/>
@@ -48,9 +48,11 @@
 	<Item ItemGroup="11000" ItemIndex="11048" ItemName="Satan" Description="Increase 20% ATK for 6 turns" ItemType="1" ItemRank="2" Overlap="10" SkillIndex="8003" RefunCost="100" Icon="satan.png"/>
 	<Item ItemGroup="11000" ItemIndex="11049" ItemName="Archangel" Description="Increase 20% DEF for 6 turns" ItemType="1" ItemRank="3" Overlap="10" SkillIndex="8004" RefunCost="150" Icon="archangel.png"/>
 	<Item ItemGroup="11000" ItemIndex="11050" ItemName="Lucky Charm" Description="Increase 5% sucess rate" ItemType="7" ItemRank="4" Overlap="10" Value="0.05" RefunCost="1400" Icon="luckycharm.png"/>
-	<Item ItemGroup="11000" ItemIndex="11051" ItemName="Small Zen Pack" Description="Contain 1000 Zen" ItemType="9" ItemRank="1" RefunCost="450" Icon="zen.png"/>
-	<Item ItemGroup="11000" ItemIndex="11052" ItemName="Medium Zen Pack" Description="Contain 5000 Zen" ItemType="9" ItemRank="2" RefunCost="900" Icon="zen.png"/>
-	<Item ItemGroup="11000" ItemIndex="11053" ItemName="Large Zen Pack" Description="Contain 10000 Zen" ItemType="9" ItemRank="3" RefunCost="1350" Icon="zen.png"/>
-	<Item ItemGroup="11000" ItemIndex="11054" ItemName="Huge Zen Pack" Description="Contain 100000 Zen" ItemType="9" ItemRank="4" RefunCost="1800" Icon="zen.png"/>
-	<Item ItemGroup="11000" ItemIndex="11055" ItemName="Super Zen Pack" Description="Contain 1000000 Zen" ItemType="9" ItemRank="5" RefunCost="2250" Icon="zen.png"/>
+	<Item ItemGroup="11000" ItemIndex="11900" ItemName="Small Zen Pack" Description="Contain 1000 Zen" ItemType="9" ItemRank="1" Value="1000" Icon="zen.png"/>
+	<Item ItemGroup="11000" ItemIndex="11901" ItemName="Medium Zen Pack" Description="Contain 5000 Zen" ItemType="9" ItemRank="2" Value="5000" Icon="zen.png"/>
+	<Item ItemGroup="11000" ItemIndex="11902" ItemName="Large Zen Pack" Description="Contain 10000 Zen" ItemType="9" ItemRank="3" Value="10000" Icon="zen.png"/>
+	<Item ItemGroup="11000" ItemIndex="11903" ItemName="Huge Zen Pack" Description="Contain 100000 Zen" ItemType="9" ItemRank="4" Value="100000" Icon="zen.png"/>
+	<Item ItemGroup="11000" ItemIndex="11904" ItemName="Super Zen Pack" Description="Contain 1000000 Zen" ItemType="9" ItemRank="5" Value="1000000" Icon="zen.png"/>
+	<Item ItemGroup="11000" ItemIndex="11998" ItemName="Zen" Description="Contain 1 Zen" ItemType="9" ItemRank="1" Value="1" Icon="zen.png"/>
+	<Item ItemGroup="11000" ItemIndex="11997" ItemName="Chaos Point" Description="Contain 1 Chaos Point" ItemType="9" ItemRank="1" Value="1" Icon="chaospoint.png"/>
 </ItemList>

@@ -50,7 +50,7 @@ public class HeroBase {
 	@JacksonXmlProperty(localName = "CharRank", isAttribute = true)
 	private int rank;
 	@JacksonXmlProperty(localName = "EvolveTo", isAttribute = true)
-	private int evolveTo;
+	private Integer evolveTo;
 
 	@JacksonXmlProperty(localName = "Element", isAttribute = true)
 	private String element;
@@ -242,12 +242,12 @@ public class HeroBase {
 	}
 
 
-	public int getEvolveTo() {
+	public Integer getEvolveTo() {
 		return evolveTo;
 	}
 
 
-	public void setEvolveTo(int evolveTo) {
+	public void setEvolveTo(Integer evolveTo) {
 		this.evolveTo = evolveTo;
 	}
 

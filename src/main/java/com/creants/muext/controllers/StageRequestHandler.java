@@ -2,6 +2,8 @@ package com.creants.muext.controllers;
 
 import java.util.List;
 
+import org.apache.commons.lang.math.RandomUtils;
+
 import com.creants.creants_2x.core.extension.BaseClientRequestHandler;
 import com.creants.creants_2x.socket.gate.entities.IQAntArray;
 import com.creants.creants_2x.socket.gate.entities.IQAntObject;
@@ -9,6 +11,7 @@ import com.creants.creants_2x.socket.gate.entities.QAntArray;
 import com.creants.creants_2x.socket.gate.entities.QAntObject;
 import com.creants.creants_2x.socket.gate.wood.QAntUser;
 import com.creants.muext.Creants2XApplication;
+import com.creants.muext.config.ItemConfig;
 import com.creants.muext.config.StageConfig;
 import com.creants.muext.dao.BattleTeamRepository;
 import com.creants.muext.dao.GameHeroRepository;
@@ -17,6 +20,7 @@ import com.creants.muext.entities.GameHero;
 import com.creants.muext.entities.HeroClass;
 import com.creants.muext.entities.Monster;
 import com.creants.muext.entities.Team;
+import com.creants.muext.entities.item.HeroItem;
 import com.creants.muext.entities.world.Stage;
 import com.creants.muext.exception.GameErrorCode;
 import com.creants.muext.managers.HeroClassManager;
@@ -29,10 +33,9 @@ import com.creants.muext.services.MessageFactory;
  * @author LamHa
  */
 public class StageRequestHandler extends BaseClientRequestHandler {
-	private static final String CMD = "cmd_join_stage";
 	public static final String STAGE_INDEX = "stgid";
-	// 6 phút rehi stamina 1 lần
-	public static final int STAMINA_REHI_TIME_MILI = 60000;
+	public static final int STAMINA_REHI_TIME_MILI = 60000;// 6 phút rehi
+															// stamina 1 lần
 	public static final int STAMINA_REHI_VALUE = 1;
 	private MatchManager matchManager;
 	private GameHeroRepository repository;
@@ -49,12 +52,13 @@ public class StageRequestHandler extends BaseClientRequestHandler {
 
 
 	@Override
-	public void handleClientRequest(QAntUser user, IQAntObject params) {
+	public void handleClientRequest(QAntUser user, IQAntObject matchInfo) {
 		String gameHeroId = user.getName();
-		int stageIndex = params.getInt(STAGE_INDEX);
+		int stageIndex = matchInfo.getInt(STAGE_INDEX);
 		Stage stage = StageConfig.getInstance().getStage(stageIndex);
 		if (stage == null) {
-			sendError(MessageFactory.createErrorMsg(CMD, GameErrorCode.STAGE_NOT_FOUND), user);
+			sendError(MessageFactory.createErrorMsg(ExtensionEvent.CMD_JOIN_STAGE, GameErrorCode.STAGE_NOT_FOUND),
+					user);
 			return;
 		}
 
@@ -69,15 +73,15 @@ public class StageRequestHandler extends BaseClientRequestHandler {
 		// gửi thông tin stamina thay đổi
 		IQAntObject assets = QAntObject.newInstance();
 		assets.putInt("stamina", stamina);
-		send("cmd_assets_change", assets, user);
+		send(ExtensionEvent.CMD_NTF_ASSETS_CHANGE, assets, user);
 
 		List<Integer[]> roundList = stage.getRoundList();
 		List<Monster> monsterList = matchManager.getMonsterList(roundList);
 
 		int roundNo = roundList.size();
-		params = QAntObject.newInstance();
-		params.putInt(STAGE_INDEX, stageIndex);
-		params.putQAntArray("round", matchManager.getRounds(stage, monsterList));
+		matchInfo = QAntObject.newInstance();
+		matchInfo.putInt(STAGE_INDEX, stageIndex);
+		matchInfo.putQAntArray("round", matchManager.getRounds(stage, monsterList));
 
 		IQAntArray monsters = QAntArray.newInstance();
 		for (Monster monster : monsterList) {
@@ -86,12 +90,10 @@ public class StageRequestHandler extends BaseClientRequestHandler {
 			obj.putInt("index", monster.getIndex());
 			monsters.addQAntObject(obj);
 		}
-		params.putQAntArray("monsters", monsters);
+		matchInfo.putQAntArray("monsters", monsters);
 
-		IQAntObject reward = QAntObject.newInstance();
-		reward.putInt("exp", 100);
-		reward.putInt("zen", 1000);
-		params.putQAntObject("reward", reward);
+		String itemBonus = getItemBonus(stage.getBonus());
+		matchInfo.putQAntArray("items_bonus", ItemConfig.getInstance().buildShortItemInfo(itemBonus));
 
 		IQAntObject script = QAntObject.newInstance();
 		IQAntArray monsterArr = QAntArray.newInstance();
@@ -115,11 +117,22 @@ public class StageRequestHandler extends BaseClientRequestHandler {
 		}
 
 		script.putQAntArray("heroes", heroArr);
+		matchInfo.putQAntObject("script", script);
+		send(ExtensionEvent.CMD_JOIN_STAGE, matchInfo, user);
 
-		params.putQAntObject("script", script);
-		send(CMD, params, user);
+		matchManager.newMatch(gameHeroId, matchInfo);
+	}
 
-		matchManager.newMatch(gameHeroId, params);
+
+	private String getItemBonus(List<HeroItem> items) {
+		String result = "";
+		for (HeroItem heroItem : items) {
+			int rate = RandomUtils.nextInt(100);
+			if (rate <= 200) {
+				result += "#" + heroItem.getIndex() + "/" + heroItem.getNo();
+			}
+		}
+		return result;
 	}
 
 

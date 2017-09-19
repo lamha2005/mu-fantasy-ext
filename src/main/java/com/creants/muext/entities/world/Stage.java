@@ -10,11 +10,6 @@ import org.apache.commons.lang.StringUtils;
 
 import com.creants.creants_2x.socket.gate.protocol.serialization.SerializableQAntType;
 import com.creants.muext.config.ItemConfig;
-import com.creants.muext.entities.ItemBase;
-import com.creants.muext.entities.item.ConsumeableItemBase;
-import com.creants.muext.entities.item.EquipmentBase;
-import com.creants.muext.entities.item.HeroConsumeableItem;
-import com.creants.muext.entities.item.HeroEquipment;
 import com.creants.muext.entities.item.HeroItem;
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import com.fasterxml.jackson.annotation.JsonInclude;
@@ -26,7 +21,8 @@ import com.fasterxml.jackson.dataformat.xml.annotation.JacksonXmlProperty;
  *
  */
 @JsonInclude(Include.NON_NULL)
-@JsonIgnoreProperties(value = { "rewards", "bonus", "rewardItems", "firstTimeRewardString", "randomBonusString" })
+@JsonIgnoreProperties(value = { "rewards", "bonus", "rewardItems", "firstTimeRewardString", "randomBonusString",
+		"nextStage" })
 public class Stage implements SerializableQAntType {
 	@JacksonXmlProperty(localName = "StageIndex", isAttribute = true)
 	public int index;
@@ -76,6 +72,8 @@ public class Stage implements SerializableQAntType {
 	@JacksonXmlProperty(localName = "ExpAccReward", isAttribute = true)
 	public transient int expAccReward;
 
+	private int nextStage;
+
 	private transient Map<Integer, Integer> monsterCountMap;
 	private transient List<Integer[]> roundList;
 	private transient List<String> firstTimeReward;
@@ -89,8 +87,8 @@ public class Stage implements SerializableQAntType {
 		monsterCountMap = new HashMap<>();
 		roundList = new ArrayList<>();
 		readMonsterIndex();
-		rewards = splitItem(firstTimeRewardString);
-		bonus = splitItem(randomBonusString);
+		rewards = ItemConfig.getInstance().splitItemToHeroItem(firstTimeRewardString);
+		bonus = ItemConfig.getInstance().splitItemToHeroItem(randomBonusString);
 
 		firstTimeReward = splitRewardString(firstTimeRewardString);
 		randomBonus = splitRewardString(randomBonusString);
@@ -312,39 +310,13 @@ public class Stage implements SerializableQAntType {
 	}
 
 
-	private List<HeroItem> splitItem(String itemArrString) {
-		List<int[]> itemsReward = new ArrayList<>();
-		if (StringUtils.isNotBlank(itemArrString)) {
-			String[] items = StringUtils.split(itemArrString, "#");
-			for (int i = 0; i < items.length; i++) {
-				String[] split = StringUtils.split(items[i], "/");
-				itemsReward.add(new int[] { Integer.parseInt(split[0]), Integer.parseInt(split[1]) });
-			}
-		}
-		return convertToItem(itemsReward);
+	public int getNextStage() {
+		return nextStage;
 	}
 
 
-	private List<HeroItem> convertToItem(List<int[]> items) {
-		List<HeroItem> itemList = new ArrayList<>();
-		if (items.size() > 0) {
-			for (int[] ir : items) {
-				ItemBase itemBase = ItemConfig.getInstance().getItem(ir[0]);
-				if (itemBase instanceof ConsumeableItemBase) {
-					HeroConsumeableItem consItem = new HeroConsumeableItem();
-					consItem.setIndex(itemBase.getIndex());
-					consItem.setItemGroup(itemBase.getGroupId());
-					consItem.setOverlap(true);
-					consItem.setElement(itemBase.getElemental());
-					consItem.setNo(ir[1]);
-					consItem.setItemBase((ConsumeableItemBase) itemBase);
-					itemList.add(consItem);
-				} else if (itemBase instanceof EquipmentBase) {
-					itemList.add(new HeroEquipment((EquipmentBase) itemBase));
-				}
-			}
-		}
-		return itemList;
+	public void setNextStage(int nextStage) {
+		this.nextStage = nextStage;
 	}
 
 }

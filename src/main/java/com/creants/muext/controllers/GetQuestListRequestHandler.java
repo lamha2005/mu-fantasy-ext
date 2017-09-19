@@ -60,7 +60,8 @@ public class GetQuestListRequestHandler extends BaseClientRequestHandler {
 		params = new QAntObject();
 		params.putQAntArray("quests", questArr);
 		params.putInt("gid", groupId);
-		send("cmd_get_quests", params, user);
+
+		send(ExtensionEvent.CMD_GET_QUESTS, params, user);
 	}
 
 

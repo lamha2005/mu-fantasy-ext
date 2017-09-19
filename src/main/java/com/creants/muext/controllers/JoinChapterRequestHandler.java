@@ -59,7 +59,8 @@ public class JoinChapterRequestHandler extends BaseClientRequestHandler {
 		}
 		params.putQAntArray("stages", stageArr);
 		params.putInt("cid", chapterId);
-		send("cmd_join_chapter", params, user);
+
+		send(ExtensionEvent.CMD_JOIN_CHAPTER, params, user);
 	}
 
 

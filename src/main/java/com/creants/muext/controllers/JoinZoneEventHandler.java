@@ -137,6 +137,13 @@ public class JoinZoneEventHandler extends BaseServerEventHandler {
 		questArr.addQAntObject(dailyQuest);
 		response.putQAntArray("quests", questArr);
 
+		// current chapter
+		HeroStage curStage = stageRepository.findStageByHeroIdAndClearIsFalse(gameHeroId);
+		IQAntObject curChapter = QAntObject.newInstance();
+		curChapter.putInt("chapter_index", curStage.getChapterIndex());
+		curChapter.putInt("stage_index", curStage.getIndex());
+		response.putQAntObject("cur_chapter", curChapter);
+
 		// team
 		BattleTeam battleTeam = battleTeamRepository.findOne(gameHeroId);
 		List<Team> teamList = battleTeam.getTeamList();
@@ -227,7 +234,6 @@ public class JoinZoneEventHandler extends BaseServerEventHandler {
 					boolean over7Day = isOver7Day(new Date(giftInfo.getAnchorTime()), new Date(currentTimeMillis));
 					if (over7Day) {
 						giftInfo.reset();
-						giftNotification++;
 					}
 
 					long curDate = DateUtils.truncate(new Date(), Calendar.DATE).getTime();
@@ -235,6 +241,9 @@ public class JoinZoneEventHandler extends BaseServerEventHandler {
 					if (curDate != preDate) {
 						giftInfo.setClaim(true);
 						giftInfo.claimNextPackage();
+					}
+
+					if (giftInfo.isClaim()) {
 						giftNotification++;
 					}
 					break;

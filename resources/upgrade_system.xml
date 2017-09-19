@@ -1,0 +1,61 @@
+<?xml version="1.0" encoding="UTF-8" standalone="yes"?>
+<UpgradeSystem>
+	<EvolveHeroes>
+		<EvolveHero ClassGroup="100" Rank="2" SpecialMaterial="11032/1#11036/2#11002/5#11001/10" ZenCost="50000" SuccessRatePercent="100"/>
+		<EvolveHero ClassGroup="100" Rank="3" SpecialMaterial="11032/1#11036/5#11002/10#11001/20" ZenCost="250000" SuccessRatePercent="100"/>
+		<EvolveHero ClassGroup="100" Rank="4" SpecialMaterial="11032/1#11036/10#11002/20#11001/50" ZenCost="500000" SuccessRatePercent="100"/>
+		<EvolveHero ClassGroup="100" Rank="5" SpecialMaterial="11032/1#11036/20#11002/20#11001/100" ZenCost="3000000" SuccessRatePercent="100"/>
+		<EvolveHero ClassGroup="200" Rank="2" SpecialMaterial="11032/1#11037/2#11002/5#11001/10" ZenCost="50000" SuccessRatePercent="100"/>
+		<EvolveHero ClassGroup="200" Rank="3" SpecialMaterial="11032/1#11037/5#11002/10#11001/20" ZenCost="250000" SuccessRatePercent="100"/>
+		<EvolveHero ClassGroup="200" Rank="4" SpecialMaterial="11032/1#11037/10#11002/20#11001/50" ZenCost="500000" SuccessRatePercent="100"/>
+		<EvolveHero ClassGroup="200" Rank="5" SpecialMaterial="11032/1#11037/20#11002/20#11001/100" ZenCost="3000000" SuccessRatePercent="100"/>
+		<EvolveHero ClassGroup="300" Rank="2" SpecialMaterial="11032/1#11038/2#11002/5#11001/10" ZenCost="50000" SuccessRatePercent="100"/>
+		<EvolveHero ClassGroup="300" Rank="3" SpecialMaterial="11032/1#11038/5#11002/10#11001/20" ZenCost="250000" SuccessRatePercent="100"/>
+		<EvolveHero ClassGroup="300" Rank="4" SpecialMaterial="11032/1#11038/10#11002/20#11001/50" ZenCost="500000" SuccessRatePercent="100"/>
+		<EvolveHero ClassGroup="300" Rank="5" SpecialMaterial="11032/1#11038/20#11002/20#11001/100" ZenCost="3000000" SuccessRatePercent="100"/>
+	</EvolveHeroes>
+	<LevelUpHeroByHeroes>
+		<LevelUpHeroByHero Materials="1" SameElementals="500" DifferentElementals="375" SuccessRatePercent="100"/>
+		<LevelUpHeroByHero Materials="2" SameElementals="2000" DifferentElementals="1500" SuccessRatePercent="100"/>
+		<LevelUpHeroByHero Materials="3" SameElementals="10000" DifferentElementals="7500" SuccessRatePercent="100"/>
+		<LevelUpHeroByHero Materials="4" SameElementals="-1" DifferentElementals="-1" SuccessRatePercent="-1"/>
+		<LevelUpHeroByHero Materials="5" SameElementals="-1" DifferentElementals="-1" SuccessRatePercent="-1"/>
+	</LevelUpHeroByHeroes>
+	<LevelUpHeroByItems>
+		<LevelUpHeroByItem Materials="11017" SameElementals="4000" DifferentElementals="3000" SuccessRatePercent="100"/>
+		<LevelUpHeroByItem Materials="11018" SameElementals="50000" DifferentElementals="37500" SuccessRatePercent="100"/>
+		<LevelUpHeroByItem Materials="11019" SameElementals="300000" DifferentElementals="225000" SuccessRatePercent="100"/>
+	</LevelUpHeroByItems>
+	<LevelUpEquipmentsLT3>
+		<LevelUpEquipment Level="2" ZenCost="500" SuccessRatePercent="100"/>
+		<LevelUpEquipment Level="3" ZenCost="1000" SuccessRatePercent="100"/>
+		<LevelUpEquipment Level="4" ZenCost="2000" SuccessRatePercent="100"/>
+		<LevelUpEquipment Level="5" ZenCost="4000" SuccessRatePercent="100"/>
+		<LevelUpEquipment Level="6" CombineMaterial="11001/1" ZenCost="8000" SuccessRatePercent="95"/>
+		<LevelUpEquipment Level="7" CombineMaterial="11001/1" ZenCost="10000" SuccessRatePercent="90"/>
+		<LevelUpEquipment Level="8" CombineMaterial="11001/2" ZenCost="15000" SuccessRatePercent="85"/>
+		<LevelUpEquipment Level="9" CombineMaterial="11001/2" ZenCost="30000" SuccessRatePercent="80"/>
+		<LevelUpEquipment Level="10" CombineMaterial="11001/1#11002/1" ZenCost="50000" SuccessRatePercent="75"/>
+		<LevelUpEquipment Level="11" CombineMaterial="11001/2#11002/1" ZenCost="50000" SuccessRatePercent="70"/>
+		<LevelUpEquipment Level="12" CombineMaterial="11001/3#11002/1" ZenCost="50000" SuccessRatePercent="65"/>
+		<LevelUpEquipment Level="13" CombineMaterial="11001/3#11002/2" ZenCost="50000" SuccessRatePercent="60"/>
+		<LevelUpEquipment Level="14" CombineMaterial="11001/3#11002/3" ZenCost="50000" SuccessRatePercent="55"/>
+		<LevelUpEquipment Level="15" CombineMaterial="11001/5#11002/3" ZenCost="50000" SuccessRatePercent="50"/>
+	</LevelUpEquipmentsLT3>
+	<LevelUpEquipmentsGT3>
+		<LevelUpEquipment Level="2" ZenCost="500" SuccessRatePercent="100"/>
+		<LevelUpEquipment Level="3" ZenCost="1000" SuccessRatePercent="90"/>
+		<LevelUpEquipment Level="4" ZenCost="2000" SuccessRatePercent="80"/>
+		<LevelUpEquipment Level="5" ZenCost="4000" SuccessRatePercent="70"/>
+		<LevelUpEquipment Level="6" CombineMaterial="11001/1" ZenCost="8000" SuccessRatePercent="60"/>
+		<LevelUpEquipment Level="7" CombineMaterial="11001/2" ZenCost="10000" SuccessRatePercent="50"/>
+		<LevelUpEquipment Level="8" CombineMaterial="11001/3" ZenCost="15000" SuccessRatePercent="45"/>
+		<LevelUpEquipment Level="9" CombineMaterial="11001/5" ZenCost="30000" SuccessRatePercent="40"/>
+		<LevelUpEquipment Level="10" CombineMaterial="11001/5#11002/1" ZenCost="50000" SuccessRatePercent="35"/>
+		<LevelUpEquipment Level="11" CombineMaterial="11001/5#11002/2" ZenCost="50000" SuccessRatePercent="30"/>
+		<LevelUpEquipment Level="12" CombineMaterial="11001/10#11002/3" ZenCost="50000" SuccessRatePercent="25"/>
+		<LevelUpEquipment Level="13" CombineMaterial="11001/10#11002/4" ZenCost="50000" SuccessRatePercent="20"/>
+		<LevelUpEquipment Level="14" CombineMaterial="11001/10#11002/5" ZenCost="50000" SuccessRatePercent="15"/>
+		<LevelUpEquipment Level="15" CombineMaterial="11001/15#11002/5" ZenCost="50000" SuccessRatePercent="10"/>
+	</LevelUpEquipmentsGT3>
+</UpgradeSystem>

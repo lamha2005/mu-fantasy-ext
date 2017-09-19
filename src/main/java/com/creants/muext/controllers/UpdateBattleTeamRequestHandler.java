@@ -74,7 +74,7 @@ public class UpdateBattleTeamRequestHandler extends BaseClientRequestHandler {
 		}
 		params.putQAntArray("teams", teamArr);
 
-		send("cmd_upd_battle_team", params, user);
+		send(ExtensionEvent.CMD_UPD_BATTLE_TEAM, params, user);
 	}
 
 }

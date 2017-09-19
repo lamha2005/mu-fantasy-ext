@@ -11,6 +11,7 @@ import com.creants.creants_2x.socket.gate.wood.QAntUser;
 import com.creants.muext.Creants2XApplication;
 import com.creants.muext.config.GiftEventConfig;
 import com.creants.muext.config.ItemConfig;
+import com.creants.muext.controllers.ExtensionEvent;
 import com.creants.muext.dao.GiftEventRepository;
 import com.creants.muext.entities.event.GiftEventBase;
 import com.creants.muext.entities.event.GiftInfo;
@@ -27,7 +28,6 @@ import com.creants.muext.services.MessageFactory;
  *
  */
 public class GiftEventRequestHandler extends BaseClientRequestHandler {
-	private static final String CMD = "cmd_gift_events";
 	private static final int GET_CATEGORY_EVENT = 1;
 	private static final int CLAIM_GIFT_PACKAGE = 2;
 	private GiftEventRepository giftRepository;
@@ -74,7 +74,8 @@ public class GiftEventRequestHandler extends BaseClientRequestHandler {
 		HeroGift heroGift = giftRepository.findOne(user.getName());
 		GiftInfo gift = heroGift.getGift(giftIndex);
 		if (gift == null) {
-			sendError(MessageFactory.createErrorMsg(CMD, GameErrorCode.LACK_OF_INFOMATION), user);
+			sendError(MessageFactory.createErrorMsg(ExtensionEvent.CMD_GIFT_EVENTS, GameErrorCode.LACK_OF_INFOMATION),
+					user);
 			return;
 		}
 
@@ -82,7 +83,8 @@ public class GiftEventRequestHandler extends BaseClientRequestHandler {
 		Integer packageIndex = params.getInt("packageIndex");
 
 		if (claimList.size() <= 0 || !claimList.contains(packageIndex)) {
-			sendError(MessageFactory.createErrorMsg(CMD, GameErrorCode.LACK_OF_INFOMATION), user);
+			sendError(MessageFactory.createErrorMsg(ExtensionEvent.CMD_GIFT_EVENTS, GameErrorCode.LACK_OF_INFOMATION),
+					user);
 			return;
 		}
 		gift.setLastUpdateTime(System.currentTimeMillis());
@@ -108,7 +110,7 @@ public class GiftEventRequestHandler extends BaseClientRequestHandler {
 		}
 		params.putQAntArray("items_info", itemsInfoArr);
 
-		send(CMD, params, user);
+		send(ExtensionEvent.CMD_GIFT_EVENTS, params, user);
 
 		gift.addClaimed(packageIndex);
 		giftRepository.save(heroGift);
@@ -127,10 +129,10 @@ public class GiftEventRequestHandler extends BaseClientRequestHandler {
 			eventArr.addQAntObject(QAntObject.newFromObject(giftEventBase));
 		}
 
-		response.putQAntArray(CMD, eventArr);
+		response.putQAntArray(ExtensionEvent.CMD_GIFT_EVENTS, eventArr);
 		response.putInt("act", GET_CATEGORY_EVENT);
 		response.putInt("rvs", GiftEventConfig.getInstance().getRevison());
-		send(CMD, response, user);
+		send(ExtensionEvent.CMD_GIFT_EVENTS, response, user);
 	}
 
 }

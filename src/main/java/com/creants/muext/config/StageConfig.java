@@ -51,11 +51,18 @@ public class StageConfig {
 			sr.next(); // to point to <Stages>
 			sr.next();
 			Stage stage = null;
+			int prevIndex = -1;
 			while (sr.hasNext()) {
 				try {
 					stage = mapper.readValue(sr, Stage.class);
 					stage.init();
-					stages.put(stage.getIndex(), stage);
+					int index = stage.getIndex();
+					stages.put(index, stage);
+					Stage prevStage = stages.get(prevIndex);
+					if (prevStage != null) {
+						prevStage.setNextStage(index);
+					}
+					prevIndex = index;
 
 					Chapter chapter = new Chapter();
 					chapter.setIndex(stage.getChapterIndex());
@@ -75,6 +82,12 @@ public class StageConfig {
 
 	public Stage getStage(int index) {
 		return stages.get(index);
+	}
+
+
+	public Stage getNextStage(int index) {
+		Stage stage = stages.get(index);
+		return stages.get(stage.getNextStage());
 	}
 
 

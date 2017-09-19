@@ -24,7 +24,6 @@ import com.creants.muext.services.MessageFactory;
  *
  */
 public class MailRequestHandler extends BaseClientRequestHandler {
-	private static final String CMD = "cmd_mail";
 	private static final int READ = 1;
 	private static final int MAIL_ACTION = 2;
 	private static final int CLAIM_ALL = 3;
@@ -90,13 +89,13 @@ public class MailRequestHandler extends BaseClientRequestHandler {
 		}
 
 		mailRepository.delete(mails);
-		send(CMD, params, user);
+		send(ExtensionEvent.CMD_MAIL, params, user);
 	}
 
 
 	private void removeAll(QAntUser user, IQAntObject params) {
 		mailRepository.deleteAll();
-		send(CMD, params, user);
+		send(ExtensionEvent.CMD_MAIL, params, user);
 	}
 
 
@@ -121,7 +120,7 @@ public class MailRequestHandler extends BaseClientRequestHandler {
 
 		params.putInt("code", 1);
 		mailRepository.delete(mail);
-		send(CMD, params, user);
+		send(ExtensionEvent.CMD_MAIL, params, user);
 	}
 
 
@@ -130,7 +129,7 @@ public class MailRequestHandler extends BaseClientRequestHandler {
 		Mail mail = mailRepository.findOne(id);
 		if (mail == null || !mail.getGameHeroId().equals(user.getName())) {
 			QAntTracer.warn(this.getClass(), "Read mail not exist: " + user.getName() + "/mailId:" + id);
-			sendError(MessageFactory.createErrorMsg(CMD, GameErrorCode.MAIL_NOT_FOUND), user);
+			sendError(MessageFactory.createErrorMsg(ExtensionEvent.CMD_MAIL, GameErrorCode.MAIL_NOT_FOUND), user);
 			return;
 		}
 
@@ -138,7 +137,7 @@ public class MailRequestHandler extends BaseClientRequestHandler {
 		mail.setRead(true);
 		mailRepository.save(mail);
 
-		send(CMD, params, user);
+		send(ExtensionEvent.CMD_MAIL, params, user);
 	}
 
 
@@ -163,7 +162,7 @@ public class MailRequestHandler extends BaseClientRequestHandler {
 		}
 
 		params.putQAntArray("mails", mailArr);
-		send(CMD, params, user);
+		send(ExtensionEvent.CMD_MAIL, params, user);
 	}
 
 }

@@ -18,9 +18,13 @@ public interface HeroStageRepository extends MongoRepository<HeroStage, Long> {
 	@Query("{'heroId' : ?0, 'chapterIndex' : ?1}")
 	List<HeroStage> findStages(String heroId, int chapterId);
 
+
 	@Query("{'heroId' : ?0, 'chapterIndex' : ?1, 'lastestSweepTime' : {'$lt' : ?2} }")
 	List<HeroStage> findStages(String heroId, int chapterId, long startOfDateMilis);
 
 
 	HeroStage findStageByHeroIdAndIndex(String heroId, int index);
+
+
+	HeroStage findStageByHeroIdAndClearIsFalse(String heroId);
 }

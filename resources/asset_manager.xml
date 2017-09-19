@@ -1,0 +1,34 @@
+<?xml version="1.0" encoding="UTF-8" standalone="yes"?>
+<AssetList>
+	<Asset Index="100" ResChar="100" Animations="attack" SpineHit="slashRed1" HitTiming="0.33" SpineSkill="1000" SpineSkillHit="slashRed1" SkillTiming="0.33"/>
+	<Asset Index="101" ResChar="101" Animations="attack" SpineHit="slashRed1" HitTiming="0.33" SpineSkill="1000" SpineSkillHit="slashRed1" SkillTiming="0.33"/>
+	<Asset Index="102" ResChar="102" Animations="attack" SpineHit="slashBlue1" HitTiming="0.33" SpineSkill="1010" SpineSkillHit="slashBlue1" SkillTiming="0.33"/>
+	<Asset Index="103" ResChar="103" Animations="attack" SpineHit="slashGreen1" HitTiming="0.33" SpineSkill="1000" SpineSkillHit="slashGreen1" SkillTiming="0.33"/>
+	<Asset Index="200" ResChar="200" Animations="attack" SpineHit="hitBlue1" HitTiming="0.33" SpineSkill="2110" SpineSkillHit="hitBlue1" SkillTiming="0.33"/>
+	<Asset Index="300" ResChar="300" Animations="attack" SpineHit="hitBlue1" HitTiming="0.33" SpineSkill="3010" SpineSkillHit="hitBlue1" SkillTiming="0.33"/>
+	<Asset Index="400" ResChar="400" Animations="attack1#attack2#attack3" SpineHit="hitRed1#hitRed2#hitRed3" HitTiming="0.25#0.33#0.5" SpineSkill="6000" SpineSkillHit="hitRed1#hitRed2#hitRed3" SkillTiming="0.25#0.33#0.5"/>
+	<Asset Index="402" ResChar="402" Animations="attack1#attack2#attack3" SpineHit="hitRed1#hitRed2#hitRed3" HitTiming="0.25#0.33#0.5" SpineSkill="6010" SpineSkillHit="hitRed1#hitRed2#hitRed3" SkillTiming="0.25#0.33#0.5"/>
+	<Asset Index="999" ResChar="100" Animations="attack" SpineHit="slashRed1" HitTiming="0.33" SpineSkill="1000" SpineSkillHit="slashRed1" SkillTiming="0.33"/>
+	<Asset Index="1003" ResChar="bullfighter" Animations="attack" SpineHit="hitBlue1" HitTiming="0.17"/>
+	<Asset Index="1004" ResChar="bullfighter" Animations="attack" SpineHit="hitBlue1" HitTiming="0.17"/>
+	<Asset Index="1005" ResChar="skeleton" Animations="attack" SpineHit="hitBlue1" HitTiming="0.17"/>
+	<Asset Index="1006" ResChar="skeletonarcher" Animations="attack" SpineHit="hitBlue1" HitTiming="0.35"/>
+	<Asset Index="1007" ResChar="armoredskeleton" Animations="attack" SpineHit="hitBlue1" HitTiming="0.17"/>
+	<Asset Index="1008" ResChar="armoredskeleton" Animations="attack" SpineHit="hitBlue1" HitTiming="0.17"/>
+	<Asset Index="1009" ResChar="spider" Animations="attack" SpineHit="hitBlue1" HitTiming="0.17"/>
+	<Asset Index="1010" ResChar="hellspider" Animations="attack" SpineHit="hitBlue1" HitTiming="0.1"/>
+	<Asset Index="1011" ResChar="hound" Animations="attack" SpineHit="hitBlue1" HitTiming="0.17"/>
+	<Asset Index="1012" ResChar="hellhound" Animations="attack" SpineHit="hitBlue1" HitTiming="0.17"/>
+	<Asset Index="1013" ResChar="spider" Animations="attack" SpineHit="hitBlue1" HitTiming="0.17"/>
+	<Asset Index="1014" ResChar="goblin" Animations="attack" SpineHit="hitBlue1" HitTiming="0.17"/>
+	<Asset Index="1015" ResChar="goblin" Animations="attack" SpineHit="hitBlue1" HitTiming="0.17"/>
+	<Asset Index="1016" ResChar="beetle" Animations="attack" SpineHit="hitBlue1" HitTiming="0.17"/>
+	<Asset Index="1017" ResChar="stonegolem" Animations="attack" SpineHit="hitBlue1" HitTiming="0.17"/>
+	<Asset Index="1018" ResChar="worm" Animations="attack" SpineHit="hitBlue1" HitTiming="0.17"/>
+	<Asset Index="1019" ResChar="hommerd" Animations="attack" SpineHit="hitBlue1" HitTiming="0.17"/>
+	<Asset Index="1020" ResChar="worm" Animations="attack" SpineHit="hitBlue1" HitTiming="0.17"/>
+	<Asset Index="1021" ResChar="worm" Animations="attack" SpineHit="hitBlue1" HitTiming="0.17"/>
+	<Asset Index="1022" ResChar="yeti" Animations="attack" SpineHit="hitBlue1" HitTiming="0.22"/>
+	<Asset Index="1023" ResChar="yeti" Animations="attack" SpineHit="hitBlue1" HitTiming="0.22"/>
+	<Asset Index="1024" ResChar="icequeen" Animations="attack" SpineHit="hitBlue1" HitTiming="0.33"/>
+</AssetList>

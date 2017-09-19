@@ -20,7 +20,6 @@ import com.creants.muext.services.MessageFactory;
  *
  */
 public class ItemRequestHandler extends BaseClientRequestHandler {
-	private static final String CMD = "cmd_item_req";
 	private static final int TAKE_ON = 1;
 	private static final int TAKE_OFF = 2;
 	private static final int CONSUME_ITEM = 3;
@@ -39,7 +38,8 @@ public class ItemRequestHandler extends BaseClientRequestHandler {
 	public void handleClientRequest(QAntUser user, IQAntObject params) {
 		Integer action = params.getInt("act");
 		if (action == null) {
-			sendError(MessageFactory.createErrorMsg(CMD, GameErrorCode.LACK_OF_INFOMATION), user);
+			sendError(MessageFactory.createErrorMsg(ExtensionEvent.CMD_ITEM_REQ, GameErrorCode.LACK_OF_INFOMATION),
+					user);
 			return;
 		}
 		switch (action) {
@@ -69,19 +69,21 @@ public class ItemRequestHandler extends BaseClientRequestHandler {
 	private void upgradeItem(QAntUser user, IQAntObject params) {
 		Long itemId = params.getLong("id");
 		if (itemId == null) {
-			sendError(MessageFactory.createErrorMsg(CMD, GameErrorCode.LACK_OF_INFOMATION), user);
+			sendError(MessageFactory.createErrorMsg(ExtensionEvent.CMD_ITEM_REQ, GameErrorCode.LACK_OF_INFOMATION),
+					user);
 			return;
 		}
 
 		HeroItem item = heroItemManager.getEquipment(itemId, user.getName());
 		if (item == null) {
-			sendError(MessageFactory.createErrorMsg(CMD, GameErrorCode.NOT_EXIST_ITEM), user);
+			sendError(MessageFactory.createErrorMsg(ExtensionEvent.CMD_ITEM_REQ, GameErrorCode.NOT_EXIST_ITEM), user);
 			return;
 		}
 
 		boolean isEquipment = ItemConfig.getInstance().isEquipment(item.getIndex());
 		if (!isEquipment) {
-			sendError(MessageFactory.createErrorMsg(CMD, GameErrorCode.CAN_NOT_UPGRADE_ITEM), user);
+			sendError(MessageFactory.createErrorMsg(ExtensionEvent.CMD_ITEM_REQ, GameErrorCode.CAN_NOT_UPGRADE_ITEM),
+					user);
 			return;
 		}
 
@@ -93,13 +95,14 @@ public class ItemRequestHandler extends BaseClientRequestHandler {
 		Long itemId = params.getLong("itemId");
 		Integer slot = params.getInt("slotIndex");
 		if (heroId == null || itemId == null || slot == null) {
-			sendError(MessageFactory.createErrorMsg(CMD, GameErrorCode.LACK_OF_INFOMATION), user);
+			sendError(MessageFactory.createErrorMsg(ExtensionEvent.CMD_ITEM_REQ, GameErrorCode.LACK_OF_INFOMATION),
+					user);
 			return;
 		}
 
 		HeroEquipment item = heroItemManager.getEquipment(itemId, user.getName());
 		if (item == null || item.getHeroId() != null) {
-			sendError(MessageFactory.createErrorMsg(CMD, GameErrorCode.ITEM_IS_USING), user);
+			sendError(MessageFactory.createErrorMsg(ExtensionEvent.CMD_ITEM_REQ, GameErrorCode.ITEM_IS_USING), user);
 			return;
 		}
 
@@ -116,7 +119,7 @@ public class ItemRequestHandler extends BaseClientRequestHandler {
 		response.putLong("itemId", itemId);
 		heroItemManager.takeOn(item, heroId, slot);
 
-		send(CMD, response, user);
+		send(ExtensionEvent.CMD_ITEM_REQ, response, user);
 	}
 
 
@@ -124,14 +127,15 @@ public class ItemRequestHandler extends BaseClientRequestHandler {
 		Long heroId = params.getLong("heroId");
 		Long itemId = params.getLong("itemId");
 		if (heroId == null || itemId == null) {
-			sendError(MessageFactory.createErrorMsg(CMD, GameErrorCode.LACK_OF_INFOMATION), user);
+			sendError(MessageFactory.createErrorMsg(ExtensionEvent.CMD_ITEM_REQ, GameErrorCode.LACK_OF_INFOMATION),
+					user);
 			return;
 		}
 
 		// kết hợp itemId với gameHeroId 1 lần
 		HeroEquipment equipment = heroItemManager.getEquipment(itemId, user.getName(), heroId);
 		if (equipment == null) {
-			sendError(MessageFactory.createErrorMsg(CMD, GameErrorCode.NOT_EXIST_ITEM), user);
+			sendError(MessageFactory.createErrorMsg(ExtensionEvent.CMD_ITEM_REQ, GameErrorCode.NOT_EXIST_ITEM), user);
 			return;
 		}
 
@@ -144,7 +148,7 @@ public class ItemRequestHandler extends BaseClientRequestHandler {
 
 		heroItemManager.takeOff(equipment);
 
-		send(CMD, response, user);
+		send(ExtensionEvent.CMD_ITEM_REQ, response, user);
 	}
 
 
@@ -161,7 +165,7 @@ public class ItemRequestHandler extends BaseClientRequestHandler {
 	private void getItem(QAntUser user, IQAntObject params) {
 		List<HeroItem> items = heroItemManager.getItems(user.getName());
 		if (items == null) {
-			send(CMD, null, user);
+			send(ExtensionEvent.CMD_ITEM_REQ, null, user);
 			return;
 		}
 
@@ -173,6 +177,6 @@ public class ItemRequestHandler extends BaseClientRequestHandler {
 		params = QAntObject.newInstance();
 		params.putQAntArray("items", qantArr);
 
-		send(CMD, params, user);
+		send(ExtensionEvent.CMD_ITEM_REQ, params, user);
 	}
 }

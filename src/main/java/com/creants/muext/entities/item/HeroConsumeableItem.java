@@ -2,6 +2,8 @@ package com.creants.muext.entities.item;
 
 import org.springframework.data.annotation.Transient;
 
+import com.creants.muext.entities.ItemBase;
+
 /**
  * @author LamHM
  *
@@ -52,8 +54,15 @@ public class HeroConsumeableItem extends HeroItem {
 	}
 
 
-	public void setItemBase(ConsumeableItemBase itemBase) {
-		this.itemBase = itemBase;
+	@Override
+	public void setItemBase(ItemBase itemBase) {
+		this.itemBase = (ConsumeableItemBase) itemBase;
 	}
 
+
+	@Override
+	public boolean equals(Object obj) {
+		HeroConsumeableItem heroItem = (HeroConsumeableItem) obj;
+		return this.getItemGroup() == heroItem.getItemGroup() && this.index == heroItem.getIndex();
+	}
 }

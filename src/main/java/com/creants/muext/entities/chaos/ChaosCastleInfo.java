@@ -1,6 +1,7 @@
 package com.creants.muext.entities.chaos;
 
 import org.springframework.data.annotation.Id;
+import org.springframework.data.mongodb.core.mapping.DBRef;
 import org.springframework.data.mongodb.core.mapping.Document;
 
 import com.creants.creants_2x.socket.gate.protocol.serialization.SerializableQAntType;
@@ -13,23 +14,16 @@ import com.creants.creants_2x.socket.gate.protocol.serialization.SerializableQAn
 public class ChaosCastleInfo implements SerializableQAntType {
 	@Id
 	private transient String gameHeroId;
+	public String rank;
 	public int ticketNo;
 	public int chaosPoint;
-	public Long[] battleTeam;
 	private transient long beginTime;
-	private ChaosCastleStage unlockStage;
-	private transient int lastStageFinish;
-	public String rank;
 	private transient int completedNo;
-	private transient int maxPower;
-	private int teamPower;
-	private boolean chaosCastleUnlock;
-	private transient boolean isNPC;
+	private transient int lastStageFinish;
+	public ChaosCastleStage stage;
 
-
-	public ChaosCastleInfo() {
-		battleTeam = new Long[] { -1L, -1L, -1L, -1L };
-	}
+	@DBRef(db = "chaos-castle-power")
+	private ChaosCastlePower chaosCastlePower;
 
 
 	public String getGameHeroId() {
@@ -62,16 +56,6 @@ public class ChaosCastleInfo implements SerializableQAntType {
 	}
 
 
-	public Long[] getBattleTeam() {
-		return battleTeam;
-	}
-
-
-	public void setBattleTeam(Long[] battleTeam) {
-		this.battleTeam = battleTeam;
-	}
-
-
 	public long getBeginTime() {
 		return beginTime;
 	}
@@ -82,13 +66,13 @@ public class ChaosCastleInfo implements SerializableQAntType {
 	}
 
 
-	public ChaosCastleStage getUnlockStage() {
-		return unlockStage;
+	public ChaosCastleStage getStage() {
+		return stage;
 	}
 
 
-	public void setUnlockStage(ChaosCastleStage unlockStage) {
-		this.unlockStage = unlockStage;
+	public void setStage(ChaosCastleStage stage) {
+		this.stage = stage;
 	}
 
 
@@ -122,43 +106,13 @@ public class ChaosCastleInfo implements SerializableQAntType {
 	}
 
 
-	public int getMaxPower() {
-		return maxPower;
+	public ChaosCastlePower getChaosCastlePower() {
+		return chaosCastlePower;
 	}
 
 
-	public void setMaxPower(int maxPower) {
-		this.maxPower = maxPower;
-	}
-
-
-	public int getTeamPower() {
-		return teamPower;
-	}
-
-
-	public void setTeamPower(int teamPower) {
-		this.teamPower = teamPower;
-	}
-
-
-	public boolean isChaosCastleUnlock() {
-		return chaosCastleUnlock;
-	}
-
-
-	public void setChaosCastleUnlock(boolean chaosCastleUnlock) {
-		this.chaosCastleUnlock = chaosCastleUnlock;
-	}
-
-
-	public boolean isNPC() {
-		return isNPC;
-	}
-
-
-	public void setNPC(boolean isNPC) {
-		this.isNPC = isNPC;
+	public void setChaosCastlePower(ChaosCastlePower chaosCastlePower) {
+		this.chaosCastlePower = chaosCastlePower;
 	}
 
 }

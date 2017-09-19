@@ -33,6 +33,7 @@ public class GameHero implements SerializableQAntType {
 	public long staUpdTime;
 	public int vipLevel;
 	public int vipPoint;
+	public int friendPoint;
 	public int maxVipPoint;
 	public boolean isNPC;
 
@@ -80,6 +81,16 @@ public class GameHero implements SerializableQAntType {
 
 	public int getMaxVipPoint() {
 		return vipLevel * 300;
+	}
+
+
+	public int getFriendPoint() {
+		return friendPoint;
+	}
+
+
+	public void setFriendPoint(int friendPoint) {
+		this.friendPoint = friendPoint;
 	}
 
 

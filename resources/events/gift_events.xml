@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <GiftEventList Revision="1" UpdateTime="8-8-2017 11:12">
-	<GiftEvent Index="0" CategoryId="0" EventName="Điểm danh" Description="Điểm danh hàng ngày nhận quà hấp dẫn " GiftList="11012/2#11011/2#11051/1#11051/1#11051/1#11051/1#11051/1"/>
+	<GiftEvent Index="0" CategoryId="0" EventName="Điểm danh" Description="Điểm danh hàng ngày nhận quà hấp dẫn " GiftList="11012/2#11011/2#11050/1#11050/1#11050/1#11050/1#11050/1"/>
 	<GiftEvent Index="1" CategoryId="1" EventName="Gift code" Description="Nhập gift code nhận quà"/>
 </GiftEventList>
 

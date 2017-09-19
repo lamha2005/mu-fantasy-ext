@@ -2,21 +2,31 @@ package com.creants.muext.entities.chaos;
 
 import java.util.List;
 
+import org.springframework.data.annotation.Transient;
+
 import com.creants.creants_2x.socket.gate.protocol.serialization.SerializableQAntType;
+import com.creants.muext.entities.ext.ShortItemExt;
 
 /**
  * @author LamHM
  *
  */
 public class ChaosCastleStage implements SerializableQAntType {
-	private int id;
-	private String accName;
-	private List<ChaosHeroClass> heroes;
-	private int teamPower;
-	private int level;
-	private String rewardString;
-	private ChaosRewardPackage rewardPackage;
-	private boolean clamed;
+	public int id;
+	public String accName;
+	public Long[] battleTeam;
+	public int teamPower;
+	public int level;
+	public List<OpponentHeroClass> heroes;
+
+	@Transient
+	public List<ShortItemExt> reward;
+	public boolean clamed;
+
+
+	public ChaosCastleStage() {
+		battleTeam = new Long[] { -1L, -1L, -1L, -1L };
+	}
 
 
 	public int getId() {
@@ -39,12 +49,12 @@ public class ChaosCastleStage implements SerializableQAntType {
 	}
 
 
-	public List<ChaosHeroClass> getHeroes() {
+	public List<OpponentHeroClass> getHeroes() {
 		return heroes;
 	}
 
 
-	public void setHeroes(List<ChaosHeroClass> heroes) {
+	public void setHeroes(List<OpponentHeroClass> heroes) {
 		this.heroes = heroes;
 	}
 
@@ -69,23 +79,13 @@ public class ChaosCastleStage implements SerializableQAntType {
 	}
 
 
-	public String getRewardString() {
-		return rewardString;
+	public List<ShortItemExt> getReward() {
+		return reward;
 	}
 
 
-	public void setRewardString(String rewardString) {
-		this.rewardString = rewardString;
-	}
-
-
-	public ChaosRewardPackage getRewardPackage() {
-		return rewardPackage;
-	}
-
-
-	public void setRewardPackage(ChaosRewardPackage rewardPackage) {
-		this.rewardPackage = rewardPackage;
+	public void setReward(List<ShortItemExt> reward) {
+		this.reward = reward;
 	}
 
 
@@ -96,6 +96,16 @@ public class ChaosCastleStage implements SerializableQAntType {
 
 	public void setClamed(boolean clamed) {
 		this.clamed = clamed;
+	}
+
+
+	public Long[] getBattleTeam() {
+		return battleTeam;
+	}
+
+
+	public void setBattleTeam(Long[] battleTeam) {
+		this.battleTeam = battleTeam;
 	}
 
 }

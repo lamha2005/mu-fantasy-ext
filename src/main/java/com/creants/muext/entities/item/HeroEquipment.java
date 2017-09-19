@@ -2,24 +2,27 @@ package com.creants.muext.entities.item;
 
 import org.springframework.data.annotation.Transient;
 
+import com.creants.muext.entities.ItemBase;
+
 /**
  * @author LamHM
  *
  */
 public class HeroEquipment extends HeroItem {
-	private int level;
-	private Long heroId;
-	private Integer slotIndex;
+	public int level;
+	public Long heroId;
+	public Integer slotIndex;
 	@Transient
-	private int atk;
+	public int atk;
 	@Transient
-	private int hp;
+	public int hp;
 	@Transient
-	private int rec;
+	public int rec;
 	@Transient
-	private int def;
+	public int def;
 
-	private int power;
+	@Transient
+	public int power;
 	@Transient
 	private transient EquipmentBase equipmentBase;
 
@@ -28,12 +31,18 @@ public class HeroEquipment extends HeroItem {
 	};
 
 
+	/**
+	 * Tạo mới equipment
+	 * 
+	 * @param equipmentBase
+	 */
 	public HeroEquipment(EquipmentBase equipmentBase) {
 		this.equipmentBase = equipmentBase;
 		setIndex(equipmentBase.getIndex());
 		setItemGroup(equipmentBase.getGroupId());
 		setElement(equipmentBase.getElemental());
-		levelUp(0);
+		setRank(equipmentBase.getItemRank());
+		levelUp(1);
 	}
 
 
@@ -72,11 +81,14 @@ public class HeroEquipment extends HeroItem {
 	}
 
 
-	public void setEquipmentBase(EquipmentBase equipmentBase) {
-		this.equipmentBase = equipmentBase;
+	@Override
+	public void setItemBase(ItemBase itemBase) {
+		this.equipmentBase = (EquipmentBase) itemBase;
 		setIndex(equipmentBase.getIndex());
 		setItemGroup(equipmentBase.getGroupId());
-		levelUp(0);
+		setElement(equipmentBase.getElemental());
+		setRank(equipmentBase.getItemRank());
+		updateBaseStats();
 	}
 
 

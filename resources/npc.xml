@@ -2,18 +2,15 @@
 <NPCList Revision="1">
 	<NPCGameHero Id="mus1#1#npc" Name="Long Chó Điên 1" Level="10" UserId="-1">
 		<HeroList>
-			<NPCHeroClass ClassIndex="100" CharRank="4" Level="10"/>
-			<NPCHeroClass ClassIndex="102" CharRank="2" Level="12"/>
-			<NPCHeroClass ClassIndex="300" CharRank="2" Level="11"/>
-			<NPCHeroClass ClassIndex="103" CharRank="3" Level="11"/>
+			<NPCHeroClass ClassIndex="100" CharRank="4" Level="1"/>
+			<NPCHeroClass ClassIndex="102" CharRank="2" Level="1"/>
 		</HeroList>
 	</NPCGameHero>
 	<NPCGameHero Id="mus1#2#npc" Name="VFF óc chó 1" Level="11" UserId="-1">
 		<HeroList>
-			<NPCHeroClass ClassIndex="100" CharRank="4" Level="15"/>
-			<NPCHeroClass ClassIndex="102" CharRank="2" Level="15"/>
-			<NPCHeroClass ClassIndex="300" CharRank="2" Level="15"/>
-			<NPCHeroClass ClassIndex="103" CharRank="3" Level="15"/>
+			<NPCHeroClass ClassIndex="100" CharRank="4" Level="1"/>
+			<NPCHeroClass ClassIndex="102" CharRank="2" Level="1"/>
+			<NPCHeroClass ClassIndex="100" CharRank="2" Level="1"/>
 		</HeroList>
 	</NPCGameHero>
 	<NPCGameHero Id="mus1#3#npc" Name="Long Chó Điên 3" Level="12" UserId="-1">

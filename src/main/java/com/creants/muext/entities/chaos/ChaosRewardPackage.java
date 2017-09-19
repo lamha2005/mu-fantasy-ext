@@ -7,9 +7,9 @@ import com.creants.creants_2x.socket.gate.protocol.serialization.SerializableQAn
  *
  */
 public class ChaosRewardPackage implements SerializableQAntType {
-	private int zen;
-	private int chaosPoint;
-	private String rewardString;
+	public int zen;
+	public int chaosPoint;
+	public String rewardString;
 
 
 	public int getZen() {

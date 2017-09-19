@@ -16,8 +16,8 @@
              <xs:attribute name="ItemRank" type="xs:int"/>
              <xs:attribute name="SkillIndex" type="xs:int"/>
              <xs:attribute name="OptionIndex" type="xs:int"/>
-             <xs:attribute name="Elemental" type="xs:string"/>
              <xs:attribute name="TwoHanded" type="xs:boolean"/>
+             <xs:attribute name="Elemental" type="xs:string"/>
              <xs:attribute name="LVRequire" type="xs:int"/>
              <xs:attribute name="ATK" type="xs:int"/>
              <xs:attribute name="HP" type="xs:int"/>

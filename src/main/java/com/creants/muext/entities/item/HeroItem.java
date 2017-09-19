@@ -1,17 +1,19 @@
 package com.creants.muext.entities.item;
 
 import org.springframework.data.annotation.Id;
+import org.springframework.data.annotation.Transient;
 import org.springframework.data.mongodb.core.index.Indexed;
 import org.springframework.data.mongodb.core.mapping.Document;
 
 import com.creants.creants_2x.socket.gate.protocol.serialization.SerializableQAntType;
+import com.creants.muext.entities.ItemBase;
 
 /**
  * @author LamHM
  *
  */
 @Document(collection = "hero-items")
-public class HeroItem implements SerializableQAntType {
+public abstract class HeroItem implements SerializableQAntType {
 	@Id
 	public long id;
 	@Indexed
@@ -19,9 +21,11 @@ public class HeroItem implements SerializableQAntType {
 
 	public int index;
 
+	@Transient
 	public int rank;
 
-	private String element;
+	@Transient
+	public String element;
 
 	private transient int itemGroup;
 
@@ -110,11 +114,7 @@ public class HeroItem implements SerializableQAntType {
 	}
 
 
-	@Override
-	public boolean equals(Object obj) {
-		HeroItem heroItem = (HeroItem) obj;
-		return this.itemGroup == heroItem.getItemGroup() && this.index == heroItem.getIndex();
-	}
+	public abstract void setItemBase(ItemBase itemBase);
 
 
 	@Override

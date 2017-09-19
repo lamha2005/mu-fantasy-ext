@@ -40,8 +40,7 @@ import com.creants.muext.services.QuestManager;
  * 
  * @author LamHa
  */
-public class StageFinishRequestHandlerV2 extends BaseClientRequestHandler {
-	private static final String CMD = "cmd_stage_finish";
+public class StageFinishRequestHandler extends BaseClientRequestHandler {
 	private static final int UNLOCK_NEW_STAGE = 1;
 	private GameHeroRepository repository;
 	private MatchManager matchManager;
@@ -51,9 +50,10 @@ public class StageFinishRequestHandlerV2 extends BaseClientRequestHandler {
 	private AutoIncrementService autoIncrService;
 	private BattleTeamRepository battleTeamRepository;
 	private HeroItemManager heroItemManager;
+	private static final StageConfig stageConfig = StageConfig.getInstance();
 
 
-	public StageFinishRequestHandlerV2() {
+	public StageFinishRequestHandler() {
 		matchManager = Creants2XApplication.getBean(MatchManager.class);
 		repository = Creants2XApplication.getBean(GameHeroRepository.class);
 		questManager = Creants2XApplication.getBean(QuestManager.class);
@@ -96,7 +96,7 @@ public class StageFinishRequestHandlerV2 extends BaseClientRequestHandler {
 				response.putQAntObject("update", updateObj);
 			}
 
-			send(CMD, response, user);
+			send(ExtensionEvent.CMD_STAGE_FINISH, response, user);
 			return;
 		}
 
@@ -108,13 +108,13 @@ public class StageFinishRequestHandlerV2 extends BaseClientRequestHandler {
 
 		matchManager.removeMatch(gameHeroId);
 		Integer stageIndex = match.getInt(StageRequestHandler.STAGE_INDEX);
-		Stage stage = StageConfig.getInstance().getStage(stageIndex);
+		Stage stage = stageConfig.getStage(stageIndex);
 		HeroStage heroStage = heroStageRepository.findStageByHeroIdAndIndex(gameHeroId, stageIndex);
 		boolean isFirstTime = !heroStage.isClear();
 
 		// xử lý trả thưởng
-		QAntObject response = processReward(user, stage, isFirstTime);
-		send(CMD, response, user);
+		QAntObject response = processReward(match, user, stage, isFirstTime);
+		send(ExtensionEvent.CMD_STAGE_FINISH, response, user);
 
 		notifyAssetChange(user, stage);
 		processHeroStage(user, heroStage);
@@ -132,24 +132,22 @@ public class StageFinishRequestHandlerV2 extends BaseClientRequestHandler {
 			heroStage.getHeroId();
 
 			// mở 1 stage mới
-			Stage nextStage = StageConfig.getInstance().getStage(heroStage.getIndex() + 1);
+			Stage nextStage = stageConfig.getNextStage(heroStage.getIndex());
 			HeroStage newStage = new HeroStage(nextStage);
-
 			newStage.setHeroId(gameHeroId);
 			newStage.setId(autoIncrService.genHeroStageId());
 			newStage.setUnlock(true);
 			heroStageRepository.save(newStage);
 
-			if (nextStage.getChapterIndex() > newStage.getChapterIndex()) {
-				// TODO thông báo mở chương mới
-				QAntTracer.debug(this.getClass(), "----------------------------->> Mo chuong moi");
-			}
-
 			QAntObject response = QAntObject.newInstance();
 			response.putInt("type", UNLOCK_NEW_STAGE);
-			response.putQAntObject("data", QAntObject.newFromObject(newStage));
-			send("cmd_notification", response, user);
+			response.putInt("stage_index", newStage.getIndex());
+			if (nextStage.getChapterIndex() > heroStage.getChapterIndex()) {
+				QAntTracer.debug(this.getClass(), "----------------------------->> Mo chuong moi: " + user.getName());
+				response.putInt("chapter_index", newStage.getChapterIndex());
+			}
 
+			send(ExtensionEvent.CMD_NTF_UNLOCK, response, user);
 		} else {
 			// TODO nếu sao lớn hơn thì cập nhật lại sao
 			heroStage.setSweepTimes(heroStage.getSweepTimes() + 1);
@@ -160,12 +158,11 @@ public class StageFinishRequestHandlerV2 extends BaseClientRequestHandler {
 	}
 
 
-	private QAntObject processReward(QAntUser user, Stage stage, boolean isFirstTime) {
+	private QAntObject processReward(IQAntObject match, QAntUser user, Stage stage, boolean isFirstTime) {
 		long startTime = System.currentTimeMillis();
 		QAntObject response = QAntObject.newInstance();
 		QAntObject reward = QAntObject.newInstance();
 		int starNo = 3;
-		List<HeroItem> bonusItems = stage.getBonus();
 		int expReward = stage.getExpReward();
 
 		BattleTeam battleTeam = battleTeamRepository.findOne(user.getName());
@@ -195,9 +192,10 @@ public class StageFinishRequestHandlerV2 extends BaseClientRequestHandler {
 			}
 		}
 
-		if (bonusItems.size() > 0) {
-			reward.putQAntArray("items_bonus", itemInstance.buildShortItemInfo(bonusItems));
-			updateItems.addAll(bonusItems);
+		IQAntArray casArray = match.getCASArray("items_bonus");
+		if (casArray.size() > 0) {
+			reward.putQAntArray("items_bonus", casArray);
+			updateItems.addAll(itemInstance.convertToHeroItem(casArray));
 		}
 
 		response.putQAntObject("reward", reward);
@@ -241,7 +239,7 @@ public class StageFinishRequestHandlerV2 extends BaseClientRequestHandler {
 	 * @param gameHeroId
 	 */
 	private List<HeroQuest> processQuest(int stageIndex, String gameHeroId) {
-		Stage stage = StageConfig.getInstance().getStage(stageIndex);
+		Stage stage = stageConfig.getStage(stageIndex);
 		Set<Integer> monsters = stage.getMonsters();
 		Set<Integer> questIds = questManager.getQuestsContainMonster(monsters);
 		if (questIds == null || questIds.isEmpty()) {
@@ -310,7 +308,7 @@ public class StageFinishRequestHandlerV2 extends BaseClientRequestHandler {
 		gameHero.incrZen(stage.getZenReward());
 		assets.putLong("zen", gameHero.getZen());
 
-		send("cmd_assets_change", assets, user);
+		send(ExtensionEvent.CMD_NTF_ASSETS_CHANGE, assets, user);
 		repository.save(gameHero);
 	}
 

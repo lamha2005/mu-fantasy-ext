@@ -29,6 +29,8 @@ public class Monster implements SerializableQAntType {
 	public String img;
 	@JacksonXmlProperty(localName = "Type", isAttribute = true)
 	public String type;
+	@JacksonXmlProperty(localName = "Element", isAttribute = true)
+	public String element;
 
 	@JacksonXmlProperty(localName = "Damage", isAttribute = true)
 	public int dam;
@@ -194,6 +196,16 @@ public class Monster implements SerializableQAntType {
 
 	public int getDef() {
 		return def;
+	}
+
+
+	public String getElement() {
+		return element;
+	}
+
+
+	public void setElement(String element) {
+		this.element = element;
 	}
 
 

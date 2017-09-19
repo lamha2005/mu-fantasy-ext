@@ -16,6 +16,7 @@ import org.springframework.beans.factory.InitializingBean;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import com.creants.creants_2x.core.util.QAntTracer;
 import com.creants.muext.dao.HeroRepository;
 import com.creants.muext.entities.HeroBase;
 import com.creants.muext.entities.HeroClass;
@@ -51,6 +52,13 @@ public class HeroClassManager implements InitializingBean {
 
 		// TODO remove
 		// endowHero("mus1#317", HeroClassType.DARK_WIZARD);
+		// addHero("mus1#323");
+
+		HeroClass hero = createNewHero("#test", HeroClassType.Storm_Fighter);
+		hero.levelUp(5);
+		System.out.println("[DEBUG]" +  hero.getLevel() + "/exp:" + hero.getExp()+"/maxExp:" + hero.getMaxExp());
+		hero.incrExp(3000);
+		System.out.println("[DEBUG]" +  hero.getLevel() + "/exp:" + hero.getExp()+"/maxExp:" + hero.getMaxExp());
 	}
 
 
@@ -157,6 +165,14 @@ public class HeroClassManager implements InitializingBean {
 	}
 
 
+	public void addHero(String gameHeroId) {
+		List<HeroClass> heroes = new ArrayList<>(2);
+		heroes.add(createNewHero(gameHeroId, HeroClassType.Storm_Fighter));
+		heroes.add(createNewHero(gameHeroId, HeroClassType.Sacred_Fighter));
+		heroRepository.save(heroes);
+	}
+
+
 	public HeroClass createNewHero(String gameHeroId, HeroClassType type) {
 		HeroBase heroBase = getHeroBase(type.getId());
 		HeroClass heroClass = new HeroClass(heroBase);
@@ -164,6 +180,22 @@ public class HeroClassManager implements InitializingBean {
 		heroClass.setGameHeroId(gameHeroId);
 		resetSkill(heroClass, heroBase.getSkills());
 		return heroClass;
+	}
+
+
+	public void upgradeHero(HeroClass heroClass) {
+		HeroBase heroBase = heroClass.getHeroBase();
+
+		Integer evolveTo = heroBase.getEvolveTo();
+		HeroBase newHeroBase = getHeroBase(evolveTo);
+		heroClass.setIndex(newHeroBase.getIndex());
+		heroClass.setRank(heroClass.getRank() + 1);
+		heroClass.setSkillList(heroBase.getSkillList());
+		heroClass.setHeroBase(newHeroBase);
+		save(heroClass);
+		QAntTracer.info(this.getClass(),
+				String.format("upgradeHero success [gameHeroId: %s, heroId:%d, HeroIndex:%d, toHeroIndex:%d]",
+						heroClass.getGameHeroId(), heroClass.getId(), heroBase.getIndex(), heroClass.getIndex()));
 	}
 
 

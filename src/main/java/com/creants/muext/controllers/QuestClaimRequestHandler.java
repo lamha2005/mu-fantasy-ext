@@ -47,7 +47,7 @@ public class QuestClaimRequestHandler extends BaseClientRequestHandler {
 			params.putQAntObject("game_hero", QAntObject.newFromObject(gameHero));
 			heroQuest.setFinish(true);
 			questRepository.save(heroQuest);
-			send("cmd_quest_claim", params, user);
+			send(ExtensionEvent.CMD_QUEST_CLAIM, params, user);
 		} else {
 			QAntTracer.warn(this.getClass(), "Bad request! gameHeroId:" + user.getName());
 		}
@@ -77,7 +77,7 @@ public class QuestClaimRequestHandler extends BaseClientRequestHandler {
 
 		gameHero.setZen(gameHero.getZen() + reward.getZen());
 		assets.putLong("zen", gameHero.getZen());
-		send("cmd_assets_change", assets, user);
+		send(ExtensionEvent.CMD_NTF_ASSETS_CHANGE, assets, user);
 		repository.save(gameHero);
 
 	}

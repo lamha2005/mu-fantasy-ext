@@ -13,12 +13,16 @@ import javax.xml.stream.XMLStreamReader;
 
 import org.apache.commons.lang.StringUtils;
 
+import com.creants.creants_2x.socket.gate.entities.IQAntArray;
+import com.creants.creants_2x.socket.gate.entities.IQAntObject;
 import com.creants.creants_2x.socket.gate.entities.QAntArray;
 import com.creants.creants_2x.socket.gate.entities.QAntObject;
 import com.creants.muext.entities.ItemBase;
 import com.creants.muext.entities.ext.ShortItemExt;
 import com.creants.muext.entities.item.ConsumeableItemBase;
 import com.creants.muext.entities.item.EquipmentBase;
+import com.creants.muext.entities.item.HeroConsumeableItem;
+import com.creants.muext.entities.item.HeroEquipment;
 import com.creants.muext.entities.item.HeroItem;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.dataformat.xml.XmlMapper;
@@ -30,6 +34,9 @@ import com.fasterxml.jackson.dataformat.xml.XmlMapper;
 public class ItemConfig {
 	public static final String SEPERATE_OTHER_ITEM = "#";
 	public static final String SEPERATE_ITEM_NO = "/";
+
+	private static final int ZEN_INDEX = 11998;
+	private static final int CHAOS_POINT_INDEX = 11997;
 
 	private static final int CONSUMABLE_ITEM = 1;
 	private static final int EQUIPMENT_ITEM = 2;
@@ -106,7 +113,7 @@ public class ItemConfig {
 					equipment.setAvailableClassGroups(availableClassGroups);
 
 					String equipSlotString = equipment.getEquipSlotString();
-					String[] slotArr = StringUtils.split(equipSlotString, "#");
+					String[] slotArr = StringUtils.split(equipSlotString, SEPERATE_OTHER_ITEM);
 					int[] availableSlots = new int[slotArr.length];
 					for (int i = 0; i < slotArr.length; i++) {
 						availableSlots[i] = Integer.parseInt(slotArr[i]);
@@ -144,6 +151,32 @@ public class ItemConfig {
 	}
 
 
+	public List<HeroItem> splitItemToHeroItem(String itemArrString) {
+		List<int[]> itemsReward = new ArrayList<>();
+		if (StringUtils.isNotBlank(itemArrString)) {
+			String[] items = StringUtils.split(itemArrString, SEPERATE_OTHER_ITEM);
+			for (int i = 0; i < items.length; i++) {
+				String[] split = StringUtils.split(items[i], SEPERATE_ITEM_NO);
+				itemsReward.add(new int[] { Integer.parseInt(split[0]), Integer.parseInt(split[1]) });
+			}
+		}
+		return convertToHeroItem(itemsReward);
+	}
+
+
+	public List<String> splitItemString(String itemString) {
+		List<String> rewardList = new ArrayList<>();
+		if (StringUtils.isNotBlank(itemString)) {
+			String[] split = StringUtils.split(itemString, SEPERATE_OTHER_ITEM);
+			for (int i = 0; i < split.length; i++) {
+				rewardList.add(split[i]);
+			}
+		}
+
+		return rewardList;
+	}
+
+
 	public QAntArray buildShortItemInfo(List<HeroItem> bonusItems) {
 		QAntArray items = QAntArray.newInstance();
 		QAntObject obj = null;
@@ -157,11 +190,16 @@ public class ItemConfig {
 	}
 
 
+	public QAntArray buildShortItemInfo(String itemArrString) {
+		return buildShortItemInfo(splitItemToHeroItem(itemArrString));
+	}
+
+
 	private List<ShortItemExt> convertToItem(List<int[]> items) {
 		List<ShortItemExt> itemList = new ArrayList<>();
 		if (items.size() > 0) {
 			for (int[] ir : items) {
-				ItemBase itemBase = ItemConfig.getInstance().getItem(ir[0]);
+				ItemBase itemBase = getItem(ir[0]);
 				ShortItemExt item = new ShortItemExt();
 				item.setNo(ir[1]);
 				item.setIndex(itemBase.getIndex());
@@ -169,6 +207,84 @@ public class ItemConfig {
 			}
 		}
 		return itemList;
+	}
+
+
+	private List<HeroItem> convertToHeroItem(List<int[]> items) {
+		List<HeroItem> itemList = new ArrayList<>();
+		if (items.size() > 0) {
+			for (int[] ir : items) {
+				ItemBase itemBase = getItem(ir[0]);
+				if (itemBase instanceof EquipmentBase) {
+					HeroEquipment heroEquipment = new HeroEquipment((EquipmentBase) itemBase);
+					heroEquipment.setNo(1);
+					itemList.add(heroEquipment);
+					continue;
+				}
+
+				// trường hợp là consumable item nhưng không overlap
+				int no = ir[1];
+				ConsumeableItemBase consItemBase = (ConsumeableItemBase) itemBase;
+				if (consItemBase.getOverlap() > 1 || no <= 1) {
+					itemList.add(createHeroConsumableItem(consItemBase, no));
+					continue;
+				}
+
+				for (int i = 0; i < no; i++) {
+					itemList.add(createHeroConsumableItem(consItemBase, 1));
+				}
+			}
+		}
+		return itemList;
+	}
+
+
+	private HeroConsumeableItem createHeroConsumableItem(ConsumeableItemBase itemBase, int no) {
+		HeroConsumeableItem consItem = new HeroConsumeableItem();
+		consItem.setIndex(itemBase.getIndex());
+		consItem.setItemGroup(itemBase.getGroupId());
+		consItem.setElement(itemBase.getElemental());
+		consItem.setItemBase(itemBase);
+		consItem.setNo(no);
+		consItem.setOverlap(itemBase.getOverlap() > 1);
+		return consItem;
+	}
+
+
+	public List<HeroItem> convertToHeroItem(IQAntArray itemArr) {
+		List<int[]> items = new ArrayList<>();
+		for (int i = 0; i < itemArr.size(); i++) {
+			IQAntObject obj = itemArr.getQAntObject(i);
+			items.add(new int[] { obj.getInt("index"), obj.getInt("no") });
+
+		}
+		return convertToHeroItem(items);
+	}
+
+
+	public List<ShortItemExt> convertToItem(String itemArrString, Integer zen, Integer chaosPoint) {
+		if (zen != null && zen > 0) {
+			itemArrString += SEPERATE_OTHER_ITEM + ZEN_INDEX + SEPERATE_ITEM_NO + zen;
+		}
+
+		if (chaosPoint != null && chaosPoint > 0) {
+			itemArrString += SEPERATE_OTHER_ITEM + CHAOS_POINT_INDEX + SEPERATE_ITEM_NO + chaosPoint;
+		}
+
+		return splitItem(itemArrString);
+	}
+
+
+	public String combineToItemString(String itemArrString, Integer zen, Integer chaosPoint) {
+		if (zen != null && zen > 0) {
+			itemArrString += SEPERATE_OTHER_ITEM + ZEN_INDEX + SEPERATE_ITEM_NO + zen;
+		}
+
+		if (chaosPoint != null && chaosPoint > 0) {
+			itemArrString += SEPERATE_OTHER_ITEM + CHAOS_POINT_INDEX + SEPERATE_ITEM_NO + chaosPoint;
+		}
+
+		return itemArrString;
 	}
 
 
