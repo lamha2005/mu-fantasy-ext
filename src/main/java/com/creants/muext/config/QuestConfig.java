@@ -300,7 +300,6 @@ public class QuestConfig {
 
 	public static void main(String[] args) {
 		QuestConfig.getInstance().writeToJsonFile();
-		;
 	}
 
 }

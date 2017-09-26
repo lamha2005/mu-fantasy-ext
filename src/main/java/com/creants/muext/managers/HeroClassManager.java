@@ -1,22 +1,16 @@
 package com.creants.muext.managers;
 
-import java.io.FileInputStream;
 import java.util.ArrayList;
 import java.util.Collection;
-import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
-import java.util.NoSuchElementException;
-import java.util.Random;
-
-import javax.xml.stream.XMLInputFactory;
-import javax.xml.stream.XMLStreamReader;
 
 import org.springframework.beans.factory.InitializingBean;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import com.creants.creants_2x.core.util.QAntTracer;
+import com.creants.muext.config.HeroClassConfig;
 import com.creants.muext.dao.HeroRepository;
 import com.creants.muext.entities.HeroBase;
 import com.creants.muext.entities.HeroClass;
@@ -24,7 +18,6 @@ import com.creants.muext.entities.HeroClassType;
 import com.creants.muext.entities.Monster;
 import com.creants.muext.entities.skill.Skill;
 import com.creants.muext.services.AutoIncrementService;
-import com.fasterxml.jackson.dataformat.xml.XmlMapper;
 
 /**
  * @author LamHM
@@ -32,9 +25,7 @@ import com.fasterxml.jackson.dataformat.xml.XmlMapper;
  */
 @Service
 public class HeroClassManager implements InitializingBean {
-	private static final String HEROES_CONFIG = "resources/heroes.xml";
-	private static final XMLInputFactory f = XMLInputFactory.newFactory();
-
+	private static final HeroClassConfig heroConfig = HeroClassConfig.getInstance();
 	@Autowired
 	private AutoIncrementService autoIncrService;
 	@Autowired
@@ -42,54 +33,19 @@ public class HeroClassManager implements InitializingBean {
 	@Autowired
 	private HeroItemManager itemManager;
 
-	private Map<Integer, HeroBase> heroes;
 	private Map<Integer, Monster> monsters;
 
 
 	@Override
 	public void afterPropertiesSet() throws Exception {
-		loadHeroes();
-
 		// TODO remove
-		// endowHero("mus1#317", HeroClassType.DARK_WIZARD);
+		// endowHero("mus1#317", HeroClassType.GREEN_KNIGHT);
 		// addHero("mus1#323");
-
-		HeroClass hero = createNewHero("#test", HeroClassType.Storm_Fighter);
-		hero.levelUp(5);
-		System.out.println("[DEBUG]" +  hero.getLevel() + "/exp:" + hero.getExp()+"/maxExp:" + hero.getMaxExp());
-		hero.incrExp(3000);
-		System.out.println("[DEBUG]" +  hero.getLevel() + "/exp:" + hero.getExp()+"/maxExp:" + hero.getMaxExp());
 	}
 
 
 	public long genHeroId() {
 		return autoIncrService.genHeroId();
-	}
-
-
-	private void loadHeroes() {
-		try {
-			heroes = new HashMap<>();
-			XMLStreamReader sr = f.createXMLStreamReader(new FileInputStream(HEROES_CONFIG));
-			XmlMapper mapper = new XmlMapper();
-			sr.next(); // to point to <Heroes>
-			sr.next(); // to point to root-element under Heroes
-
-			HeroBase heroBase = null;
-			while (sr.hasNext()) {
-				try {
-					heroBase = mapper.readValue(sr, HeroBase.class);
-					heroes.put(heroBase.getIndex(), heroBase);
-				} catch (NoSuchElementException e) {
-
-				}
-			}
-
-			sr.close();
-		} catch (Exception e) {
-			e.printStackTrace();
-		}
-
 	}
 
 
@@ -130,6 +86,7 @@ public class HeroClassManager implements InitializingBean {
 			heroClass.setEquipments(itemManager.getTakeOnEquipments(heroClass.getId()));
 			heroes.add(heroClass);
 		}
+
 		return heroes;
 	}
 
@@ -145,7 +102,7 @@ public class HeroClassManager implements InitializingBean {
 
 
 	public HeroBase getHeroBase(int index) {
-		return heroes.get(index);
+		return heroConfig.getHeroBase(index);
 	}
 
 
@@ -155,8 +112,7 @@ public class HeroClassManager implements InitializingBean {
 
 
 	public List<HeroClass> summon(String gameHeroId) {
-		HeroBase heroBase = new ArrayList<>(heroes.values()).get((new Random()).nextInt(heroes.size()));
-		HeroClass createNewHero = createNewHero(gameHeroId, heroBase);
+		HeroClass createNewHero = createNewHero(gameHeroId, heroConfig.getRandomHero(100));
 		save(createNewHero);
 
 		List<HeroClass> heroList = new ArrayList<>();

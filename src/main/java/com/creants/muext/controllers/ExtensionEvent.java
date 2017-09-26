@@ -21,6 +21,7 @@ public class ExtensionEvent {
 	public static final String CMD_HERO = "cmd_hero";
 	public static final String CMD_MAIL = "cmd_mail";
 	public static final String CMD_CHAOS_CASTLE = "cmd_chaos_castle";
+	public static final String CMD_GET_ETOKEN = "cmd_get_etoken";
 
 	public static final String CMD_NTF_ASSETS_CHANGE = "cmd_assets_change";
 	public static final String CMD_NTF_UNLOCK = "cmd_unlock_notification";

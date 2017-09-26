@@ -1,5 +1,7 @@
 package com.creants.muext.entities.quest;
 
+import org.springframework.data.annotation.Transient;
+
 import com.creants.creants_2x.socket.gate.protocol.serialization.SerializableQAntType;
 
 /**
@@ -7,7 +9,9 @@ import com.creants.creants_2x.socket.gate.protocol.serialization.SerializableQAn
  *
  */
 public class AbstractQuest implements SerializableQAntType {
+	@Transient
 	public transient String name;
+	@Transient
 	public transient String desc;
 	public transient int groupId;
 	public transient int taskType;

@@ -16,7 +16,7 @@ public class Team implements SerializableQAntType {
 
 
 	public Team() {
-		heroes = new Long[] { -1L, -1L, -1L, -1L };
+		heroes = new Long[] { -1L, -1L, -1L, -1L, -1L };
 		index = -1;
 	}
 

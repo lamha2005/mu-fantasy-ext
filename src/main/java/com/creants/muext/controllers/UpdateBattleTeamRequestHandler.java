@@ -49,7 +49,8 @@ public class UpdateBattleTeamRequestHandler extends BaseClientRequestHandler {
 			team.setIndex(index != null ? index : -1);
 
 			Collection<Integer> heroList = teamObj.getIntArray("heroes");
-			Long[] heroArr = new Long[4];
+			// TODO validate heroList
+			Long[] heroArr = new Long[heroList.size()];
 			int count = 0;
 			for (long l : heroList) {
 				heroArr[count] = l;
@@ -58,6 +59,7 @@ public class UpdateBattleTeamRequestHandler extends BaseClientRequestHandler {
 			team.setHeroes(heroArr);
 
 			battleTeam.addTeam(team);
+			System.out.println("Update team:" + name + ", " + Arrays.toString(heroArr));
 		}
 
 		battleTeamRep.save(battleTeam);

@@ -305,6 +305,8 @@ public class HeroClass implements SerializableQAntType {
 			exp -= maxExp;
 			levelUp(1);
 			isLevelUp = true;
+			
+//			System.out.println(this);
 		}
 
 		return isLevelUp;
@@ -353,6 +355,12 @@ public class HeroClass implements SerializableQAntType {
 		}
 
 		return heroPower;
+	}
+
+
+	@Override
+	public String toString() {
+		return "{level:" + level + ",exp:" + exp + ",maxExp:" + maxExp + "}";
 	}
 
 }

@@ -35,6 +35,7 @@ dependencies {
     compile 'com.fasterxml.jackson.dataformat:jackson-dataformat-xml:2.8.8'
     compile group: 'org.quartz-scheduler', name: 'quartz', version: '2.3.0'
     compile 'de.jkeylockmanager:jkeylockmanager:2.1.0'
+    compile 'junit:junit:4.12'
 }
 
 compileJava.options.encoding = 'UTF-8'
