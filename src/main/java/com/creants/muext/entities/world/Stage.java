@@ -7,6 +7,7 @@ import java.util.Map;
 import java.util.Set;
 
 import org.apache.commons.lang.StringUtils;
+import org.springframework.data.annotation.Transient;
 
 import com.creants.creants_2x.socket.gate.protocol.serialization.SerializableQAntType;
 import com.creants.muext.config.ItemConfig;
@@ -67,11 +68,14 @@ public class Stage implements SerializableQAntType {
 	public int sweepTimes;
 
 	@JacksonXmlProperty(localName = "ExpReward", isAttribute = true)
+	@Transient
 	public transient int expReward;
 
 	@JacksonXmlProperty(localName = "ExpAccReward", isAttribute = true)
+	@Transient
 	public transient int expAccReward;
 
+	@Transient
 	private int nextStage;
 
 	private transient Map<Integer, Integer> monsterCountMap;
@@ -87,24 +91,12 @@ public class Stage implements SerializableQAntType {
 		monsterCountMap = new HashMap<>();
 		roundList = new ArrayList<>();
 		readMonsterIndex();
-		rewards = ItemConfig.getInstance().splitItemToHeroItem(firstTimeRewardString);
-		bonus = ItemConfig.getInstance().splitItemToHeroItem(randomBonusString);
+		ItemConfig itemConfig = ItemConfig.getInstance();
+		rewards = itemConfig.splitItemToHeroItem(firstTimeRewardString);
+		bonus = itemConfig.splitItemToHeroItem(randomBonusString);
 
-		firstTimeReward = splitRewardString(firstTimeRewardString);
-		randomBonus = splitRewardString(randomBonusString);
-	}
-
-
-	private List<String> splitRewardString(String rewardString) {
-		List<String> rewardList = new ArrayList<>();
-		if (StringUtils.isNotBlank(rewardString)) {
-			String[] split = StringUtils.split(rewardString, "#");
-			for (int i = 0; i < split.length; i++) {
-				rewardList.add(split[i]);
-			}
-		}
-
-		return rewardList;
+		firstTimeReward = itemConfig.splitRewardString(firstTimeRewardString);
+		randomBonus = itemConfig.splitRewardString(randomBonusString);
 	}
 
 
@@ -282,6 +274,11 @@ public class Stage implements SerializableQAntType {
 
 	public Set<Integer> getMonsters() {
 		return monsterCountMap.keySet();
+	}
+
+
+	public Map<Integer, Integer> getMonsterCountMap() {
+		return monsterCountMap;
 	}
 
 

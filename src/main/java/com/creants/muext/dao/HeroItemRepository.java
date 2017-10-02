@@ -2,6 +2,8 @@ package com.creants.muext.dao;
 
 import java.util.List;
 
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 import org.springframework.data.mongodb.repository.MongoRepository;
 import org.springframework.stereotype.Repository;
 
@@ -15,6 +17,9 @@ import com.creants.muext.entities.item.HeroItem;
 @Repository
 public interface HeroItemRepository extends MongoRepository<HeroItem, Long> {
 	List<HeroItem> findAllByGameHeroId(String gameHeroId);
+
+
+	Page<HeroItem> findAllByGameHeroId(String gameHeroId, Pageable page);
 
 
 	List<HeroConsumeableItem> findItemsByGameHeroIdAndIsOverlapIsTrue(String gameHeroId);

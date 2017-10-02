@@ -3,40 +3,45 @@ package com.creants.muext.config;
 import java.io.File;
 import java.io.FileInputStream;
 import java.util.ArrayList;
+import java.util.Collection;
 import java.util.HashMap;
 import java.util.HashSet;
 import java.util.List;
 import java.util.Map;
 import java.util.Set;
+import java.util.TreeMap;
 
 import javax.xml.stream.XMLInputFactory;
 import javax.xml.stream.XMLStreamReader;
 
-import org.apache.commons.lang.StringUtils;
-import org.apache.commons.lang.math.NumberUtils;
-
-import com.creants.muext.entities.ItemBase;
-import com.creants.muext.entities.Reward;
-import com.creants.muext.entities.quest.GroupDailyQuest;
-import com.creants.muext.entities.quest.GroupMainQuest;
+import com.creants.muext.entities.quest.HeroQuest;
+import com.creants.muext.entities.quest.KillMonsterQuest;
+import com.creants.muext.entities.quest.MonsterKillTask;
 import com.creants.muext.entities.quest.Quest;
-import com.creants.muext.entities.quest.Task;
-import com.creants.muext.entities.quest.TaskType;
-import com.creants.muext.services.QuestManager;
+import com.creants.muext.entities.quest.WinQuest;
+import com.creants.muext.entities.quest.WinTask;
 import com.fasterxml.jackson.databind.ObjectMapper;
+import com.fasterxml.jackson.dataformat.xml.XmlMapper;
 
 /**
  * @author LamHM
  *
  */
 public class QuestConfig {
+	public static final String QUEST_GROUP_DAILY = "daily";
+	public static final String QUEST_GROUP_NORMAL = "normal";
+
+	public static final int MONSTER_KILL = 1;
+	public static final int WIN_TASK = 2;
+
 	private static final String QUEST_CONFIG = "resources/quests.xml";
-	private static final String REWARD_CONFIG = "resources/quest_reward.xml";
 	private static final XMLInputFactory f = XMLInputFactory.newFactory();
 
 	private static QuestConfig instance;
-	private Map<Integer, Quest> quests;
-	private Map<Integer, Reward> rewardMap;
+	private Map<Integer, Quest> questMap;
+	private Map<Integer, HeroQuest> dailyQuestMap;
+	private Map<Integer, HeroQuest> normalQuestMap;
+	// Monster có trong các nhiệm vụ
 	private Map<Integer, Set<Integer>> monsterInQuest;
 
 
@@ -49,208 +54,82 @@ public class QuestConfig {
 
 
 	private QuestConfig() {
-		loadItems();
-		loadMonsters();
+		monsterInQuest = new HashMap<>();
+		questMap = new HashMap<>();
+		dailyQuestMap = new TreeMap<>();
+		normalQuestMap = new TreeMap<>();
+		loadQuest();
 	}
 
 
-	private void loadItems() {
-		rewardMap = new HashMap<>();
-
-		XMLStreamReader sr;
+	private void loadQuest() {
 		try {
-			sr = f.createXMLStreamReader(new FileInputStream(REWARD_CONFIG));
-			sr.next(); // to point to <Monsters>
-			while (sr.hasNext()) {
-				sr.next();
-
-				if (sr.getEventType() != XMLStreamReader.START_ELEMENT) {
-					continue;
-				}
-
-				Reward reward = new Reward();
-				int attributeCount = sr.getAttributeCount();
-				for (int i = 0; i < attributeCount; i++) {
-					String attName = sr.getAttributeLocalName(i);
-					String attValue = sr.getAttributeValue(i);
-
-					switch (attName) {
-						case "Index":
-							reward.setIndex(Integer.parseInt(attValue));
-							break;
-						case "Exp":
-							if (NumberUtils.isNumber(attValue)) {
-								reward.setExp(Integer.parseInt(attValue));
-							}
-							break;
-						case "Zen":
-							if (NumberUtils.isNumber(attValue)) {
-								reward.setZen(Integer.parseInt(attValue));
-							}
-							break;
-						case "Soul":
-							if (NumberUtils.isNumber(attValue)) {
-								reward.setSoul(Integer.parseInt(attValue));
-							}
-							break;
-						case "Items":
-							List<ItemBase> items = reward.getItems();
-							String[] itemArr = StringUtils.split(attValue, ";");
-							if (itemArr.length > 0) {
-								for (int j = 0; j < itemArr.length; j++) {
-									String[] infos = StringUtils.split(itemArr[j], ",");
-									if (infos.length <= 0)
-										continue;
-
-									ItemBase item = new ItemBase();
-									for (int k = 0; k < infos.length; k++) {
-										String[] stringItemArr = StringUtils.split(infos[k], "=");
-										if (stringItemArr[0].trim().startsWith("index")) {
-											item.setIndex(Integer.parseInt(stringItemArr[1].trim()));
-										} else if (stringItemArr[0].trim().startsWith("no")) {
-											// item.setNo(Integer.parseInt(stringItemArr[1].trim()));
-										}
-									}
-									items.add(item);
-								}
-							}
-							reward.setItems(items);
-							break;
-
-						default:
-							break;
-					}
-
-				}
-
-				rewardMap.put(reward.getIndex(), reward);
-			}
-			sr.close();
-		} catch (Exception e) {
-			e.printStackTrace();
-		}
-	}
-
-
-	public Reward getReward(int rewardIndex) {
-		return rewardMap.get(rewardIndex);
-	}
-
-
-	private void loadMonsters() {
-		try {
-			quests = new HashMap<>();
-			monsterInQuest = new HashMap<Integer, Set<Integer>>();
-
 			XMLStreamReader sr = f.createXMLStreamReader(new FileInputStream(QUEST_CONFIG));
-			sr.next(); // to point to <Monsters>
+			XmlMapper mapper = new XmlMapper();
+			sr.next();
+			sr.next();
+			Quest quest = null;
 			while (sr.hasNext()) {
-				sr.next();
-
-				if (sr.getEventType() != XMLStreamReader.START_ELEMENT) {
+				if (!sr.isStartElement()) {
+					sr.next();
 					continue;
 				}
 
-				int taskIndex = 0;
-				int taskGroup = 0;
-				int taskType = 0;
-				int monsterIndex1 = -1;
-				int monsterIndex2 = -1;
-				int taskCount = 0;
-				int rewardIndex = 0;
-				String taskName = null;
-				String taskDesc = null;
+				HeroQuest heroQuest = null;
+				int taskType = Integer.parseInt(sr.getAttributeValue(null, "TaskType"));
+				switch (taskType) {
+					case MONSTER_KILL:
+						MonsterKillTask monsterKillTask = mapper.readValue(sr, MonsterKillTask.class);
+						quest = monsterKillTask;
+						quest.convertBase();
 
-				// TODO tùy theo loại nhiệm vụ là gì thì đọc thông tin đó
-				int attributeCount = sr.getAttributeCount();
-				for (int i = 0; i < attributeCount; i++) {
-					String attName = sr.getAttributeLocalName(i);
-					String attValue = sr.getAttributeValue(i);
+						addMonsterToQuest(monsterKillTask.doGetMonsterList(), quest.getIndex());
 
-					switch (attName) {
-						case "TaskIndex":
-							taskIndex = Integer.parseInt(attValue);
-							break;
-						case "TaskName":
-							taskName = attValue;
-							break;
-						case "TaskDescription":
-							taskDesc = attValue;
-							break;
-						case "TaskGroup":
-							taskGroup = Integer.parseInt(attValue);
-							break;
-						case "TaskType":
-							taskType = Integer.parseInt(attValue);
-							break;
-						case "MonsterIndex1":
-							if (attValue != null && NumberUtils.isNumber(attValue)) {
-								monsterIndex1 = Integer.parseInt(attValue);
-							}
-							break;
-						case "MonsterIndex2":
-							if (attValue != null && NumberUtils.isNumber(attValue)) {
-								monsterIndex2 = Integer.parseInt(attValue);
-							}
-							break;
-						case "TaskCount":
-							if (attValue != null && NumberUtils.isNumber(attValue)) {
-								taskCount = Integer.parseInt(attValue);
-							}
-							break;
-						case "TaskReward":
-							rewardIndex = Integer.parseInt(attValue);
-							break;
+						KillMonsterQuest killQuest = new KillMonsterQuest();
+						killQuest.setMonsters(monsterKillTask.getMonsters());
+						heroQuest = killQuest;
+						break;
+					case WIN_TASK:
+						WinTask winTask = mapper.readValue(sr, WinTask.class);
+						quest.convertBase();
+						quest = winTask;
 
-						default:
-							break;
-					}
+						WinQuest winQuest = new WinQuest();
+						winQuest.setNo(winTask.getWinNo());
+						heroQuest = winQuest;
+						break;
 
+					default:
+						quest = null;
+						sr.next();
+						break;
 				}
 
-				Quest quest = null;
-				if (QuestManager.GROUP_MAIN_QUEST == taskGroup) {
-					quest = new GroupMainQuest();
-				} else {
-					quest = new GroupDailyQuest();
+				if (quest == null)
+					continue;
+
+				heroQuest.setQuestIndex(quest.getIndex());
+				heroQuest.setGroupId(quest.getGroupId());
+				heroQuest.setTaskType(taskType);
+
+				questMap.put(quest.getIndex(), quest);
+				switch (quest.getGroupId()) {
+					case QUEST_GROUP_NORMAL:
+						normalQuestMap.put(quest.getIndex(), heroQuest);
+						break;
+					case QUEST_GROUP_DAILY:
+						dailyQuestMap.put(quest.getIndex(), heroQuest);
+						break;
+
+					default:
+						break;
 				}
-
-				Task task = new Task();
-				if (taskType == TaskType.MonsterKill.getId()) {
-					HashMap<Object, Object> properties = new HashMap<>();
-					properties.put(monsterIndex1, taskCount);
-					properties.put(monsterIndex2, taskCount);
-					task.setProperties(properties);
-					if (monsterIndex1 > 0) {
-						addMonsterToQuest(monsterIndex1, taskIndex);
-					}
-
-					if (monsterIndex2 > 0) {
-						addMonsterToQuest(monsterIndex2, taskIndex);
-					}
-
-					quest.setDesc(taskDesc);
-				} else if (taskType == TaskType.WinCampain.getId() || taskType == TaskType.WinChaos.getId()) {
-					HashMap<Object, Object> properties = new HashMap<>();
-					properties.put("count", taskCount);
-					quest.setDesc(taskDesc + " " + taskCount + " lần.");
-					task.setProperties(properties);
-				}
-
-				quest.setReward(getReward(rewardIndex));
-				quest.setIndex(taskIndex);
-				quest.setName(taskName);
-				quest.setGroupId(taskGroup);
-				quest.setTaskType(taskType);
-				quest.setTask(task);
-				quests.put(taskIndex, quest);
 			}
 
 			sr.close();
 		} catch (Exception e) {
 			e.printStackTrace();
 		}
-
 	}
 
 
@@ -262,6 +141,13 @@ public class QuestConfig {
 
 		list.add(questId);
 		monsterInQuest.put(monsterId, list);
+	}
+
+
+	private void addMonsterToQuest(Collection<Integer> monsters, int questId) {
+		for (Integer monsterId : monsters) {
+			addMonsterToQuest(monsterId, questId);
+		}
 	}
 
 
@@ -278,8 +164,18 @@ public class QuestConfig {
 	}
 
 
+	public List<HeroQuest> getDailyQuestList() {
+		return new ArrayList<>(dailyQuestMap.values());
+	}
+
+
+	public List<HeroQuest> getNormalQuestList() {
+		return new ArrayList<>(normalQuestMap.values());
+	}
+
+
 	public List<Quest> getQuests() {
-		return new ArrayList<>(quests.values());
+		return new ArrayList<>(questMap.values());
 	}
 
 
@@ -294,12 +190,13 @@ public class QuestConfig {
 
 
 	public Quest getQuest(int questIndex) {
-		return quests.get(questIndex);
+		return questMap.get(questIndex);
 	}
 
 
 	public static void main(String[] args) {
 		QuestConfig.getInstance().writeToJsonFile();
+
 	}
 
 }

@@ -164,6 +164,19 @@ public class ItemConfig {
 	}
 
 
+	public List<String> splitRewardString(String rewardString) {
+		List<String> rewardList = new ArrayList<>();
+		if (StringUtils.isNotBlank(rewardString)) {
+			String[] split = StringUtils.split(rewardString, SEPERATE_OTHER_ITEM);
+			for (int i = 0; i < split.length; i++) {
+				rewardList.add(split[i]);
+			}
+		}
+
+		return rewardList;
+	}
+
+
 	public List<String> splitItemString(String itemString) {
 		List<String> rewardList = new ArrayList<>();
 		if (StringUtils.isNotBlank(itemString)) {

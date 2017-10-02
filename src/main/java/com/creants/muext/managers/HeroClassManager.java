@@ -7,6 +7,8 @@ import java.util.Map;
 
 import org.springframework.beans.factory.InitializingBean;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageRequest;
 import org.springframework.stereotype.Service;
 
 import com.creants.creants_2x.core.util.QAntTracer;
@@ -25,6 +27,7 @@ import com.creants.muext.services.AutoIncrementService;
  */
 @Service
 public class HeroClassManager implements InitializingBean {
+	private static final int MAX_HERO_PER_PAGE = 20;
 	private static final HeroClassConfig heroConfig = HeroClassConfig.getInstance();
 	@Autowired
 	private AutoIncrementService autoIncrService;
@@ -39,8 +42,10 @@ public class HeroClassManager implements InitializingBean {
 	@Override
 	public void afterPropertiesSet() throws Exception {
 		// TODO remove
-		// endowHero("mus1#317", HeroClassType.GREEN_KNIGHT);
-		// addHero("mus1#323");
+		 endowHero("mus1#326", HeroClassType.GREAT_DARK_KNIGHT);
+		// for (int i = 0; i < 25; i++) {
+		// addHero("mus1#329");
+		// }
 	}
 
 
@@ -64,6 +69,11 @@ public class HeroClassManager implements InitializingBean {
 			heroClass.setHeroBase(getHeroBase(heroClass.getIndex()));
 		}
 		return heroes;
+	}
+
+
+	public Page<HeroClass> findHeroesByGameHeroId(String gameHeroId, int page) {
+		return heroRepository.findHeroesByGameHeroId(gameHeroId, new PageRequest(page - 1, MAX_HERO_PER_PAGE));
 	}
 
 
@@ -203,7 +213,7 @@ public class HeroClassManager implements InitializingBean {
 	public List<HeroClass> endowHeroes(String gameHeroId) {
 		List<HeroClass> heroes = new ArrayList<>(2);
 		heroes.add(createNewHero(gameHeroId, HeroClassType.DARK_KNIGHT));
-		heroes.add(createNewHero(gameHeroId, HeroClassType.FAIRY_ELF));
+		// heroes.add(createNewHero(gameHeroId, HeroClassType.FAIRY_ELF));
 		heroRepository.save(heroes);
 		return heroes;
 	}

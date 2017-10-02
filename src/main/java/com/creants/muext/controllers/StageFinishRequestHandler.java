@@ -1,6 +1,7 @@
 package com.creants.muext.controllers;
 
 import java.util.ArrayList;
+import java.util.Collection;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -24,9 +25,7 @@ import com.creants.muext.entities.GameHero;
 import com.creants.muext.entities.HeroClass;
 import com.creants.muext.entities.item.HeroConsumeableItem;
 import com.creants.muext.entities.item.HeroItem;
-import com.creants.muext.entities.quest.HeroQuest;
-import com.creants.muext.entities.quest.Task;
-import com.creants.muext.entities.quest.TaskType;
+import com.creants.muext.entities.quest.KillMonsterQuest;
 import com.creants.muext.entities.world.HeroStage;
 import com.creants.muext.entities.world.Stage;
 import com.creants.muext.managers.HeroClassManager;
@@ -41,7 +40,6 @@ import com.creants.muext.services.QuestManager;
  * @author LamHa
  */
 public class StageFinishRequestHandler extends BaseClientRequestHandler {
-	private static final int UNLOCK_NEW_STAGE = 1;
 	private GameHeroRepository repository;
 	private MatchManager matchManager;
 	private QuestManager questManager;
@@ -85,7 +83,6 @@ public class StageFinishRequestHandler extends BaseClientRequestHandler {
 		Boolean isWin = params.getBool("win");
 		if (!isWin) {
 			matchManager.removeMatch(gameHeroId);
-			QAntObject response = QAntObject.newInstance();
 			if (useItems != null) {
 				QAntArray itemUdpArr = QAntArray.newInstance();
 				for (HeroItem heroItem : useItems) {
@@ -93,10 +90,10 @@ public class StageFinishRequestHandler extends BaseClientRequestHandler {
 				}
 				QAntObject updateObj = QAntObject.newInstance();
 				updateObj.putQAntArray("items", itemUdpArr);
-				response.putQAntObject("update", updateObj);
+				params.putQAntObject("update", updateObj);
 			}
 
-			send(ExtensionEvent.CMD_STAGE_FINISH, response, user);
+			send(ExtensionEvent.CMD_STAGE_FINISH, params, user);
 			return;
 		}
 
@@ -113,13 +110,13 @@ public class StageFinishRequestHandler extends BaseClientRequestHandler {
 		boolean isFirstTime = !heroStage.isClear();
 
 		// xử lý trả thưởng
-		QAntObject response = processReward(match, user, stage, isFirstTime);
-		send(ExtensionEvent.CMD_STAGE_FINISH, response, user);
+		processReward(params, match, user, stage, isFirstTime);
+		send(ExtensionEvent.CMD_STAGE_FINISH, params, user);
 
 		notifyAssetChange(user, stage);
 		processHeroStage(user, heroStage);
 		// kiểm tra xử lý nhiệm vụ, nên tách ra notification quest
-		processQuest(stageIndex, gameHeroId);
+		processQuest(user, stageIndex, gameHeroId);
 	}
 
 
@@ -140,7 +137,7 @@ public class StageFinishRequestHandler extends BaseClientRequestHandler {
 			heroStageRepository.save(newStage);
 
 			QAntObject response = QAntObject.newInstance();
-			response.putInt("type", UNLOCK_NEW_STAGE);
+			response.putInt("type", ExtensionEvent.NTF_UNLOCK_NEW_STAGE);
 			response.putInt("stage_index", newStage.getIndex());
 			if (nextStage.getChapterIndex() > heroStage.getChapterIndex()) {
 				QAntTracer.debug(this.getClass(), "----------------------------->> Mo chuong moi: " + user.getName());
@@ -158,9 +155,8 @@ public class StageFinishRequestHandler extends BaseClientRequestHandler {
 	}
 
 
-	private QAntObject processReward(IQAntObject match, QAntUser user, Stage stage, boolean isFirstTime) {
+	private void processReward(IQAntObject params, IQAntObject match, QAntUser user, Stage stage, boolean isFirstTime) {
 		long startTime = System.currentTimeMillis();
-		QAntObject response = QAntObject.newInstance();
 		QAntObject reward = QAntObject.newInstance();
 		int starNo = 3;
 		int expReward = stage.getExpReward();
@@ -198,7 +194,7 @@ public class StageFinishRequestHandler extends BaseClientRequestHandler {
 			updateItems.addAll(itemInstance.convertToHeroItem(casArray));
 		}
 
-		response.putQAntObject("reward", reward);
+		params.putQAntObject("reward", reward);
 
 		// cập nhật db
 		List<HeroItem> addItems = heroItemManager.addItems(user.getName(), updateItems);
@@ -221,11 +217,9 @@ public class StageFinishRequestHandler extends BaseClientRequestHandler {
 		}
 		updateObj.putQAntArray("heroes", heroArr);
 		updateObj.putQAntArray("items", itemArr);
-		response.putQAntObject("update", updateObj);
+		params.putQAntObject("update", updateObj);
 
 		System.out.println("-----------------------> delta: " + (System.currentTimeMillis() - startTime));
-
-		return response;
 	}
 
 
@@ -238,38 +232,34 @@ public class StageFinishRequestHandler extends BaseClientRequestHandler {
 	 *            màn đang chơi
 	 * @param gameHeroId
 	 */
-	private List<HeroQuest> processQuest(int stageIndex, String gameHeroId) {
+	private void processQuest(QAntUser user, int stageIndex, String gameHeroId) {
 		Stage stage = stageConfig.getStage(stageIndex);
-		Set<Integer> monsters = stage.getMonsters();
-		Set<Integer> questIds = questManager.getQuestsContainMonster(monsters);
+		Map<Integer, Integer> monsterMap = stage.getMonsterCountMap();
+		Set<Integer> questIds = questManager.getQuestsContainMonster(monsterMap.keySet());
 		if (questIds == null || questIds.isEmpty()) {
-			return null;
+			return;
 		}
 
 		Integer[] array = questIds.toArray(new Integer[questIds.size()]);
-		List<HeroQuest> quests = questManager.getQuests(gameHeroId, array);
+		List<KillMonsterQuest> quests = questManager.getKillMonsterQuest(gameHeroId, array);
 		if (quests == null || quests.isEmpty())
-			return null;
+			return;
 
 		try {
-			for (HeroQuest heroQuest : quests) {
-				int taskType = heroQuest.getTaskType();
-				// nhiệm vụ tiêu diệt quái
-				if (taskType == TaskType.MonsterKill.getId()) {
-					Task task = heroQuest.getTask();
-					Map<Object, Object> properties = task.getProperties();
-					monsters = stage.getMonsters();
-					for (Object monsterIndex : properties.keySet()) {
-						int monIndex = Integer.parseInt(String.valueOf(monsterIndex));
-						int remainMonster = (Integer) properties.get(monsterIndex) - stage.countMonster(monIndex);
-						if (remainMonster > 0) {
-							properties.put(monsterIndex, remainMonster);
-						} else {
-							properties.put(monsterIndex, 0);
-							heroQuest.setClaim(true);
-						}
-					}
+			Collection<Long> questFinishList = new ArrayList<>();
+			for (KillMonsterQuest heroQuest : quests) {
+				boolean isFinish = heroQuest.killMonster(monsterMap);
+				if (isFinish) {
+					heroQuest.setClaim(true);
+					questFinishList.add(heroQuest.getId());
 				}
+			}
+
+			if (questFinishList.size() > 0) {
+				IQAntObject response = QAntObject.newInstance();
+				response.putUtfString("type", ExtensionEvent.NTF_VIEW_QUEST_TYPE);
+				response.putLongArray("ids", questFinishList);
+				send(ExtensionEvent.CMD_NTF_VIEW, response, user);
 			}
 
 			questManager.save(quests);
@@ -280,15 +270,6 @@ public class StageFinishRequestHandler extends BaseClientRequestHandler {
 			e.printStackTrace();
 		}
 
-		if (quests != null) {
-			IQAntArray questArr = QAntArray.newInstance();
-			for (HeroQuest questStats : quests) {
-				questArr.addQAntObject(QAntObject.newFromObject(questStats));
-			}
-			// params.putQAntArray("quests", questArr);
-		}
-
-		return quests;
 	}
 
 

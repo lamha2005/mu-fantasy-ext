@@ -9,6 +9,8 @@ import java.util.Map;
 
 import org.springframework.beans.factory.InitializingBean;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageRequest;
 import org.springframework.stereotype.Service;
 
 import com.creants.creants_2x.core.util.QAntTracer;
@@ -25,6 +27,7 @@ import com.creants.muext.services.AutoIncrementService;
  */
 @Service
 public class HeroItemManager implements InitializingBean {
+	private static final int MAX_ITEM_PER_PAGE = 20;
 	private static final ItemConfig itemConfig = ItemConfig.getInstance();
 	@Autowired
 	private HeroItemRepository heroItemRep;
@@ -38,9 +41,9 @@ public class HeroItemManager implements InitializingBean {
 		// addItems("mus1#323", "7000/1");
 		// addItems("mus1#317", "11017/3#11018/3#11019/3");
 		// addItems("mus1#317", "1001/1");
-		// addItems("mus1#323", "11013/1");
-		// addItems("mus1#317",
-		// "11032/5#11033/10#11034/15#11035/20#11036/10#11037/10");
+		// for (int i = 0; i < 50; i++) {
+		// addItems("mus1#323", "7000/1#1001/1");
+		// }
 	}
 
 
@@ -50,6 +53,11 @@ public class HeroItemManager implements InitializingBean {
 			heroItem.setItemBase(itemConfig.getItem(heroItem.getIndex()));
 		});
 		return items;
+	}
+
+
+	public Page<HeroItem> getItems(String gameHeroId, int page) {
+		return heroItemRep.findAllByGameHeroId(gameHeroId, new PageRequest(page - 1, MAX_ITEM_PER_PAGE));
 	}
 
 

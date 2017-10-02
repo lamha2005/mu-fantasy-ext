@@ -2,13 +2,17 @@ package com.creants.muext.controllers;
 
 import java.util.List;
 
+import org.springframework.data.domain.Page;
+
 import com.creants.creants_2x.core.extension.BaseClientRequestHandler;
+import com.creants.creants_2x.socket.gate.entities.IQAntArray;
 import com.creants.creants_2x.socket.gate.entities.IQAntObject;
 import com.creants.creants_2x.socket.gate.entities.QAntArray;
 import com.creants.creants_2x.socket.gate.entities.QAntObject;
 import com.creants.creants_2x.socket.gate.wood.QAntUser;
 import com.creants.muext.Creants2XApplication;
 import com.creants.muext.config.ItemConfig;
+import com.creants.muext.entities.HeroClass;
 import com.creants.muext.entities.item.HeroEquipment;
 import com.creants.muext.entities.item.HeroItem;
 import com.creants.muext.exception.GameErrorCode;
@@ -25,8 +29,10 @@ public class ItemRequestHandler extends BaseClientRequestHandler {
 	private static final int CONSUME_ITEM = 3;
 	private static final int SELL_ITEM = 4;
 	private static final int UPGRADE_ITEM = 5;
+	private static final int ITEM_PAGE = 11;
 
 	private HeroItemManager heroItemManager;
+	private static final ItemConfig itemConfig = ItemConfig.getInstance();
 
 
 	public ItemRequestHandler() {
@@ -58,11 +64,36 @@ public class ItemRequestHandler extends BaseClientRequestHandler {
 			case UPGRADE_ITEM:
 				upgradeItem(user, params);
 				break;
+			case ITEM_PAGE:
+				getItemPage(user, params);
+				break;
 
 			default:
 				getItem(user, params);
 				break;
 		}
+	}
+
+
+	private void getItemPage(QAntUser user, IQAntObject params) {
+		Integer page = params.getInt("page");
+		if (page == null) {
+			page = 1;
+		}
+		Page<HeroItem> itemPage = heroItemManager.getItems(user.getName(), page);
+		params.putInt("max_page", itemPage.getTotalPages());
+
+		List<HeroItem> items = itemPage.getContent();
+		if (items != null && items.size() > 0) {
+			IQAntArray arr = QAntArray.newInstance();
+			for (HeroItem item : items) {
+				item.setItemBase(itemConfig.getItem(item.getIndex()));
+				arr.addQAntObject(QAntObject.newFromObject(item));
+			}
+			params.putQAntArray("items", arr);
+		}
+
+		send(ExtensionEvent.CMD_ITEM_REQ, params, user);
 	}
 
 

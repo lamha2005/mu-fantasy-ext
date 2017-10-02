@@ -3,7 +3,6 @@ package com.creants.muext.services;
 import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.Date;
-import java.util.HashMap;
 import java.util.List;
 import java.util.Set;
 
@@ -19,9 +18,8 @@ import com.creants.muext.dao.QuestRepository;
 import com.creants.muext.dao.QuestStatsRepository;
 import com.creants.muext.entities.GameHero;
 import com.creants.muext.entities.quest.HeroQuest;
+import com.creants.muext.entities.quest.KillMonsterQuest;
 import com.creants.muext.entities.quest.Quest;
-import com.creants.muext.entities.quest.Task;
-import com.creants.muext.entities.quest.TaskType;
 
 /**
  * @author LamHM
@@ -60,10 +58,10 @@ public class QuestManager implements InitializingBean {
 	}
 
 
-	public List<HeroQuest> getQuests(String heroId, int groupId) {
-		List<HeroQuest> quests = questStatsRespository.findByHeroIdAndGroupId(heroId, groupId);
+	public List<HeroQuest> getQuests(String gameHeroId, int groupId) {
+		List<HeroQuest> quests = questStatsRespository.findByGameHeroIdAndGroupId(gameHeroId, groupId);
 		if (groupId == GROUP_MAIN_QUEST) {
-			GameHero hero = heroRepository.findOne(heroId);
+			GameHero hero = heroRepository.findOne(gameHeroId);
 			int level = hero.getLevel();
 			List<Quest> newQuests = questRepository.getQuests(level);
 			if (newQuests != null) {
@@ -80,74 +78,29 @@ public class QuestManager implements InitializingBean {
 	}
 
 
-	public void save(List<HeroQuest> quests) {
+	public List<KillMonsterQuest> getKillMonsterQuest(String gameHeroId, Integer[] questIds) {
+		return questStatsRespository.getKillMonsterQuest(gameHeroId, questIds);
+	}
+
+
+	public void save(List<KillMonsterQuest> quests) {
 		questStatsRespository.save(quests);
 	}
 
 
 	public void registerQuestsFromHero(GameHero gameHero) {
 		List<HeroQuest> quests = new ArrayList<HeroQuest>();
-		for (int i = 0; i < 5; i++) {
-			HeroQuest quest = new HeroQuest();
-			quest.setHeroId(gameHero.getId());
-			quest.setQuestIndex(1);
-			quest.setId(autoIncrService.genQuestId());
-			quest.setGroupId(GROUP_MAIN_QUEST);
-			quest.setCreateTime(System.currentTimeMillis());
-			quest.setTaskType(TaskType.MonsterKill.getId());
-			quest.setName("Bull Hunter");
-			quest.setDesc("Hunt Bull Fighter in Loren");
-			Task task = new Task();
-			HashMap<Object, Object> properties = new HashMap<>();
-			properties.put("1", 10);
-			properties.put("3", 10);
-			task.setProperties(properties);
-			quest.setTask(task);
+		quests.addAll(questConfig.getNormalQuestList());
+		quests.addAll(questConfig.getDailyQuestList());
 
-			quests.add(quest);
+		for (HeroQuest heroQuest : quests) {
+			heroQuest.setGameHeroId(gameHero.getId());
+			heroQuest.setId(autoIncrService.genQuestId());
+			heroQuest.setCreateTime(System.currentTimeMillis());
 		}
+
 		questStatsRespository.save(quests);
 
-		registerDailyQuestFromHero(gameHero);
-	}
-
-
-	private void registerDailyQuestFromHero(GameHero gameHero) {
-		long currentTimeMillis = System.currentTimeMillis();
-		List<HeroQuest> quests = new ArrayList<HeroQuest>();
-		HeroQuest quest = new HeroQuest();
-		quest.setHeroId(gameHero.getId());
-		quest.setQuestIndex(200);
-		quest.setId(autoIncrService.genQuestId());
-		quest.setGroupId(GROUP_DAILY_QUEST);
-		quest.setCreateTime(currentTimeMillis);
-		quest.setTaskType(TaskType.WinCampain.getId());
-		quest.setName("Win Campain");
-		quest.setDesc("Người chơi chiến thắng Campain");
-		Task task = new Task();
-		HashMap<Object, Object> properties = new HashMap<>();
-		properties.put("count", 5);
-		task.setProperties(properties);
-		quest.setTask(task);
-		quests.add(quest);
-
-		HeroQuest quest1 = new HeroQuest();
-		quest1.setHeroId(gameHero.getId());
-		quest1.setQuestIndex(201);
-		quest1.setId(autoIncrService.genQuestId());
-		quest1.setGroupId(GROUP_DAILY_QUEST);
-		quest1.setCreateTime(currentTimeMillis);
-		quest1.setTaskType(TaskType.WinChaos.getId());
-		quest1.setName("Win Chaos");
-		quest1.setDesc("Người chơi chiến thắng Chaos");
-		Task task1 = new Task();
-		HashMap<Object, Object> properties1 = new HashMap<>();
-		properties1.put("count", 5);
-		task1.setProperties(properties);
-		quest1.setTask(task1);
-
-		quests.add(quest1);
-		questStatsRespository.save(quests);
 	}
 
 

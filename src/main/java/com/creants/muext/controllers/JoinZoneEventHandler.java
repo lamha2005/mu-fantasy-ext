@@ -41,12 +41,10 @@ import com.creants.muext.entities.Team;
 import com.creants.muext.entities.event.GiftEventBase;
 import com.creants.muext.entities.event.GiftInfo;
 import com.creants.muext.entities.event.HeroGift;
-import com.creants.muext.entities.item.HeroItem;
 import com.creants.muext.entities.quest.HeroQuest;
 import com.creants.muext.entities.world.HeroStage;
 import com.creants.muext.entities.world.Stage;
 import com.creants.muext.managers.HeroClassManager;
-import com.creants.muext.managers.HeroItemManager;
 import com.creants.muext.services.AutoIncrementService;
 import com.creants.muext.services.QuestManager;
 import com.creants.muext.util.UserHelper;
@@ -69,7 +67,6 @@ public class JoinZoneEventHandler extends BaseServerEventHandler {
 	private AdminManager adminManager;
 	private BattleTeamRepository battleTeamRepository;
 	private AutoIncrementService autoIncrementService;
-	private HeroItemManager heroItemManager;
 	private GiftEventRepository giftEventRepository;
 	private MailRepository mailRepository;
 
@@ -82,7 +79,6 @@ public class JoinZoneEventHandler extends BaseServerEventHandler {
 		stageRepository = Creants2XApplication.getBean(HeroStageRepository.class);
 		adminManager = Creants2XApplication.getBean(AdminManager.class);
 		battleTeamRepository = Creants2XApplication.getBean(BattleTeamRepository.class);
-		heroItemManager = Creants2XApplication.getBean(HeroItemManager.class);
 		giftEventRepository = Creants2XApplication.getBean(GiftEventRepository.class);
 		mailRepository = Creants2XApplication.getBean(MailRepository.class);
 	}
@@ -102,12 +98,6 @@ public class JoinZoneEventHandler extends BaseServerEventHandler {
 			gameHero = createNewGameHero(gameHeroId, creantsUserId);
 			user.setProperty(UserHelper.GAME_HERO_NAME, gameHero.getName());
 			isNewAccount = true;
-		} else {
-			List<HeroClass> heroes = heroManager.findHeroesByGameHeroId(gameHeroId);
-			gameHero.setHeroes(heroes);
-
-			List<HeroItem> items = heroItemManager.getItems(gameHeroId);
-			gameHero.setItems(items);
 		}
 
 		processMail(user, response, isNewAccount);
@@ -119,7 +109,6 @@ public class JoinZoneEventHandler extends BaseServerEventHandler {
 		IQAntArray questArr = QAntArray.newInstance();
 		IQAntObject mainQuest = QAntObject.newInstance();
 		mainQuest.putInt("gid", QuestManager.GROUP_MAIN_QUEST);
-		mainQuest.putUtfString("n", "Nhiệm vụ chính");
 		mainQuest.putInt("no", mainQuests == null ? 0 : mainQuests.size());
 		questArr.addQAntObject(mainQuest);
 
@@ -132,7 +121,6 @@ public class JoinZoneEventHandler extends BaseServerEventHandler {
 
 		IQAntObject dailyQuest = QAntObject.newInstance();
 		dailyQuest.putInt("gid", QuestManager.GROUP_DAILY_QUEST);
-		dailyQuest.putUtfString("n", "Nhiệm vụ hàng ngày");
 		dailyQuest.putInt("no", dailyQuestList.size());
 		questArr.addQAntObject(dailyQuest);
 		response.putQAntArray("quests", questArr);

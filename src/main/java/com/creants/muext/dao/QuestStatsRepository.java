@@ -7,6 +7,7 @@ import org.springframework.data.mongodb.repository.Query;
 import org.springframework.stereotype.Repository;
 
 import com.creants.muext.entities.quest.HeroQuest;
+import com.creants.muext.entities.quest.KillMonsterQuest;
 
 /**
  * @author LamHM
@@ -22,21 +23,25 @@ public interface QuestStatsRepository extends MongoRepository<HeroQuest, Long> {
 	 * @param questIds
 	 * @return
 	 */
-	@Query("{'heroId' : ?0, 'questIndex' : {'$in' : ?1}}")
-	List<HeroQuest> getQuests(String heroId, Integer[] questIds);
+	@Query("{'gameHeroId' : ?0, 'questIndex' : {'$in' : ?1}}")
+	List<HeroQuest> getQuests(String gameHeroId, Integer[] questIds);
 
 
-	@Query("{'heroId' : ?0, 'groupId' : ?1, 'finish' : ?2}")
-	List<HeroQuest> getQuests(String heroId, int groupId, boolean isFinish);
+	@Query("{'gameHeroId' : ?0, 'questIndex' : {'$in' : ?1}}")
+	List<KillMonsterQuest> getKillMonsterQuest(String gameHeroId, Integer[] questIds);
 
 
-	List<HeroQuest> findByHeroIdAndGroupId(String heroId, int groupId);
+	@Query("{'gameHeroId' : ?0, 'groupId' : ?1, 'finish' : ?2}")
+	List<HeroQuest> getQuests(String gameHeroId, int groupId, boolean isFinish);
 
 
-	@Query("{'heroId' : ?0, 'groupId' : 2, 'createTime' : {'$lt' : ?1}}")
-	List<HeroQuest> findDailyQuestNeedRemove(String heroId, long startOfDateMili);
+	List<HeroQuest> findByGameHeroIdAndGroupId(String gameHeroId, int groupId);
 
 
-	@Query("{'heroId' : ?0, 'groupId' : 2, 'createTime' : {'$gte' : ?1, '$lte' : ?2}}")
-	List<HeroQuest> findDailyQuests(String heroId, long startOfDateMili, long endOfDateMili);
+	@Query("{'gameHeroId' : ?0, 'groupId' : 2, 'createTime' : {'$lt' : ?1}}")
+	List<HeroQuest> findDailyQuestNeedRemove(String gameHeroId, long startOfDateMili);
+
+
+	@Query("{'gameHeroId' : ?0, 'groupId' : 2, 'createTime' : {'$gte' : ?1, '$lte' : ?2}}")
+	List<HeroQuest> findDailyQuests(String gameHeroId, long startOfDateMili, long endOfDateMili);
 }

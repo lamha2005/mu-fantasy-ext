@@ -7,6 +7,8 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
+import org.springframework.data.domain.Page;
+
 import com.creants.creants_2x.core.annotations.Instantiation;
 import com.creants.creants_2x.core.extension.BaseClientRequestHandler;
 import com.creants.creants_2x.core.util.QAntTracer;
@@ -17,6 +19,7 @@ import com.creants.creants_2x.socket.gate.entities.QAntObject;
 import com.creants.creants_2x.socket.gate.wood.QAntUser;
 import com.creants.muext.Creants2XApplication;
 import com.creants.muext.config.GameConfig;
+import com.creants.muext.config.HeroClassConfig;
 import com.creants.muext.dao.BattleTeamRepository;
 import com.creants.muext.dao.GameHeroRepository;
 import com.creants.muext.entities.BattleTeam;
@@ -46,12 +49,14 @@ public class HeroRequestHandler extends BaseClientRequestHandler {
 	private static final int UPGRADE_RANK = 2;
 	private static final int HERO_DETAIL = 3;
 	private static final int HERO_LIST = 10;
+	private static final int HERO_PAGE = 11;
 
 	private GameHeroRepository gameHeroRepository;
 	private HeroItemManager heroItemManager;
 	private HeroClassManager heroClassManager;
 	private BattleTeamRepository battleTeamRep;
 	private KeyLockManager keyLockManager;
+	private static final HeroClassConfig heroConfig = HeroClassConfig.getInstance();
 
 
 	public HeroRequestHandler() {
@@ -79,11 +84,36 @@ public class HeroRequestHandler extends BaseClientRequestHandler {
 			case HERO_LIST:
 				getHeroList(user, params);
 				break;
+			case HERO_PAGE:
+				getHeroPage(user, params);
+				break;
 
 			default:
 				getHeroList(user, params);
 				break;
 		}
+	}
+
+
+	private void getHeroPage(QAntUser user, IQAntObject params) {
+		Integer page = params.getInt("page");
+		if (page == null) {
+			page = 1;
+		}
+		Page<HeroClass> heroPage = heroClassManager.findHeroesByGameHeroId(user.getName(), page);
+		params.putInt("max_page", heroPage.getTotalPages());
+
+		List<HeroClass> heroes = heroPage.getContent();
+		if (heroes != null && heroes.size() > 0) {
+			IQAntArray arr = QAntArray.newInstance();
+			for (HeroClass heroClass : heroes) {
+				heroClass.setHeroBase(heroConfig.getHeroBase(heroClass.getIndex()));
+				arr.addQAntObject(QAntObject.newFromObject(heroClass));
+			}
+			params.putQAntArray("heroes", arr);
+		}
+
+		send(ExtensionEvent.CMD_HERO, params, user);
 	}
 
 

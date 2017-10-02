@@ -26,6 +26,7 @@ public class StageConfig {
 	private static StageConfig instance;
 	private Map<Integer, Stage> stages;
 	private Map<Integer, Chapter> chapters;
+	private Stage firstStage;
 
 
 	public static StageConfig getInstance() {
@@ -56,6 +57,10 @@ public class StageConfig {
 				try {
 					stage = mapper.readValue(sr, Stage.class);
 					stage.init();
+					if (firstStage == null) {
+						firstStage = stage;
+					}
+
 					int index = stage.getIndex();
 					stages.put(index, stage);
 					Stage prevStage = stages.get(prevIndex);
@@ -92,7 +97,7 @@ public class StageConfig {
 
 
 	public Stage getFirstStage() {
-		return getStages().get(0);
+		return firstStage;
 	}
 
 
@@ -112,7 +117,8 @@ public class StageConfig {
 
 
 	public static void main(String[] args) {
-		StageConfig.getInstance().writeToJsonFile();
+		StageConfig instance2 = StageConfig.getInstance();
+		instance2.writeToJsonFile();
 	}
 
 }

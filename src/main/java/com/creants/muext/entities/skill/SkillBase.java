@@ -1,9 +1,7 @@
 package com.creants.muext.entities.skill;
 
-import org.apache.commons.lang.StringUtils;
 import org.springframework.data.annotation.Transient;
 
-import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import com.fasterxml.jackson.annotation.JsonInclude;
 import com.fasterxml.jackson.annotation.JsonInclude.Include;
 import com.fasterxml.jackson.dataformat.xml.annotation.JacksonXmlProperty;
@@ -13,7 +11,6 @@ import com.fasterxml.jackson.dataformat.xml.annotation.JacksonXmlProperty;
  *
  */
 @JsonInclude(Include.NON_NULL)
-@JsonIgnoreProperties(value = { "lvUpValueString", "effectIndexString", "effectValueString" })
 public class SkillBase {
 	@JacksonXmlProperty(localName = "Index", isAttribute = true)
 	private int index;
@@ -29,30 +26,24 @@ public class SkillBase {
 	private int cooldown;
 	@JacksonXmlProperty(localName = "SkillType", isAttribute = true)
 	private String skillType;
+	@JacksonXmlProperty(localName = "SkillLevel", isAttribute = true)
+	private int skillLevel;
+	@JacksonXmlProperty(localName = "UpgradeTo", isAttribute = true)
+	private int upgradeTo;
 	@JacksonXmlProperty(localName = "TargetType", isAttribute = true)
 	private String targetType;
 	@JacksonXmlProperty(localName = "Affects", isAttribute = true)
 	private String affects;
-	@JacksonXmlProperty(localName = "MaxLVofSkill", isAttribute = true)
-	private int maxLVofSkill;
 	@JacksonXmlProperty(localName = "Damage", isAttribute = true)
 	private int damage;
-	@JacksonXmlProperty(localName = "LvUpDamage", isAttribute = true)
-	private int lvUpDamage;
 	@JacksonXmlProperty(localName = "Durations", isAttribute = true)
 	private int durations;
-	@JacksonXmlProperty(localName = "LvUpValue", isAttribute = true)
-	private String lvUpValueString;
 	@JacksonXmlProperty(localName = "EffectIndex", isAttribute = true)
-	private String effectIndexString;
+	private int effectIndex;
 	@JacksonXmlProperty(localName = "EffectValue", isAttribute = true)
-	private String effectValueString;
+	private int effectValue;
 	@JacksonXmlProperty(localName = "BattlePower", isAttribute = true)
 	private int battlePower;
-	@JacksonXmlProperty(localName = "LvUpBattlePower", isAttribute = true)
-	private int lvUpBattlePower;
-	@JacksonXmlProperty(localName = "ValueGrowth", isAttribute = true)
-	private String valueGrowth;
 	@JacksonXmlProperty(localName = "StatusImage", isAttribute = true)
 	private String statusImage;
 	@JacksonXmlProperty(localName = "CastSound", isAttribute = true)
@@ -61,44 +52,11 @@ public class SkillBase {
 	private String effectSound;
 	@JacksonXmlProperty(localName = "HitSound", isAttribute = true)
 	private String hitSound;
-	@JacksonXmlProperty(localName = "SkillRank", isAttribute = true)
-	private String skillRank;
-
-	private float[] lvUpValue;
-	private int[] effectIndex;
-	private int[] effectValue;
+	@JacksonXmlProperty(localName = "Icon", isAttribute = true)
+	private String icon;
 
 
 	public void convertBaseInfo() {
-		String[] lvUpValueItems = StringUtils.split(lvUpValueString, "#");
-		if (lvUpValueItems == null) {
-			lvUpValue = new float[] { 0 };
-		} else {
-			lvUpValue = new float[lvUpValueItems.length];
-			for (int i = 0; i < lvUpValueItems.length; i++) {
-				lvUpValue[i] = Float.parseFloat(lvUpValueItems[i]);
-			}
-		}
-
-		String[] effectIndexItems = StringUtils.split(effectIndexString, "#");
-		if (effectIndexItems == null) {
-			effectIndex = new int[] { 0 };
-		} else {
-			effectIndex = new int[effectIndexItems.length];
-			for (int i = 0; i < effectIndexItems.length; i++) {
-				effectIndex[i] = Integer.parseInt(effectIndexItems[i]);
-			}
-		}
-
-		String[] effectValueItems = StringUtils.split(effectValueString, "#");
-		if (effectValueItems == null) {
-			effectValue = new int[] { 0 };
-		} else {
-			effectValue = new int[effectValueItems.length];
-			for (int i = 0; i < effectValueItems.length; i++) {
-				effectValue[i] = Integer.parseInt(effectValueItems[i]);
-			}
-		}
 	}
 
 
@@ -182,56 +140,6 @@ public class SkillBase {
 	}
 
 
-	public int getLvUpDamage() {
-		return lvUpDamage;
-	}
-
-
-	public void setLvUpDamage(int lvUpDamage) {
-		this.lvUpDamage = lvUpDamage;
-	}
-
-
-	public String getLvUpValueString() {
-		return lvUpValueString;
-	}
-
-
-	public void setLvUpValueString(String lvUpValueString) {
-		this.lvUpValueString = lvUpValueString;
-	}
-
-
-	public String getEffectIndexString() {
-		return effectIndexString;
-	}
-
-
-	public void setEffectIndexString(String effectIndexString) {
-		this.effectIndexString = effectIndexString;
-	}
-
-
-	public String getEffectValueString() {
-		return effectValueString;
-	}
-
-
-	public void setEffectValueString(String effectValueString) {
-		this.effectValueString = effectValueString;
-	}
-
-
-	public String getValueGrowth() {
-		return valueGrowth;
-	}
-
-
-	public void setValueGrowth(String valueGrowth) {
-		this.valueGrowth = valueGrowth;
-	}
-
-
 	public int getDurations() {
 		return durations;
 	}
@@ -249,16 +157,6 @@ public class SkillBase {
 
 	public void setBattlePower(int battlePower) {
 		this.battlePower = battlePower;
-	}
-
-
-	public int getLvUpBattlePower() {
-		return lvUpBattlePower;
-	}
-
-
-	public void setLvUpBattlePower(int lvUpBattlePower) {
-		this.lvUpBattlePower = lvUpBattlePower;
 	}
 
 
@@ -302,26 +200,6 @@ public class SkillBase {
 	}
 
 
-	public String getSkillRank() {
-		return skillRank;
-	}
-
-
-	public void setSkillRank(String skillRank) {
-		this.skillRank = skillRank;
-	}
-
-
-	public int getMaxLVofSkill() {
-		return maxLVofSkill;
-	}
-
-
-	public void setMaxLVofSkill(int maxLVofSkill) {
-		this.maxLVofSkill = maxLVofSkill;
-	}
-
-
 	public int getDamage() {
 		return damage;
 	}
@@ -332,18 +210,53 @@ public class SkillBase {
 	}
 
 
-	public float[] getLvUpValue() {
-		return lvUpValue;
+	public int getSkillLevel() {
+		return skillLevel;
 	}
 
 
-	public int[] getEffectIndex() {
+	public void setSkillLevel(int skillLevel) {
+		this.skillLevel = skillLevel;
+	}
+
+
+	public int getUpgradeTo() {
+		return upgradeTo;
+	}
+
+
+	public void setUpgradeTo(int upgradeTo) {
+		this.upgradeTo = upgradeTo;
+	}
+
+
+	public int getEffectIndex() {
 		return effectIndex;
 	}
 
 
-	public int[] getEffectValue() {
+	public void setEffectIndex(int effectIndex) {
+		this.effectIndex = effectIndex;
+	}
+
+
+	public int getEffectValue() {
 		return effectValue;
+	}
+
+
+	public void setEffectValue(int effectValue) {
+		this.effectValue = effectValue;
+	}
+
+
+	public String getIcon() {
+		return icon;
+	}
+
+
+	public void setIcon(String icon) {
+		this.icon = icon;
 	}
 
 }

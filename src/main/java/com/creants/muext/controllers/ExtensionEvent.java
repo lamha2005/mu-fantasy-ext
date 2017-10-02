@@ -25,4 +25,10 @@ public class ExtensionEvent {
 
 	public static final String CMD_NTF_ASSETS_CHANGE = "cmd_assets_change";
 	public static final String CMD_NTF_UNLOCK = "cmd_unlock_notification";
+	public static final String CMD_NTF_VIEW = "cmd_view_notification";
+
+	public static final int NTF_UNLOCK_NEW_STAGE = 1;
+
+	public static final String NTF_VIEW_QUEST_TYPE= "quest";
+
 }

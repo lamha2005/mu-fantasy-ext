@@ -4,20 +4,24 @@ import org.springframework.data.annotation.Id;
 import org.springframework.data.mongodb.core.index.Indexed;
 import org.springframework.data.mongodb.core.mapping.Document;
 
+import com.creants.creants_2x.socket.gate.protocol.serialization.SerializableQAntType;
+
 /**
  * @author LamHM
  *
  */
 @Document(collection = "hero_quests")
-public class HeroQuest extends AbstractQuest {
+public class HeroQuest implements SerializableQAntType {
 	@Id
 	public long id;
-	public int questIndex;
 	@Indexed
-	private transient String heroId;
+	private transient String gameHeroId;
+	public int questIndex;
 	public transient boolean finish;
 	public transient long createTime;
 	public boolean claim;
+	public int taskType;
+	public String groupId;
 
 
 	public long getId() {
@@ -40,13 +44,13 @@ public class HeroQuest extends AbstractQuest {
 	}
 
 
-	public String getHeroId() {
-		return heroId;
+	public String getGameHeroId() {
+		return gameHeroId;
 	}
 
 
-	public void setHeroId(String heroId) {
-		this.heroId = heroId;
+	public void setGameHeroId(String gameHeroId) {
+		this.gameHeroId = gameHeroId;
 	}
 
 
@@ -77,6 +81,26 @@ public class HeroQuest extends AbstractQuest {
 
 	public void setClaim(boolean claim) {
 		this.claim = claim;
+	}
+
+
+	public String getGroupId() {
+		return groupId;
+	}
+
+
+	public void setGroupId(String groupId) {
+		this.groupId = groupId;
+	}
+
+
+	public int getTaskType() {
+		return taskType;
+	}
+
+
+	public void setTaskType(int taskType) {
+		this.taskType = taskType;
 	}
 
 }

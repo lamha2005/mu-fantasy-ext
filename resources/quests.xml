@@ -1,12 +1,13 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <QuestList>
-	<Quest TaskIndex="0" TaskGroup="1" TaskType="1" TaskName="Bull Hunter" TaskDescription="Hunt Bull Fighter in Loren"   MonsterIndex1="0" MonsterIndex2="" TaskCount="10" TaskReward="1"/>
-	<Quest TaskIndex="1" TaskGroup="1" TaskType="1" TaskName="Yeti Hunter" TaskDescription="Hunt Yeti"   MonsterIndex1="1" MonsterIndex2="3" TaskCount="10" TaskReward="1"/>
-	<Quest TaskIndex="2" TaskGroup="1" TaskType="1" TaskName="Bull Hunter" TaskDescription="Hunt Bull Fighter in Loren"   MonsterIndex1="0" MonsterIndex2="" TaskCount="10" TaskReward="1"/>
-	<Quest TaskIndex="3" TaskGroup="1" TaskType="1" TaskName="Yeti Hunter" TaskDescription="Hunt Yeti"   MonsterIndex1="1" MonsterIndex2="3" TaskCount="10" TaskReward="1"/>
-	<Quest TaskIndex="100" TaskGroup="100" TaskType="3" TaskName="Chaos Castle Master" TaskDescription="Join and win the Chaos Castle event"   MonsterIndex1="" MonsterIndex2="" TaskCount="10" TaskReward="1"/>
-	<Quest TaskIndex="200" TaskGroup="2" TaskType="2" TaskName="Win Campain" TaskDescription="Người cần chơi chiến thắng Campain" TaskCount="5" TaskReward="1"/>
-	<Quest TaskIndex="201" TaskGroup="2" TaskType="3" TaskName="Win Chaos" TaskDescription="Người chơi chiến thắng Chaos" TaskCount="5" TaskReward="1"/>
-	<Quest TaskIndex="300" TaskGroup="3" TaskType="8" TaskName="Online liên tục" TaskDescription="Online nhận quà giá trị" TaskCount="" TaskReward="4"/>
+	<Quest Index="0" Group="normal" TaskType="1" Name="Bull Hunter" Description="Hunt Bull Fighter in Loren" Task="1003/10" ZenReward="1000" ExpReward="50" ItemReward="11012/2#11011/1"/>
+	<Quest Index="1" Group="normal" TaskType="1" Name="Yeti Hunter" Description="Hunt Yeti" Task="1004/10" ZenReward="1000" ExpReward="50" ItemReward="11012/2#11011/1"/>
+	
+	<Quest Index="100" Group="daily" TaskType="2" Name="Chaos Castle Master" Description="Join and win the Chaos Castle event" Task="2" ZenReward="1000" ExpReward="50" ItemReward="11012/2#11011/1"/>
+	<Quest Index="200" Group="daily" TaskType="2" Name="Win Campain" Description="Người cần chơi chiến thắng Campain" Task="5" ZenReward="1000" ExpReward="50" ItemReward="11012/2#11011/1"/>
+	<Quest Index="201" Group="daily" TaskType="2" Name="Win Chaos" Description="Người chơi chiến thắng Chaos" Task="5" ZenReward="1000" ExpReward="50" ItemReward="11012/2#11011/1"/>
+	
+	<Quest Index="300" Group="3" TaskType="8" Name="Online liên tục" Description="Online nhận quà giá trị" Task="1" ZenReward="1000" ExpReward="50" ItemReward="11012/2#11011/1"/>
 </QuestList>
 
+ 
