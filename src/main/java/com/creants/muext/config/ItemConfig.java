@@ -257,6 +257,7 @@ public class ItemConfig {
 		consItem.setIndex(itemBase.getIndex());
 		consItem.setItemGroup(itemBase.getGroupId());
 		consItem.setElement(itemBase.getElemental());
+		consItem.setItemType(itemBase.getItemType());
 		consItem.setItemBase(itemBase);
 		consItem.setNo(no);
 		consItem.setOverlap(itemBase.getOverlap() > 1);

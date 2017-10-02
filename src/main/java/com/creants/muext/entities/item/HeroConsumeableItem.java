@@ -10,6 +10,9 @@ import com.creants.muext.entities.ItemBase;
  */
 public class HeroConsumeableItem extends HeroItem {
 	private transient boolean isOverlap;
+
+	public int itemType;
+
 	@Transient
 	private ConsumeableItemBase itemBase;
 
@@ -51,6 +54,16 @@ public class HeroConsumeableItem extends HeroItem {
 
 	public ConsumeableItemBase getItemBase() {
 		return itemBase;
+	}
+
+
+	public int getItemType() {
+		return itemType;
+	}
+
+
+	public void setItemType(int itemType) {
+		this.itemType = itemType;
 	}
 
 

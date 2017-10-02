@@ -137,6 +137,7 @@ public class HeroRequestHandler extends BaseClientRequestHandler {
 			teamObj.putInt("index", index > 0 ? index : -1);
 			teamObj.putUtfString("name", team.getName());
 			teamObj.putLongArray("heroes", new ArrayList<Long>(Arrays.asList(team.getHeroes())));
+			teamObj.putInt("leader_index", team.getLeaderIndex());
 			teamArr.addQAntObject(teamObj);
 		}
 		params.putQAntArray("teams", teamArr);

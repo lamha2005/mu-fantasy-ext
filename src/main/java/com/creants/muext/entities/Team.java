@@ -13,6 +13,7 @@ public class Team implements SerializableQAntType {
 	private int index;
 	public String name;
 	public Long[] heroes;
+	public int leaderIndex;
 
 
 	public Team() {
@@ -79,6 +80,16 @@ public class Team implements SerializableQAntType {
 			}
 		}
 		return heroIds;
+	}
+
+
+	public int getLeaderIndex() {
+		return leaderIndex;
+	}
+
+
+	public void setLeaderIndex(int leaderIndex) {
+		this.leaderIndex = leaderIndex;
 	}
 
 }

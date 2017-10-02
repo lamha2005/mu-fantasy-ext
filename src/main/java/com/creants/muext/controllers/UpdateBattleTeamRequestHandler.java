@@ -58,6 +58,12 @@ public class UpdateBattleTeamRequestHandler extends BaseClientRequestHandler {
 			}
 			team.setHeroes(heroArr);
 
+			Integer leaderIndex = params.getInt("leader_index");
+			if (leaderIndex == null) {
+				leaderIndex = 0;
+			}
+			team.setLeaderIndex(leaderIndex);
+
 			battleTeam.addTeam(team);
 			System.out.println("Update team:" + name + ", " + Arrays.toString(heroArr));
 		}
@@ -72,6 +78,7 @@ public class UpdateBattleTeamRequestHandler extends BaseClientRequestHandler {
 			teamObj.putInt("index", team.getIndex());
 			teamObj.putUtfString("name", team.getName());
 			teamObj.putLongArray("heroes", new ArrayList<Long>(Arrays.asList(team.getHeroes())));
+			teamObj.putInt("leader_index", team.getLeaderIndex());
 			teamArr.addQAntObject(teamObj);
 		}
 		params.putQAntArray("teams", teamArr);

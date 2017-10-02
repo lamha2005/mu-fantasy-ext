@@ -141,6 +141,7 @@ public class JoinZoneEventHandler extends BaseServerEventHandler {
 			teamObj.putUtfString("name", team.getName());
 			teamObj.putInt("index", team.getIndex());
 			teamObj.putLongArray("heroes", new ArrayList<Long>(Arrays.asList(team.getHeroes())));
+			teamObj.putInt("leader_index", team.getLeaderIndex());
 			teamArr.addQAntObject(teamObj);
 		}
 		response.putQAntArray("teams", teamArr);
