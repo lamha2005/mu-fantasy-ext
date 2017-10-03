@@ -29,6 +29,7 @@ import com.creants.muext.entities.HeroClass;
 import com.creants.muext.entities.Team;
 import com.creants.muext.entities.item.HeroConsumeableItem;
 import com.creants.muext.entities.item.HeroEquipment;
+import com.creants.muext.entities.item.HeroItem;
 import com.creants.muext.exception.GameErrorCode;
 import com.creants.muext.managers.HeroClassManager;
 import com.creants.muext.managers.HeroItemManager;
@@ -48,6 +49,7 @@ public class HeroRequestHandler extends BaseClientRequestHandler {
 	private static final int UPGRADE_LEVEL = 1;
 	private static final int UPGRADE_RANK = 2;
 	private static final int HERO_DETAIL = 3;
+	private static final int NEXT_RANK = 4;
 	private static final int HERO_LIST = 10;
 	private static final int HERO_PAGE = 11;
 
@@ -87,11 +89,47 @@ public class HeroRequestHandler extends BaseClientRequestHandler {
 			case HERO_PAGE:
 				getHeroPage(user, params);
 				break;
+			case NEXT_RANK:
+				getNextRank(user, params);
+				break;
 
 			default:
 				getHeroList(user, params);
 				break;
 		}
+	}
+
+
+	private void getNextRank(QAntUser user, IQAntObject params) {
+		Long heroId = params.getLong("heroId");
+		if (heroId == null) {
+			sendError(MessageFactory.createErrorMsg(ExtensionEvent.CMD_HERO, GameErrorCode.CAN_NOT_FIND_HERO), user);
+			return;
+		}
+
+		HeroClass hero = heroClassManager.findHeroById(heroId);
+		if (hero == null || !hero.getGameHeroId().equals(user.getName())) {
+			sendError(MessageFactory.createErrorMsg(ExtensionEvent.CMD_HERO, GameErrorCode.CAN_NOT_UPGRADE_ITEM), user);
+			QAntTracer.warn(this.getClass(), "upgradeRank hero is not owned: " + user.getName() + "/heroId:" + heroId);
+			return;
+		}
+
+		HeroBase heroBase = hero.getHeroBase();
+		if (heroBase.getEvolveTo() == null) {
+			sendError(MessageFactory.createErrorMsg(ExtensionEvent.CMD_HERO, GameErrorCode.CAN_NOT_UPGRADE_ITEM), user);
+			QAntTracer.warn(this.getClass(), "upgradeRank hero can not upgrade: " + user.getName() + "/heroId:" + heroId
+					+ "/heroIndex:" + heroBase.getIndex());
+			return;
+		}
+
+		Integer evolveTo = heroBase.getEvolveTo();
+		HeroBase newHeroBase = heroConfig.getHeroBase(evolveTo);
+		hero.setIndex(newHeroBase.getIndex());
+		hero.setRank(hero.getRank() + 1);
+		hero.setSkillList(heroBase.getSkillList());
+		hero.setHeroBase(newHeroBase);
+		params.putQAntObject("new_hero", QAntObject.newFromObject(hero));
+		send(ExtensionEvent.CMD_HERO, params, user);
 	}
 
 
@@ -211,7 +249,7 @@ public class HeroRequestHandler extends BaseClientRequestHandler {
 					return;
 				}
 
-				IQAntArray itemArr = params.getCASArray("use_items");
+				IQAntArray itemArr = params.getCASArray("items");
 				if (itemArr == null || itemArr.size() <= 0) {
 					sendError(MessageFactory.createErrorMsg(ExtensionEvent.CMD_HERO, GameErrorCode.LACK_OF_INFOMATION),
 							user);
@@ -228,7 +266,16 @@ public class HeroRequestHandler extends BaseClientRequestHandler {
 				}
 				// TODO validate nguyên liệu
 				String evolveId = hero.getClassGroup() + "/" + (hero.getRank() + 1);
-				heroItemManager.useItems(user.getName(), itemIds);
+				List<HeroConsumeableItem> useItems = heroItemManager.useItems(user.getName(), itemIds);
+				if (useItems != null) {
+					QAntArray itemUdpArr = QAntArray.newInstance();
+					for (HeroItem heroItem : useItems) {
+						itemUdpArr.addQAntObject(QAntObject.newFromObject(heroItem));
+					}
+					QAntObject updateObj = QAntObject.newInstance();
+					updateObj.putQAntArray("items", itemUdpArr);
+					params.putQAntObject("update", updateObj);
+				}
 
 				heroClassManager.upgradeHero(hero);
 				params.putInt("code", 1);
@@ -353,7 +400,17 @@ public class HeroRequestHandler extends BaseClientRequestHandler {
 				}
 
 				if (consumeableItems.size() > 0) {
-					heroItemManager.updateConsumeableItem(consumeableItems);
+					List<HeroConsumeableItem> updateConsumeableItem = heroItemManager
+							.updateConsumeableItem(consumeableItems);
+					if (updateConsumeableItem != null) {
+						QAntArray itemUdpArr = QAntArray.newInstance();
+						for (HeroConsumeableItem heroItem : updateConsumeableItem) {
+							itemUdpArr.addQAntObject(QAntObject.newFromObject(heroItem));
+						}
+						QAntObject updateObj = QAntObject.newInstance();
+						updateObj.putQAntArray("items", itemUdpArr);
+						params.putQAntObject("update", updateObj);
+					}
 				}
 
 				GameHero gameHero = gameHeroRepository.findOne(gameHeroId);

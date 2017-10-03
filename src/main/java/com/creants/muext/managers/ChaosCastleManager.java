@@ -35,6 +35,7 @@ public class ChaosCastleManager implements InitializingBean {
 	private static final String RANK_B = "B";
 	private static final String RANK_A = "A";
 	private static final String RANK_S = "S";
+	private static final int MAX_STAGE = 20;
 	private Map<String, List<HeroClass>> teamMap;
 	private String[] rankArr;
 
@@ -187,6 +188,10 @@ public class ChaosCastleManager implements InitializingBean {
 
 			// TODO khi nào ko có user tương ứng thì mới dùng boss
 			ChaosCastlePower opponent = findOpponent(maxPower, castleStage);
+			if (opponent == null) {
+				QAntTracer.warn(this.getClass(), "Can not found opponent for maxPower = " + maxPower);
+				return null;
+			}
 			GameHero gameHero = npcManager.getGameHero(opponent.getGameHeroId());
 			stage.setAccName(gameHero.getName());
 			stage.setLevel(gameHero.getLevel());
@@ -220,13 +225,11 @@ public class ChaosCastleManager implements InitializingBean {
 	public ChaosCastleStage getNextStage(ChaosCastleInfo chaosInfo) {
 		ChaosCastlePower chaosCastlePower = chaosInfo.getChaosCastlePower();
 		ChaosCastleStage curStage = chaosInfo.getStage();
-		ChaosStageBase stageBase = null;
-		if (curStage.getId() < 20) {
-			stageBase = ChaosCastleConfig.getInstance().getStage(curStage.getId() + 1);
-		} else {
-			stageBase = ChaosCastleConfig.getInstance().getStage(curStage.getId() + 1);
+		ChaosStageBase stageBase = ChaosCastleConfig.getInstance().getStage(curStage.getId() + 1);
+		if (curStage.getId() >= MAX_STAGE) {
 			chaosInfo.setRank(getNextRank(chaosInfo.getRank()));
 		}
+
 		ChaosCastleStage stage = new ChaosCastleStage();
 		stage.setId(stageBase.getIndex());
 		ChaosCastlePower opponent = findOpponent(chaosCastlePower.getMaxPower(), stageBase);

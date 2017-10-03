@@ -17,6 +17,7 @@ public enum GameErrorCode implements IErrorCode {
 	ITEM_IS_USING("ITEM_IS_USING", 8),
 	NOT_EXIST_ITEM("NOT_EXIST_ITEM", 9),
 	CAN_NOT_UPGRADE_ITEM("CAN_NOT_UPGRADE_ITEM", 10),
+	CAN_NOT_UPGRADE_HERO("CAN_NOT_UPGRADE_HERO", 11),
 	MAIL_NOT_FOUND("MAIL_NOT_FOUND", 11);
 	private short id;
 	private String msg;

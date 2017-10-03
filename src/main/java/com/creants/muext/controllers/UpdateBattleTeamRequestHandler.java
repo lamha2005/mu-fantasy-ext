@@ -58,7 +58,7 @@ public class UpdateBattleTeamRequestHandler extends BaseClientRequestHandler {
 			}
 			team.setHeroes(heroArr);
 
-			Integer leaderIndex = params.getInt("leader_index");
+			Integer leaderIndex = teamObj.getInt("leader_index");
 			if (leaderIndex == null) {
 				leaderIndex = 0;
 			}
@@ -85,5 +85,7 @@ public class UpdateBattleTeamRequestHandler extends BaseClientRequestHandler {
 
 		send(ExtensionEvent.CMD_UPD_BATTLE_TEAM, params, user);
 	}
+	
+	
 
 }

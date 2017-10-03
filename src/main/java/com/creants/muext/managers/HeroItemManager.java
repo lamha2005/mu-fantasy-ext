@@ -39,7 +39,8 @@ public class HeroItemManager implements InitializingBean {
 	public void afterPropertiesSet() throws Exception {
 		// itemIndex/no#itemIndex/no
 		// addItems("mus1#323", "7000/1");
-		// addItems("mus1#317", "11017/3#11018/3#11019/3");
+		// addItems("mus1#327", "11032/50#11036/80#11002/80#11001/80");
+		// addItems("mus1#329", "11017/10#11018/10#11019/10");
 		// addItems("mus1#317", "1001/1");
 		// for (int i = 0; i < 50; i++) {
 		// addItems("mus1#323", "7000/1#1001/1");
@@ -139,8 +140,8 @@ public class HeroItemManager implements InitializingBean {
 	}
 
 
-	public void updateConsumeableItem(Collection<HeroConsumeableItem> items) {
-		heroItemRep.save(items);
+	public List<HeroConsumeableItem> updateConsumeableItem(Collection<HeroConsumeableItem> items) {
+		return heroItemRep.save(items);
 	}
 
 
