@@ -23,17 +23,19 @@ public class GameHero implements SerializableQAntType {
 	public String avatar;
 	public String name;
 	public int level;
-	public long zen;
-	public long soul;
 	public int exp;
 	public int maxExp;
 
+	public long zen;
+	public long soul;
 	public int stamina;
+	public int vipPoint;
+	public int friendPoint;
+	public int bless;
+
 	public int maxStamina;
 	public long staUpdTime;
 	public int vipLevel;
-	public int vipPoint;
-	public int friendPoint;
 	public int maxVipPoint;
 	public boolean isNPC;
 
@@ -259,5 +261,16 @@ public class GameHero implements SerializableQAntType {
 	public void setNPC(boolean isNPC) {
 		this.isNPC = isNPC;
 	}
+
+
+	public int getBless() {
+		return bless;
+	}
+
+
+	public void setBless(int bless) {
+		this.bless = bless;
+	}
+	
 
 }

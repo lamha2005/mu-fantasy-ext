@@ -45,15 +45,9 @@ public class HeroItemManager implements InitializingBean {
 		// for (int i = 0; i < 50; i++) {
 		// addItems("mus1#323", "7000/1#1001/1");
 		// }
-	}
 
-
-	public List<HeroItem> getItems(String gameHeroId) {
-		List<HeroItem> items = heroItemRep.findAllByGameHeroId(gameHeroId);
-		items.forEach(heroItem -> {
-			heroItem.setItemBase(itemConfig.getItem(heroItem.getIndex()));
-		});
-		return items;
+		Page<HeroItem> page = heroItemRep.getItemListExceptMoneyType("mus1#323", new PageRequest(0, MAX_ITEM_PER_PAGE));
+		System.out.println("test");
 	}
 
 

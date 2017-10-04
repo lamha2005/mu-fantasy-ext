@@ -1,6 +1,7 @@
 package com.creants.muext.entities.item;
 
 import org.springframework.data.annotation.Transient;
+import org.springframework.data.mongodb.core.index.Indexed;
 
 import com.creants.muext.entities.ItemBase;
 
@@ -11,6 +12,7 @@ import com.creants.muext.entities.ItemBase;
 public class HeroConsumeableItem extends HeroItem {
 	private transient boolean isOverlap;
 
+	@Indexed
 	public int itemType;
 
 	@Transient

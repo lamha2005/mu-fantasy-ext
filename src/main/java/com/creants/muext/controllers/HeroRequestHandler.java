@@ -312,6 +312,8 @@ public class HeroRequestHandler extends BaseClientRequestHandler {
 				exp += hero.getExp();
 
 				// cắn hero
+				// TODO kiểm tra mấy con hero này có nằm trong battle team ko,
+				// nếu có thì cập nhật lại
 				Collection<Long> consumHeroIds = params.getLongArray("heroIds");
 				List<HeroClass> consumHeroes = new ArrayList<>();
 				if (consumHeroIds != null && consumHeroIds.size() > 0) {

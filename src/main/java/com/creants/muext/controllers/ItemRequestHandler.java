@@ -12,7 +12,6 @@ import com.creants.creants_2x.socket.gate.entities.QAntObject;
 import com.creants.creants_2x.socket.gate.wood.QAntUser;
 import com.creants.muext.Creants2XApplication;
 import com.creants.muext.config.ItemConfig;
-import com.creants.muext.entities.HeroClass;
 import com.creants.muext.entities.item.HeroEquipment;
 import com.creants.muext.entities.item.HeroItem;
 import com.creants.muext.exception.GameErrorCode;
@@ -69,7 +68,6 @@ public class ItemRequestHandler extends BaseClientRequestHandler {
 				break;
 
 			default:
-				getItem(user, params);
 				break;
 		}
 	}
@@ -122,6 +120,7 @@ public class ItemRequestHandler extends BaseClientRequestHandler {
 
 
 	private void takeOn(QAntUser user, IQAntObject params) {
+		// TODO kiem tra hero nay co phai cua user nay ko
 		Long heroId = params.getLong("heroId");
 		Long itemId = params.getLong("itemId");
 		Integer slot = params.getInt("slotIndex");
@@ -190,24 +189,5 @@ public class ItemRequestHandler extends BaseClientRequestHandler {
 
 	private void sellItem(QAntUser user, IQAntObject params) {
 
-	}
-
-
-	private void getItem(QAntUser user, IQAntObject params) {
-		List<HeroItem> items = heroItemManager.getItems(user.getName());
-		if (items == null) {
-			send(ExtensionEvent.CMD_ITEM_REQ, null, user);
-			return;
-		}
-
-		QAntArray qantArr = QAntArray.newInstance();
-		for (HeroItem heroItem : items) {
-			qantArr.addQAntObject(QAntObject.newFromObject(heroItem));
-		}
-
-		params = QAntObject.newInstance();
-		params.putQAntArray("items", qantArr);
-
-		send(ExtensionEvent.CMD_ITEM_REQ, params, user);
 	}
 }
