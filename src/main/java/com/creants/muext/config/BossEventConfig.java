@@ -20,7 +20,7 @@ import com.fasterxml.jackson.dataformat.xml.XmlMapper;
  *
  */
 public class BossEventConfig {
-	private static final String EFFECT_CONFIG = "resources/events/boss_events.xml";
+	private static final String BOSS_EVENT_CONFIG = "resources/events/boss_events.xml";
 	private static final XMLInputFactory f = XMLInputFactory.newFactory();
 	private static BossEventConfig instance;
 	private Map<Integer, BossEvent> eventMap;
@@ -42,7 +42,7 @@ public class BossEventConfig {
 	private void loadBossEvent() {
 		try {
 			eventMap = new HashMap<>();
-			XMLStreamReader sr = f.createXMLStreamReader(new FileInputStream(EFFECT_CONFIG));
+			XMLStreamReader sr = f.createXMLStreamReader(new FileInputStream(BOSS_EVENT_CONFIG));
 			XmlMapper mapper = new XmlMapper();
 			sr.next();
 			sr.next();

@@ -59,6 +59,7 @@ public class HeroConsumeableItem extends HeroItem {
 	}
 
 
+	@Override
 	public int getItemType() {
 		return itemType;
 	}

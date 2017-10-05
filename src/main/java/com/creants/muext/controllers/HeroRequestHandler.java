@@ -21,7 +21,6 @@ import com.creants.muext.Creants2XApplication;
 import com.creants.muext.config.GameConfig;
 import com.creants.muext.config.HeroClassConfig;
 import com.creants.muext.dao.BattleTeamRepository;
-import com.creants.muext.dao.GameHeroRepository;
 import com.creants.muext.entities.BattleTeam;
 import com.creants.muext.entities.GameHero;
 import com.creants.muext.entities.HeroBase;
@@ -30,7 +29,10 @@ import com.creants.muext.entities.Team;
 import com.creants.muext.entities.item.HeroConsumeableItem;
 import com.creants.muext.entities.item.HeroEquipment;
 import com.creants.muext.entities.item.HeroItem;
+import com.creants.muext.entities.upgrade.EvolveHero;
+import com.creants.muext.entities.upgrade.UpgradeSystem;
 import com.creants.muext.exception.GameErrorCode;
+import com.creants.muext.managers.GameHeroManager;
 import com.creants.muext.managers.HeroClassManager;
 import com.creants.muext.managers.HeroItemManager;
 import com.creants.muext.services.MessageFactory;
@@ -53,9 +55,9 @@ public class HeroRequestHandler extends BaseClientRequestHandler {
 	private static final int HERO_LIST = 10;
 	private static final int HERO_PAGE = 11;
 
-	private GameHeroRepository gameHeroRepository;
 	private HeroItemManager heroItemManager;
 	private HeroClassManager heroClassManager;
+	private GameHeroManager gameHeroManager;
 	private BattleTeamRepository battleTeamRep;
 	private KeyLockManager keyLockManager;
 	private static final HeroClassConfig heroConfig = HeroClassConfig.getInstance();
@@ -64,7 +66,7 @@ public class HeroRequestHandler extends BaseClientRequestHandler {
 	public HeroRequestHandler() {
 		heroItemManager = Creants2XApplication.getBean(HeroItemManager.class);
 		heroClassManager = Creants2XApplication.getBean(HeroClassManager.class);
-		gameHeroRepository = Creants2XApplication.getBean(GameHeroRepository.class);
+		gameHeroManager = Creants2XApplication.getBean(GameHeroManager.class);
 		battleTeamRep = Creants2XApplication.getBean(BattleTeamRepository.class);
 		keyLockManager = KeyLockManagers.newLock();
 	}
@@ -103,22 +105,22 @@ public class HeroRequestHandler extends BaseClientRequestHandler {
 	private void getNextRank(QAntUser user, IQAntObject params) {
 		Long heroId = params.getLong("heroId");
 		if (heroId == null) {
-			sendError(MessageFactory.createErrorMsg(ExtensionEvent.CMD_HERO, GameErrorCode.CAN_NOT_FIND_HERO), user);
+			responseError(user, GameErrorCode.CAN_NOT_FIND_HERO);
 			return;
 		}
 
 		HeroClass hero = heroClassManager.findHeroById(heroId);
 		if (hero == null || !hero.getGameHeroId().equals(user.getName())) {
-			sendError(MessageFactory.createErrorMsg(ExtensionEvent.CMD_HERO, GameErrorCode.CAN_NOT_UPGRADE_ITEM), user);
-			QAntTracer.warn(this.getClass(), "upgradeRank hero is not owned: " + user.getName() + "/heroId:" + heroId);
+			responseError(user, GameErrorCode.CAN_NOT_UPGRADE_ITEM);
+			warn("upgradeRank hero is not owned: " + user.getName() + "/heroId:" + heroId);
 			return;
 		}
 
 		HeroBase heroBase = hero.getHeroBase();
 		if (heroBase.getEvolveTo() == null) {
-			sendError(MessageFactory.createErrorMsg(ExtensionEvent.CMD_HERO, GameErrorCode.CAN_NOT_UPGRADE_ITEM), user);
-			QAntTracer.warn(this.getClass(), "upgradeRank hero can not upgrade: " + user.getName() + "/heroId:" + heroId
-					+ "/heroIndex:" + heroBase.getIndex());
+			responseError(user, GameErrorCode.CAN_NOT_UPGRADE_ITEM);
+			warn("upgradeRank hero can not upgrade: " + user.getName() + "/heroId:" + heroId + "/heroIndex:"
+					+ heroBase.getIndex());
 			return;
 		}
 
@@ -188,13 +190,13 @@ public class HeroRequestHandler extends BaseClientRequestHandler {
 	private void getHeroDetail(QAntUser user, IQAntObject params) {
 		Long heroId = params.getLong("heroId");
 		if (heroId == null) {
-			sendError(MessageFactory.createErrorMsg("cmd_hero", GameErrorCode.LACK_OF_INFOMATION), user);
+			responseError(user, GameErrorCode.LACK_OF_INFOMATION);
 			return;
 		}
 
 		HeroClass hero = heroClassManager.findHeroById(heroId);
 		if (hero == null) {
-			sendError(MessageFactory.createErrorMsg("cmd_hero", GameErrorCode.CAN_NOT_FIND_HERO), user);
+			responseError(user, GameErrorCode.CAN_NOT_FIND_HERO);
 			return;
 		}
 
@@ -224,37 +226,46 @@ public class HeroRequestHandler extends BaseClientRequestHandler {
 			public void doInLock() {
 				Long heroId = params.getLong("heroId");
 				if (heroId == null) {
-					sendError(MessageFactory.createErrorMsg(ExtensionEvent.CMD_HERO, GameErrorCode.CAN_NOT_FIND_HERO),
-							user);
+					responseError(user, GameErrorCode.CAN_NOT_FIND_HERO);
 					return;
 				}
 
 				HeroClass hero = heroClassManager.findHeroById(heroId);
-				if (hero == null || !hero.getGameHeroId().equals(user.getName())) {
-					sendError(
-							MessageFactory.createErrorMsg(ExtensionEvent.CMD_HERO, GameErrorCode.CAN_NOT_UPGRADE_ITEM),
-							user);
-					QAntTracer.warn(this.getClass(),
-							"upgradeRank hero is not owned: " + user.getName() + "/heroId:" + heroId);
+				String gameHeroId = user.getName();
+				if (hero == null || !hero.getGameHeroId().equals(gameHeroId)) {
+					responseError(user, GameErrorCode.CAN_NOT_UPGRADE_HERO);
+					warn("upgradeRank hero is not owned: " + gameHeroId + "/heroId:" + heroId);
 					return;
 				}
 
 				HeroBase heroBase = hero.getHeroBase();
 				if (heroBase.getEvolveTo() == null) {
-					sendError(
-							MessageFactory.createErrorMsg(ExtensionEvent.CMD_HERO, GameErrorCode.CAN_NOT_UPGRADE_ITEM),
-							user);
-					QAntTracer.warn(this.getClass(),
-							"upgradeRank hero can not upgrade: " + user.getName() + "/heroId:" + heroId);
+					responseError(user, GameErrorCode.CAN_NOT_UPGRADE_HERO);
+					warn("upgradeRank hero can not upgrade: " + gameHeroId + "/heroId:" + heroId);
+					return;
+				}
+
+				GameHero gameHero = gameHeroManager.getHero(gameHeroId);
+
+				// TODO validate nguyên liệu
+				String evolveId = UpgradeSystem.genEvolveKey(hero.getClassGroup(), hero.nextRank());
+				EvolveHero evolveHero = GameConfig.getInstance().getEvolveHero(evolveId);
+				if (evolveHero == null) {
+					responseError(user, GameErrorCode.CAN_NOT_UPGRADE_HERO);
+					warn("upgradeRank hero can not upgrade: " + gameHeroId + "/evolveId:" + evolveId);
+					return;
+				}
+
+				if (evolveHero.getZenCost() > gameHero.getZen()) {
+					responseError(user, GameErrorCode.NOT_ENOUGH_ZEN);
+					warn("upgradeRank hero can not upgrade: " + gameHeroId + "/heroId:" + heroId);
 					return;
 				}
 
 				IQAntArray itemArr = params.getCASArray("items");
 				if (itemArr == null || itemArr.size() <= 0) {
-					sendError(MessageFactory.createErrorMsg(ExtensionEvent.CMD_HERO, GameErrorCode.LACK_OF_INFOMATION),
-							user);
-					QAntTracer.warn(this.getClass(), "upgradeRank hero can not upgrade. Item is not empty: "
-							+ user.getName() + "/heroId:" + heroId);
+					responseError(user, GameErrorCode.LACK_OF_INFOMATION);
+					warn("upgradeRank hero can not upgrade. Items empty: " + gameHeroId + "/heroId:" + heroId);
 					return;
 				}
 
@@ -264,9 +275,8 @@ public class HeroRequestHandler extends BaseClientRequestHandler {
 					IQAntObject itemObj = itemArr.getQAntObject(i);
 					itemIds.put(itemObj.getLong("id"), itemObj.getInt("no"));
 				}
-				// TODO validate nguyên liệu
-				String evolveId = hero.getClassGroup() + "/" + (hero.getRank() + 1);
-				List<HeroConsumeableItem> useItems = heroItemManager.useItems(user.getName(), itemIds);
+
+				List<HeroConsumeableItem> useItems = heroItemManager.useItems(gameHeroId, itemIds);
 				if (useItems != null) {
 					QAntArray itemUdpArr = QAntArray.newInstance();
 					for (HeroItem heroItem : useItems) {
@@ -278,11 +288,27 @@ public class HeroRequestHandler extends BaseClientRequestHandler {
 				}
 
 				heroClassManager.upgradeHero(hero);
+
+				gameHero = gameHeroManager.incrZen(gameHeroId, -evolveHero.getZenCost());
+				Map<String, Object> assetMap = new HashMap<>();
+				assetMap.put("zen", gameHero.getZen());
+				send(ExtensionEvent.CMD_NTF_ASSETS_CHANGE, MessageFactory.buildAssetsChange(assetMap), user);
+
 				params.putInt("code", 1);
 				params.putQAntObject("new_hero", QAntObject.newFromObject(hero));
 				send(ExtensionEvent.CMD_HERO, params, user);
 			}
 		});
+	}
+
+
+	private void responseError(QAntUser user, GameErrorCode error) {
+		sendError(MessageFactory.createErrorMsg(ExtensionEvent.CMD_HERO, error), user);
+	}
+
+
+	private void warn(String message) {
+		QAntTracer.warn(this.getClass(), message);
 	}
 
 
@@ -296,16 +322,14 @@ public class HeroRequestHandler extends BaseClientRequestHandler {
 				int exp = 0;
 				Long heroId = params.getLong("heroId");
 				if (heroId == null) {
-					sendError(MessageFactory.createErrorMsg(ExtensionEvent.CMD_HERO, GameErrorCode.CAN_NOT_FIND_HERO),
-							user);
+					responseError(user, GameErrorCode.CAN_NOT_FIND_HERO);
 					return;
 				}
 
 				// hero cần upgrade
 				HeroClass hero = heroClassManager.findHeroById(heroId);
 				if (hero == null) {
-					sendError(MessageFactory.createErrorMsg(ExtensionEvent.CMD_HERO, GameErrorCode.CAN_NOT_FIND_HERO),
-							user);
+					responseError(user, GameErrorCode.CAN_NOT_FIND_HERO);
 					return;
 				}
 
@@ -319,9 +343,7 @@ public class HeroRequestHandler extends BaseClientRequestHandler {
 				if (consumHeroIds != null && consumHeroIds.size() > 0) {
 					consumHeroes = heroClassManager.findHeroes(consumHeroIds);
 					if (consumHeroes.size() != consumHeroIds.size()) {
-						sendError(
-								MessageFactory.createErrorMsg(ExtensionEvent.CMD_HERO, GameErrorCode.CAN_NOT_FIND_HERO),
-								user);
+						responseError(user, GameErrorCode.CAN_NOT_FIND_HERO);
 						return;
 					}
 
@@ -332,10 +354,8 @@ public class HeroRequestHandler extends BaseClientRequestHandler {
 								hero.getElement().equals(heroClass.getElement()));
 
 						if (incrExp < 0) {
-							QAntTracer.warn(HeroRequestHandler.class,
-									"Can not use hero rank: " + heroClass.getRank() + "/gameHeroId:" + gameHeroId);
-							sendError(MessageFactory.createErrorMsg(ExtensionEvent.CMD_HERO,
-									GameErrorCode.MATERIAL_CAN_NOT_USE), user);
+							responseError(user, GameErrorCode.MATERIAL_CAN_NOT_USE);
+							warn("Can not use hero rank: " + heroClass.getRank() + "/gameHeroId:" + gameHeroId);
 							return;
 						}
 
@@ -381,8 +401,7 @@ public class HeroRequestHandler extends BaseClientRequestHandler {
 						int incrExp = GameConfig.getInstance().getExpFromItem(heroItem.getIndex(),
 								hero.getElement().equals(heroItem.getElement()));
 						if (incrExp < 0) {
-							sendError(MessageFactory.createErrorMsg(ExtensionEvent.CMD_HERO,
-									GameErrorCode.MATERIAL_CAN_NOT_USE), user);
+							responseError(user, GameErrorCode.MATERIAL_CAN_NOT_USE);
 							return;
 						}
 
@@ -393,7 +412,7 @@ public class HeroRequestHandler extends BaseClientRequestHandler {
 				}
 
 				if (fee == 0) {
-					sendError(MessageFactory.createErrorMsg(ExtensionEvent.CMD_HERO, GameErrorCode.FEE_NULL), user);
+					responseError(user, GameErrorCode.FEE_NULL);
 					return;
 				}
 
@@ -415,9 +434,10 @@ public class HeroRequestHandler extends BaseClientRequestHandler {
 					}
 				}
 
-				GameHero gameHero = gameHeroRepository.findOne(gameHeroId);
-				gameHero.incrZen(-fee);
-				gameHeroRepository.save(gameHero);
+				GameHero gameHero = gameHeroManager.incrZen(gameHeroId, -fee);
+				Map<String, Object> assetMap = new HashMap<>();
+				assetMap.put("zen", gameHero.getZen());
+				send(ExtensionEvent.CMD_NTF_ASSETS_CHANGE, MessageFactory.buildAssetsChange(assetMap), user);
 
 				hero.incrExp(exp);
 				heroClassManager.save(hero);

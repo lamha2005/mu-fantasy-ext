@@ -18,7 +18,6 @@ import com.creants.muext.Creants2XApplication;
 import com.creants.muext.config.ItemConfig;
 import com.creants.muext.config.StageConfig;
 import com.creants.muext.dao.BattleTeamRepository;
-import com.creants.muext.dao.GameHeroRepository;
 import com.creants.muext.dao.HeroStageRepository;
 import com.creants.muext.entities.BattleTeam;
 import com.creants.muext.entities.GameHero;
@@ -28,6 +27,7 @@ import com.creants.muext.entities.item.HeroItem;
 import com.creants.muext.entities.quest.KillMonsterQuest;
 import com.creants.muext.entities.world.HeroStage;
 import com.creants.muext.entities.world.Stage;
+import com.creants.muext.managers.GameHeroManager;
 import com.creants.muext.managers.HeroClassManager;
 import com.creants.muext.managers.HeroItemManager;
 import com.creants.muext.managers.MatchManager;
@@ -40,9 +40,9 @@ import com.creants.muext.services.QuestManager;
  * @author LamHa
  */
 public class StageFinishRequestHandler extends BaseClientRequestHandler {
-	private GameHeroRepository repository;
 	private MatchManager matchManager;
 	private QuestManager questManager;
+	private GameHeroManager gameHeroManager;
 	private HeroStageRepository heroStageRepository;
 	private HeroClassManager heroManager;
 	private AutoIncrementService autoIncrService;
@@ -53,13 +53,13 @@ public class StageFinishRequestHandler extends BaseClientRequestHandler {
 
 	public StageFinishRequestHandler() {
 		matchManager = Creants2XApplication.getBean(MatchManager.class);
-		repository = Creants2XApplication.getBean(GameHeroRepository.class);
 		questManager = Creants2XApplication.getBean(QuestManager.class);
 		heroStageRepository = Creants2XApplication.getBean(HeroStageRepository.class);
 		autoIncrService = Creants2XApplication.getBean(AutoIncrementService.class);
 		heroManager = Creants2XApplication.getBean(HeroClassManager.class);
 		battleTeamRepository = Creants2XApplication.getBean(BattleTeamRepository.class);
 		heroItemManager = Creants2XApplication.getBean(HeroItemManager.class);
+		gameHeroManager = Creants2XApplication.getBean(GameHeroManager.class);
 	}
 
 
@@ -115,7 +115,7 @@ public class StageFinishRequestHandler extends BaseClientRequestHandler {
 
 		notifyAssetChange(user, stage);
 		processHeroStage(user, heroStage);
-		// kiểm tra xử lý nhiệm vụ, nên tách ra notification quest
+		// kiểm tra xử lý nhiệm vụ
 		processQuest(user, stageIndex, gameHeroId);
 	}
 
@@ -140,7 +140,7 @@ public class StageFinishRequestHandler extends BaseClientRequestHandler {
 			response.putInt("type", ExtensionEvent.NTF_UNLOCK_NEW_STAGE);
 			response.putInt("stage_index", newStage.getIndex());
 			if (nextStage.getChapterIndex() > heroStage.getChapterIndex()) {
-				QAntTracer.debug(this.getClass(), "----------------------------->> Mo chuong moi: " + user.getName());
+				QAntTracer.debug(this.getClass(), "----------------------------->> Mo chuong moi: " + gameHeroId);
 				response.putInt("chapter_index", newStage.getChapterIndex());
 			}
 
@@ -274,7 +274,7 @@ public class StageFinishRequestHandler extends BaseClientRequestHandler {
 
 
 	private void notifyAssetChange(QAntUser user, Stage stage) {
-		GameHero gameHero = repository.findOne(user.getName());
+		GameHero gameHero = gameHeroManager.getHero(user.getName());
 		IQAntObject assets = QAntObject.newInstance();
 		Integer exp = stage.getExpAccReward();
 		if (exp > 0) {
@@ -290,7 +290,7 @@ public class StageFinishRequestHandler extends BaseClientRequestHandler {
 		assets.putLong("zen", gameHero.getZen());
 
 		send(ExtensionEvent.CMD_NTF_ASSETS_CHANGE, assets, user);
-		repository.save(gameHero);
+		gameHeroManager.update(gameHero);
 	}
 
 }

@@ -143,4 +143,10 @@ public class HeroEquipment extends HeroItem {
 		return def;
 	}
 
+
+	@Override
+	public int getItemType() {
+		return -1;
+	}
+
 }

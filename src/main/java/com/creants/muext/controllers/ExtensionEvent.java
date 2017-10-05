@@ -22,6 +22,7 @@ public class ExtensionEvent {
 	public static final String CMD_MAIL = "cmd_mail";
 	public static final String CMD_CHAOS_CASTLE = "cmd_chaos_castle";
 	public static final String CMD_GET_ETOKEN = "cmd_get_etoken";
+	public static final String CMD_SHOP = "cmd_shop";
 
 	public static final String CMD_NTF_ASSETS_CHANGE = "cmd_assets_change";
 	public static final String CMD_NTF_UNLOCK = "cmd_unlock_notification";
@@ -29,6 +30,6 @@ public class ExtensionEvent {
 
 	public static final int NTF_UNLOCK_NEW_STAGE = 1;
 
-	public static final String NTF_VIEW_QUEST_TYPE= "quest";
+	public static final String NTF_VIEW_QUEST_TYPE = "quest";
 
 }

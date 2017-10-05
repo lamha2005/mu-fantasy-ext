@@ -209,6 +209,11 @@ public class HeroClass implements SerializableQAntType {
 	}
 
 
+	public int nextRank() {
+		return rank++;
+	}
+
+
 	public void setRank(int rank) {
 		this.rank = rank;
 	}
@@ -305,8 +310,8 @@ public class HeroClass implements SerializableQAntType {
 			exp -= maxExp;
 			levelUp(1);
 			isLevelUp = true;
-			
-//			System.out.println(this);
+
+			// System.out.println(this);
 		}
 
 		return isLevelUp;

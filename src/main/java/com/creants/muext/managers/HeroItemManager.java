@@ -40,14 +40,12 @@ public class HeroItemManager implements InitializingBean {
 		// itemIndex/no#itemIndex/no
 		// addItems("mus1#323", "7000/1");
 		// addItems("mus1#327", "11032/50#11036/80#11002/80#11001/80");
-		// addItems("mus1#329", "11017/10#11018/10#11019/10");
+		// addItems("mus1#336",
+		// "11017/30#11018/30#11019/30#1001/1#1002/1#7000/1");
 		// addItems("mus1#317", "1001/1");
 		// for (int i = 0; i < 50; i++) {
 		// addItems("mus1#323", "7000/1#1001/1");
 		// }
-
-		Page<HeroItem> page = heroItemRep.getItemListExceptMoneyType("mus1#323", new PageRequest(0, MAX_ITEM_PER_PAGE));
-		System.out.println("test");
 	}
 
 

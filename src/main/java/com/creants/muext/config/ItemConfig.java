@@ -35,7 +35,8 @@ public class ItemConfig {
 	public static final String SEPERATE_OTHER_ITEM = "#";
 	public static final String SEPERATE_ITEM_NO = "/";
 
-	private static final int ZEN_INDEX = 11998;
+	public static final int ZEN_INDEX = 11998;
+	public static final int BLESS_INDEX = 11999;
 	private static final int CHAOS_POINT_INDEX = 11997;
 
 	private static final int CONSUMABLE_ITEM = 1;
@@ -165,15 +166,7 @@ public class ItemConfig {
 
 
 	public List<String> splitRewardString(String rewardString) {
-		List<String> rewardList = new ArrayList<>();
-		if (StringUtils.isNotBlank(rewardString)) {
-			String[] split = StringUtils.split(rewardString, SEPERATE_OTHER_ITEM);
-			for (int i = 0; i < split.length; i++) {
-				rewardList.add(split[i]);
-			}
-		}
-
-		return rewardList;
+		return splitItemString(rewardString);
 	}
 
 

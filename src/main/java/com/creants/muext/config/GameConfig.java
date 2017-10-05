@@ -8,6 +8,7 @@ import java.util.Map;
 import javax.xml.stream.XMLInputFactory;
 import javax.xml.stream.XMLStreamReader;
 
+import com.creants.muext.entities.upgrade.EvolveHero;
 import com.creants.muext.entities.upgrade.UpgradeSystem;
 import com.fasterxml.jackson.core.type.TypeReference;
 import com.fasterxml.jackson.databind.ObjectMapper;
@@ -101,6 +102,11 @@ public class GameConfig {
 
 	public UpgradeSystem getUpgradeSystem() {
 		return upgradeSystem;
+	}
+
+
+	public EvolveHero getEvolveHero(String id) {
+		return upgradeSystem.getEvolveHero(id);
 	}
 
 

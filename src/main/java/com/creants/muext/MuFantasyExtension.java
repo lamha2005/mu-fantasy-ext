@@ -28,6 +28,7 @@ import com.creants.muext.controllers.LoginEventHandler;
 import com.creants.muext.controllers.LogoutEventHandler;
 import com.creants.muext.controllers.MailRequestHandler;
 import com.creants.muext.controllers.QuestClaimRequestHandler;
+import com.creants.muext.controllers.ShopRequestHandler;
 import com.creants.muext.controllers.StageFinishRequestHandler;
 import com.creants.muext.controllers.StageRequestHandler;
 import com.creants.muext.controllers.SummonRequestHandler;
@@ -80,6 +81,7 @@ public class MuFantasyExtension extends QAntExtension {
 		addRequestHandler(ExtensionEvent.CMD_HERO, HeroRequestHandler.class);
 		addRequestHandler(ExtensionEvent.CMD_MAIL, MailRequestHandler.class);
 		addRequestHandler(ExtensionEvent.CMD_CHAOS_CASTLE, ChaosCastleRequestHandler.class);
+		addRequestHandler(ExtensionEvent.CMD_SHOP, ShopRequestHandler.class);
 
 		addRequestHandler("cmd_ccu", CCURequestHandler.class);
 		addRequestHandler("cmd_admin_login", AdminLoginRequestHandler.class);

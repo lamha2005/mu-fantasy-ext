@@ -117,6 +117,9 @@ public abstract class HeroItem implements SerializableQAntType {
 	public abstract void setItemBase(ItemBase itemBase);
 
 
+	public abstract int getItemType();
+
+
 	@Override
 	public String toString() {
 		return "{gameHeroId:" + gameHeroId + ", id:" + id + ", index: " + index + "}";

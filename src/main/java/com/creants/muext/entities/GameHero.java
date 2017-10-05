@@ -17,6 +17,7 @@ import com.creants.muext.entities.item.HeroItem;
  */
 @Document(collection = "game-heroes")
 public class GameHero implements SerializableQAntType {
+	private static final int MAX_STAMINA = 100;
 	@Id
 	public String id;
 	public long userId;
@@ -31,9 +32,11 @@ public class GameHero implements SerializableQAntType {
 	public int stamina;
 	public int vipPoint;
 	public int friendPoint;
-	public int bless;
+	public long bless;
+	public int arenaTicket;
 
 	public int maxStamina;
+	public int maxArenaTicket;
 	public long staUpdTime;
 	public int vipLevel;
 	public int maxVipPoint;
@@ -46,7 +49,7 @@ public class GameHero implements SerializableQAntType {
 
 
 	public GameHero() {
-		maxStamina = 100;
+		maxStamina = MAX_STAMINA;
 		items = new ArrayList<HeroItem>();
 	}
 
@@ -181,6 +184,11 @@ public class GameHero implements SerializableQAntType {
 	}
 
 
+	public void incrBless(long value) {
+		this.bless -= value;
+	}
+
+
 	public long getSoul() {
 		return soul;
 	}
@@ -263,14 +271,33 @@ public class GameHero implements SerializableQAntType {
 	}
 
 
-	public int getBless() {
+	public long getBless() {
 		return bless;
 	}
 
 
-	public void setBless(int bless) {
+	public void setBless(long bless) {
 		this.bless = bless;
 	}
-	
+
+
+	public int getArenaTicket() {
+		return arenaTicket;
+	}
+
+
+	public void setArenaTicket(int arenaTicket) {
+		this.arenaTicket = arenaTicket;
+	}
+
+
+	public int getMaxArenaTicket() {
+		return maxArenaTicket;
+	}
+
+
+	public void setMaxArenaTicket(int maxArenaTicket) {
+		this.maxArenaTicket = maxArenaTicket;
+	}
 
 }

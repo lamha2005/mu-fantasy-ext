@@ -25,6 +25,7 @@ public class UpgradeSystem {
 	@JacksonXmlProperty(localName = "LevelUpEquipmentsGT3")
 	private List<LevelUpEquipment> levelUpEquipmentGT3List;
 
+	// key format: classGoup/rank
 	private Map<String, EvolveHero> evolveHeroes;
 	private Map<Integer, LevelUpHeroByHero> levelUpHeroByHeroes;
 	private Map<Integer, LevelUpHeroByItem> levelUpHeroByItems;
@@ -35,7 +36,7 @@ public class UpgradeSystem {
 	public void convertBase() {
 		evolveHeroes = new HashMap<>();
 		for (EvolveHero evolveHero : evolveHeroList) {
-			evolveHeroes.put(evolveHero.getClassGroup() + "/" + evolveHero.getRank(), evolveHero);
+			evolveHeroes.put(genEvolveKey(evolveHero.getClassGroup(), evolveHero.getRank()), evolveHero);
 		}
 
 		levelUpHeroByHeroes = new HashMap<>();
@@ -58,6 +59,11 @@ public class UpgradeSystem {
 			levelUpEquipmentsGT3.put(levelUpItem.getLevel(), levelUpItem);
 		}
 
+	}
+
+
+	public static String genEvolveKey(int classGroup, int rank) {
+		return classGroup + "/" + rank;
 	}
 
 
@@ -113,6 +119,11 @@ public class UpgradeSystem {
 
 	public Map<String, EvolveHero> getEvolveHeroes() {
 		return evolveHeroes;
+	}
+
+
+	public EvolveHero getEvolveHero(String key) {
+		return evolveHeroes.get(key);
 	}
 
 
