@@ -12,7 +12,7 @@ public class ExtensionEvent {
 	public static final String CMD_JOIN_STAGE = "cmd_join_stage";
 	public static final String CMD_STAGE_FINISH = "cmd_stage_finish";
 	public static final String CMD_JOIN_CHAPTER = "cmd_join_chapter";
-	public static final String CMD_QUEST_CLAIM = "cmd_quest_claim";
+	public static final String CMD_QUEST = "cmd_quest";
 	public static final String CMD_BOSS_EVENT_JOIN = "cmd_boss_event_join";
 	public static final String CMD_SUMMON = "cmd_summon";
 	public static final String CMD_GIFT_EVENTS = "cmd_gift_events";

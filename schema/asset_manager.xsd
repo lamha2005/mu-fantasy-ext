@@ -14,9 +14,15 @@
              <xs:attribute name="Animations" type="xs:string"/>
              <xs:attribute name="SpineHit" type="xs:string"/>
              <xs:attribute name="HitTiming" type="xs:string"/>
+             <xs:attribute name="Sound" type="xs:string"/>
+             <xs:attribute name="SoundTiming" type="xs:string"/>
+             <xs:attribute name="SoundHurt" type="xs:string"/>
              <xs:attribute name="SpineSkill" type="xs:int"/>
              <xs:attribute name="SpineSkillHit" type="xs:string"/>
              <xs:attribute name="SkillTiming" type="xs:string"/>
+             <xs:attribute name="SkillAnimations" type="xs:string"/>
+             <xs:attribute name="SoundSkill" type="xs:string"/>
+             <xs:attribute name="SoundTimingSkill" type="xs:string"/>
         </xs:complexType>
     </xs:element>
 </xs:schema>

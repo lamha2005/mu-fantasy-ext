@@ -90,15 +90,16 @@ public class JoinZoneEventHandler extends BaseServerEventHandler {
 		user.setLoginTime(System.currentTimeMillis());
 		long creantsUserId = user.getCreantsUserId();
 		String gameHeroId = user.getName();
-
 		IQAntObject response = new QAntObject();
 		boolean isNewAccount = false;
 		GameHero gameHero = gameHeroRep.findOne(gameHeroId);
 		if (gameHero == null) {
 			gameHero = createNewGameHero(gameHeroId, creantsUserId);
-			user.setProperty(UserHelper.GAME_HERO_NAME, gameHero.getName());
 			isNewAccount = true;
 		}
+
+		gameHero.setName(user.getFullName());
+		UserHelper.setGameHeroName(user, gameHero.getName());
 
 		processMail(user, response, isNewAccount);
 		updateStamina(user, gameHero);

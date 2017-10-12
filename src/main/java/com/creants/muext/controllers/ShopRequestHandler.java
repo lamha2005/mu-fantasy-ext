@@ -80,7 +80,7 @@ public class ShopRequestHandler extends BaseClientRequestHandler {
 		if (packageId == null) {
 			// TODO send error
 			QAntTracer.warn(this.getClass(), "ShopRequestHandler package_id is null");
-			responseError(user, GameErrorCode.LACK_OF_INFOMATION);
+			responseError(user, GameErrorCode.LACK_OF_INFOMATION, GET_PACKAGE_LIST);
 			return;
 		}
 
@@ -93,7 +93,7 @@ public class ShopRequestHandler extends BaseClientRequestHandler {
 		switch (priceItemIndex) {
 			case ItemConfig.ZEN_INDEX:
 				if (hero.getZen() < priceItemNo) {
-					responseError(user, GameErrorCode.NOT_ENOUGH_ZEN);
+					responseError(user, GameErrorCode.NOT_ENOUGH_ZEN, BUY_ITEM);
 					return;
 				}
 
@@ -102,7 +102,7 @@ public class ShopRequestHandler extends BaseClientRequestHandler {
 				break;
 			case ItemConfig.BLESS_INDEX:
 				if (hero.getBless() < priceItemNo) {
-					responseError(user, GameErrorCode.NOT_ENOUGH_BLESS);
+					responseError(user, GameErrorCode.NOT_ENOUGH_BLESS, BUY_ITEM);
 					return;
 				}
 				hero.incrBless(-priceItemNo);
@@ -135,7 +135,9 @@ public class ShopRequestHandler extends BaseClientRequestHandler {
 	}
 
 
-	private void responseError(QAntUser user, GameErrorCode error) {
-		sendError(MessageFactory.createErrorMsg(ExtensionEvent.CMD_HERO, error), user);
+	private void responseError(QAntUser user, GameErrorCode error, int act) {
+		IQAntObject createErrorMsg = MessageFactory.createErrorMsg(ExtensionEvent.CMD_SHOP, error);
+		createErrorMsg.putInt("act", act);
+		sendError(createErrorMsg, user);
 	}
 }

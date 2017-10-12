@@ -1,34 +1,34 @@
 <?xml version="1.0" encoding="UTF-8" standalone="yes"?>
 <AssetList>
-	<Asset Index="100" ResChar="100" Animations="attack" SpineHit="slashRed1#slashRed2#slashRed3" HitTiming="0.3#0.62#1.16" SpineSkillHit="slashRed1#slashRed2" SkillTiming="1#1.56"/>
-	<Asset Index="101" ResChar="101" Animations="attack" SpineHit="slashRed1#slashRed2#slashRed3" HitTiming="0.36#0.56#0.86" SpineSkillHit="hitExplosionA1" SkillTiming="1.6"/>
-	<Asset Index="102" ResChar="102" Animations="attack" SpineHit="slashBlue1" HitTiming="0.6" SpineSkillHit="slashBlue2#slashBlue1" SkillTiming="1.26#1.5"/>
-	<Asset Index="103" ResChar="103" Animations="attack" SpineHit="slashGreen1" HitTiming="0.5" SpineSkillHit="hitWindA#hitWindA" SkillTiming="1#1.3"/>
-	<Asset Index="200" ResChar="200" Animations="attack" SpineHit="hitBlue1" HitTiming="0.66" SpineSkillHit="hitBlue1" SkillTiming="1.3"/>
-	<Asset Index="300" ResChar="300" Animations="attack" SpineHit="hitArrowGN1" HitTiming="0.56" SpineSkillHit="hitArrowGS1" SkillTiming="1.56"/>
-	<Asset Index="400" ResChar="400" Animations="attack" SpineHit="hitRed1#hitRed2" HitTiming="0.4#1" SpineSkillHit="hitRed1#hitRed2#hitRed3" SkillTiming="1.06#1.66#2.4"/>
-	<Asset Index="402" ResChar="402" Animations="attack" SpineHit="hitRed1#hitRed2" HitTiming="0.32#0.7" SpineSkillHit="hitRed1#hitRed2#hitRed3" SkillTiming="1#1.5#2.1"/>
-	<Asset Index="999" ResChar="100" Animations="attack" SpineHit="slashRed1" HitTiming="0.66" SpineSkillHit="slashRed1" SkillTiming="0.66"/>
-	<Asset Index="1003" ResChar="bullfighter" Animations="attack" SpineHit="hitBlue1" HitTiming="0.17" SpineSkillHit="hitBlue1"/>
-	<Asset Index="1004" ResChar="bullfighter" Animations="attack" SpineHit="hitBlue1" HitTiming="0.17" SpineSkillHit="hitBlue1"/>
-	<Asset Index="1005" ResChar="skeleton" Animations="attack" SpineHit="hitBlue1" HitTiming="0.17" SpineSkillHit="hitBlue1"/>
-	<Asset Index="1006" ResChar="skeletonarcher" Animations="attack" SpineHit="hitBlue1" HitTiming="0.35" SpineSkillHit="hitBlue1"/>
-	<Asset Index="1007" ResChar="armoredskeleton" Animations="attack" SpineHit="hitBlue1" HitTiming="0.17" SpineSkillHit="hitBlue1"/>
-	<Asset Index="1008" ResChar="armoredskeleton" Animations="attack" SpineHit="hitBlue1" HitTiming="0.17" SpineSkillHit="hitBlue1"/>
-	<Asset Index="1009" ResChar="spider" Animations="attack" SpineHit="hitBlue1" HitTiming="0.17" SpineSkillHit="hitBlue1"/>
-	<Asset Index="1010" ResChar="hellspider" Animations="attack" SpineHit="hitBlue1" HitTiming="0.1" SpineSkillHit="hitBlue1"/>
-	<Asset Index="1011" ResChar="hound" Animations="attack" SpineHit="hitBlue1" HitTiming="0.17" SpineSkillHit="hitBlue1"/>
-	<Asset Index="1012" ResChar="hellhound" Animations="attack" SpineHit="hitBlue1" HitTiming="0.17" SpineSkillHit="hitBlue1"/>
-	<Asset Index="1013" ResChar="budgedragon" Animations="attack" SpineHit="hitBlue1" HitTiming="0.17" SpineSkillHit="hitBlue1"/>
-	<Asset Index="1014" ResChar="goblin" Animations="attack" SpineHit="hitBlue1" HitTiming="0.17" SpineSkillHit="hitBlue1"/>
-	<Asset Index="1015" ResChar="elitegoblin" Animations="attack" SpineHit="hitBlue1" HitTiming="0.17" SpineSkillHit="hitBlue1"/>
-	<Asset Index="1016" ResChar="beetle" Animations="attack" SpineHit="hitBlue1" HitTiming="0.17" SpineSkillHit="hitBlue1"/>
-	<Asset Index="1017" ResChar="stonegolem" Animations="attack" SpineHit="hitBlue1" HitTiming="0.17" SpineSkillHit="hitBlue1"/>
-	<Asset Index="1018" ResChar="worm" Animations="attack" SpineHit="hitBlue1" HitTiming="0.17" SpineSkillHit="hitBlue1"/>
-	<Asset Index="1019" ResChar="hommerd" Animations="attack" SpineHit="hitBlue1" HitTiming="0.17" SpineSkillHit="hitBlue1"/>
-	<Asset Index="1020" ResChar="worm" Animations="attack" SpineHit="hitBlue1" HitTiming="0.17" SpineSkillHit="hitBlue1"/>
-	<Asset Index="1021" ResChar="worm" Animations="attack" SpineHit="hitBlue1" HitTiming="0.17" SpineSkillHit="hitBlue1"/>
-	<Asset Index="1022" ResChar="yeti" Animations="attack" SpineHit="hitBlue1" HitTiming="0.22" SpineSkillHit="hitBlue1"/>
-	<Asset Index="1023" ResChar="yeti" Animations="attack" SpineHit="hitBlue1" HitTiming="0.22" SpineSkillHit="hitBlue1"/>
-	<Asset Index="1024" ResChar="icequeen" Animations="attack" SpineHit="hitBlue1" HitTiming="0.33" SpineSkillHit="hitBlue1"/>
+	<Asset Index="100" ResChar="100" Animations="attack" SpineHit="slashRed1#slashRed2#slashRed3" HitTiming="0.3#0.62#1.16" Sound="vb01a1#slash13#hit_slash11#slash11#hit_slash11#vb01a1#slash12#hit_slash12" SoundTiming="0#0.2#0.15#0.5#0.45#0.9#1.05#1" SoundHurt="vb01h1" SpineSkillHit="slashRed1#slashRed2" SkillTiming="1#1.56" SkillAnimations="skill" SoundSkill="vb01a1#cast2#twistingslash1#hit_slash11#hit_slash12" SoundTimingSkill="0#0#0.8#0.9#1.45"/>
+	<Asset Index="101" ResChar="101" Animations="attack" SpineHit="slashRed1#slashRed2#slashRed3" HitTiming="0.36#0.56#0.86" Sound="vb02a1#slash13#hit_slash11#slash11#hit_slash11#vb02a1#slash12#hit_slash12" SoundTiming="0#0.25#0.2#0.45#0.4#0.75#0.75#0.7" SoundHurt="vb02h1" SpineSkillHit="hitExplosionA1" SkillTiming="1.6" SkillAnimations="skill" SoundSkill="vb02a1#cast1#fallingslash1#explosion11" SoundTimingSkill="0#0#0#1.45"/>
+	<Asset Index="102" ResChar="102" Animations="attack" SpineHit="slashBlue1" HitTiming="0.6" Sound="vb01a2#slash12#hit_slash12" SoundTiming="0#0.5#0.45" SoundHurt="vb01h1" SpineSkillHit="slashBlue2#slashBlue1" SkillTiming="1.26#1.5" SkillAnimations="skill" SoundSkill="vb01a2#cast3#deathstab1#hit_clash11#hit_slash13" SoundTimingSkill="0#0#0#1.26#1.5"/>
+	<Asset Index="103" ResChar="103" Animations="attack" SpineHit="slashGreen1" HitTiming="0.5" Sound="vb02a1#slash13#hit_slash12" SoundTiming="0#0.4#0.35" SoundHurt="vb02h1" SpineSkillHit="hitWindA#hitWindA" SkillTiming="1#1.3" SkillAnimations="skill" SoundSkill="vb02a1#cast1#twistingslash1#hit_slash11#hit_slash12" SoundTimingSkill="0#0#0.8#0.85#1.25"/>
+	<Asset Index="200" ResChar="200" Animations="attack" SpineHit="hitBlue1" HitTiming="0.66" Sound="vb01a2#charge11#magic11#hit_magic11" SoundTiming="0#0#0.4#0.55" SoundHurt="vb01h1" SpineSkillHit="hitBlue1" SkillTiming="1.3" SkillAnimations="skill" SoundSkill="vb01a2#cast3#charge11#magic11#hit_magic11" SoundTimingSkill="0#0#0.8#1.2#1.33"/>
+	<Asset Index="300" ResChar="300" Animations="attack" SpineHit="hitArrowGN1" HitTiming="0.56" Sound="vg01a1#shoot11#hit_arrow11" SoundTiming="0#0.2#0.45" SoundHurt="vg01h1" SpineSkillHit="hitArrowGS1" SkillTiming="1.56" SkillAnimations="skill" SoundSkill="vg01a1#cast3#multishot1#hit_arrow11" SoundTimingSkill="0#0#0.01#1.56"/>
+	<Asset Index="400" ResChar="400" Animations="attack" SpineHit="hitRed1#hitRed2" HitTiming="0.4#1" Sound="vb03a1#punch11#hit_punch11#punch12#hit_punch12" SoundTiming="0#0.3#0.25#0.9#0.85" SoundHurt="vb03h1" SpineSkillHit="hitRed1#hitRed2#hitRed3" SkillTiming="1.06#1.66#2.4" SkillAnimations="skill" SoundSkill="vb03a1#cast2#punch21#hit_punch21#punch22#hit_punch22#punch23#hit_punch23" SoundTimingSkill="0#0#0.5#0.95#0.9#1.55#01.5#2.3#2.25"/>
+	<Asset Index="402" ResChar="402" Animations="attack" SpineHit="slashRed1#slashRed2" HitTiming="0.32#0.7" Sound="vb02a1#punch12#hit_slash11#punch13#hit_slash12" SoundTiming="0#0.2#0.15#0.6#0.55" SoundHurt="vb02h1" SpineSkillHit="slashRed1#slashRed2#slashRed3" SkillTiming="1#1.5#2.1" SkillAnimations="skill" SoundSkill="vb02a1#cast1#claw21#hit_slash11#claw22#hit_slash12#claw22#hit_slash13" SoundTimingSkill="0#0#0.7#0.85#1.2#1.35#1.8#1.95"/>
+	<Asset Index="999" ResChar="100" Animations="attack" SpineHit="slashRed1#slashRed2#slashRed3" HitTiming="0.3#0.62#1.16" Sound="vb01a1#slash13#hit_slash11#slash11#hit_slash11#vb01a1#slash12#hit_slash11" SoundTiming="0#0.2#0.15#0.5#0.45#0.9#1.05#1" SoundHurt="vb01h1" SpineSkillHit="slashRed1#slashRed2" SkillTiming="1#1.56" SkillAnimations="skill" SoundSkill="vb01a1#cast2#twistingslash1#hit_slash11#hit_slash12" SoundTimingSkill="0#0#0.8#0.9#1.45"/>
+	<Asset Index="1003" ResChar="bullfighter" Animations="attack" SpineHit="hitBlue1" HitTiming="0.34" Sound="hit_punch12" SoundTiming="0.34"/>
+	<Asset Index="1004" ResChar="elitebull" Animations="attack" SpineHit="hitBlue1" HitTiming="0.34" Sound="hit_punch11" SoundTiming="0.34"/>
+	<Asset Index="1005" ResChar="skeleton" Animations="attack" SpineHit="hitBlue1" HitTiming="0.34" Sound="hit_punch12" SoundTiming="0.34"/>
+	<Asset Index="1006" ResChar="skeletonarcher" Animations="attack" SpineHit="hitBlue1" HitTiming="0.7" Sound="hit_punch11" SoundTiming="0.7"/>
+	<Asset Index="1007" ResChar="armoredskeleton" Animations="attack" SpineHit="hitBlue1" HitTiming="0.34" Sound="hit_punch12" SoundTiming="0.34"/>
+	<Asset Index="1008" ResChar="armoredskeleton" Animations="attack" SpineHit="hitBlue1" HitTiming="0.34" Sound="hit_punch11" SoundTiming="0.34"/>
+	<Asset Index="1009" ResChar="spider" Animations="attack" SpineHit="hitBlue1" HitTiming="0.34" Sound="hit_punch12" SoundTiming="0.34"/>
+	<Asset Index="1010" ResChar="hellspider" Animations="attack" SpineHit="hitBlue1" HitTiming="0.4" Sound="hit_punch11" SoundTiming="0.4"/>
+	<Asset Index="1011" ResChar="hound" Animations="attack" SpineHit="hitBlue1#hitBlue1" HitTiming="0.34#0.44" Sound="hit_punch11#hit_punch12" SoundTiming="0.34#0.44"/>
+	<Asset Index="1012" ResChar="hellhound" Animations="attack" SpineHit="hitBlue1" HitTiming="0.34" Sound="hit_punch12" SoundTiming="0.34"/>
+	<Asset Index="1013" ResChar="budgedragon" Animations="attack" SpineHit="hitBlue1" HitTiming="0.34" Sound="hit_punch11" SoundTiming="0.34"/>
+	<Asset Index="1014" ResChar="goblin" Animations="attack" SpineHit="hitBlue1" HitTiming="0.34" Sound="hit_punch12" SoundTiming="0.34"/>
+	<Asset Index="1015" ResChar="elitegoblin" Animations="attack" SpineHit="hitBlue1" HitTiming="0.34" Sound="hit_punch11" SoundTiming="0.34"/>
+	<Asset Index="1016" ResChar="beetle" Animations="attack" SpineHit="hitBlue1" HitTiming="0.34" Sound="hit_punch12" SoundTiming="0.34"/>
+	<Asset Index="1017" ResChar="stonegolem" Animations="attack" SpineHit="hitBlue1" HitTiming="0.34" Sound="hit_punch11" SoundTiming="0.34"/>
+	<Asset Index="1018" ResChar="worm" Animations="attack" SpineHit="hitBlue1" HitTiming="0.34" Sound="hit_punch12" SoundTiming="0.34"/>
+	<Asset Index="1019" ResChar="hommerd" Animations="attack" SpineHit="hitBlue1" HitTiming="0.34" Sound="hit_punch11" SoundTiming="0.34"/>
+	<Asset Index="1020" ResChar="icemonster" Animations="attack" SpineHit="hitBlue1" HitTiming="0.34" Sound="hit_punch12" SoundTiming="0.34"/>
+	<Asset Index="1021" ResChar="assassin" Animations="attack" SpineHit="hitBlue1" HitTiming="0.34" Sound="hit_punch11" SoundTiming="0.34"/>
+	<Asset Index="1022" ResChar="yeti" Animations="attack" SpineHit="hitBlue1" HitTiming="0.44" Sound="hit_punch12" SoundTiming="0.44"/>
+	<Asset Index="1023" ResChar="eliteyeti" Animations="attack" SpineHit="hitBlue1" HitTiming="0.44" Sound="hit_punch11" SoundTiming="0.44"/>
+	<Asset Index="1024" ResChar="icequeen" Animations="attack" SpineHit="hitBlue1" HitTiming="0.66" Sound="hit_punch12" SoundTiming="0.66"/>
 </AssetList>

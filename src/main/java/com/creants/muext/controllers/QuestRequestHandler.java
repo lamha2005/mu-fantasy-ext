@@ -25,14 +25,16 @@ import com.creants.muext.managers.HeroItemManager;
  * @author LamHM
  *
  */
-public class QuestClaimRequestHandler extends BaseClientRequestHandler {
+public class QuestRequestHandler extends BaseClientRequestHandler {
+	private static final QuestConfig questConfig = QuestConfig.getInstance();
+	private static final int GET_LIST = 1;
+	private static final int CLAIM = 2;
 	private QuestStatsRepository questRepository;
 	private GameHeroRepository repository;
-	private static final QuestConfig questConfig = QuestConfig.getInstance();
 	private HeroItemManager heroItemManager;
 
 
-	public QuestClaimRequestHandler() {
+	public QuestRequestHandler() {
 		questRepository = Creants2XApplication.getBean(QuestStatsRepository.class);
 		repository = Creants2XApplication.getBean(GameHeroRepository.class);
 		heroItemManager = Creants2XApplication.getBean(HeroItemManager.class);
@@ -41,6 +43,32 @@ public class QuestClaimRequestHandler extends BaseClientRequestHandler {
 
 	@Override
 	public void handleClientRequest(QAntUser user, IQAntObject params) {
+		Integer action = params.getInt("act");
+		if (action == null) {
+			action = GET_LIST;
+		}
+
+		switch (action) {
+			case GET_LIST:
+				getList(user, params);
+				break;
+			case CLAIM:
+				claimReward(user, params);
+				break;
+
+			default:
+				break;
+		}
+
+	}
+
+
+	private void getList(QAntUser user, IQAntObject params) {
+		String group = params.getUtfString("group");
+	}
+
+
+	private void claimReward(QAntUser user, IQAntObject params) {
 		Long questId = Long.parseLong(params.getUtfString("qid"));
 		HeroQuest heroQuest = questRepository.findOne(questId);
 		params = QAntObject.newInstance();
@@ -51,11 +79,10 @@ public class QuestClaimRequestHandler extends BaseClientRequestHandler {
 			params.putQAntObject("game_hero", QAntObject.newFromObject(gameHero));
 			heroQuest.setFinish(true);
 			questRepository.save(heroQuest);
-			send(ExtensionEvent.CMD_QUEST_CLAIM, params, user);
+			send(ExtensionEvent.CMD_QUEST, params, user);
 		} else {
 			QAntTracer.warn(this.getClass(), "Bad request! gameHeroId:" + user.getName());
 		}
-
 	}
 
 

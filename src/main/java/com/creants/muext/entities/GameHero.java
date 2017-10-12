@@ -185,7 +185,7 @@ public class GameHero implements SerializableQAntType {
 
 
 	public void incrBless(long value) {
-		this.bless -= value;
+		this.bless += value;
 	}
 
 

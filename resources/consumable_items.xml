@@ -8,7 +8,7 @@
 	<Item ItemGroup="11000" ItemIndex="11008" ItemName="Low refining stone" Description="A unique material" ItemType="6" ItemRank="1" Overlap="10" RefunCost="300" Icon="refinestone1.png"/>
 	<Item ItemGroup="11000" ItemIndex="11009" ItemName="High refining stone" Description="A unique material" ItemType="3" ItemRank="3" Overlap="10" RefunCost="450" Icon="refinestone2.png"/>
 	<Item ItemGroup="11000" ItemIndex="11010" ItemName="Rena" Description="A unique material" ItemType="3" ItemRank="4" Overlap="10" RefunCost="600" Icon="rena.png"/>
-	<Item ItemGroup="11000" ItemIndex="11011" ItemName="Antidote" Description="Removes the effects of poison" ItemType="1" ItemRank="1" Overlap="10" RefunCost="50" Icon="antidote.png"/>
+	<Item ItemGroup="11000" ItemIndex="11011" ItemName="Antidote" Description="Removes the effects of poison" ItemType="1" ItemRank="1" Overlap="10" SkillIndex="8050" RefunCost="50" Icon="antidote.png"/>
 	<Item ItemGroup="11000" ItemIndex="11012" ItemName="Apple" Description="Restore 100 HP" ItemType="1" ItemRank="1" Overlap="10" SkillIndex="8010" RefunCost="50" Icon="apple.png"/>
 	<Item ItemGroup="11000" ItemIndex="11013" ItemName="HP Potion (Small)" Description="Restore 300 HP" ItemType="1" ItemRank="2" Overlap="10" SkillIndex="8020" RefunCost="100" Icon="hppotion1.png"/>
 	<Item ItemGroup="11000" ItemIndex="11014" ItemName="HP Potion (Medium)" Description="Restore 700 HP" ItemType="1" ItemRank="3" Overlap="10" SkillIndex="8030" RefunCost="150" Icon="hppotion2.png"/>

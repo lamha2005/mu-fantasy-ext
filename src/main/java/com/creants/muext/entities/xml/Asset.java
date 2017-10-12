@@ -9,16 +9,15 @@ import com.fasterxml.jackson.dataformat.xml.annotation.JacksonXmlProperty;
  * @author LamHM
  *
  */
-@JsonIgnoreProperties({ "animationsString", "spineHitString", "hitTimingString", "spineSkillHitString",
-		"skillTimingString" })
+@JsonIgnoreProperties({ "spineHitString", "hitTimingString", "spineSkillHitString", "soundString", "soundTimingString",
+		"soundSkillString", "soundTimingSkillString", "skillTimingString" })
 public class Asset {
 	@JacksonXmlProperty(localName = "Index", isAttribute = true)
 	private int index;
 	@JacksonXmlProperty(localName = "ResChar", isAttribute = true)
 	private String resChar;
-
 	@JacksonXmlProperty(localName = "Animations", isAttribute = true)
-	private String animationsString;
+	private String animations;
 	@JacksonXmlProperty(localName = "SpineHit", isAttribute = true)
 	private String spineHitString;
 	@JacksonXmlProperty(localName = "HitTiming", isAttribute = true)
@@ -30,47 +29,60 @@ public class Asset {
 	@JacksonXmlProperty(localName = "SkillTiming", isAttribute = true)
 	private String skillTimingString;
 
-	private String[] animations;
+	@JacksonXmlProperty(localName = "Sound", isAttribute = true)
+	private String soundString;
+	@JacksonXmlProperty(localName = "SoundTiming", isAttribute = true)
+	private String soundTimingString;
+	@JacksonXmlProperty(localName = "SoundHurt", isAttribute = true)
+	private String soundHurt;
+	@JacksonXmlProperty(localName = "SkillAnimations", isAttribute = true)
+	private String skillAnimations;
+	@JacksonXmlProperty(localName = "SoundSkill", isAttribute = true)
+	private String soundSkillString;
+	@JacksonXmlProperty(localName = "SoundTimingSkill", isAttribute = true)
+	private String soundTimingSkillString;
+
 	private String[] spineHit;
 	private float[] hitTiming;
 	private String[] spineSkillHit;
 	private float[] skillTiming;
 
+	private String[] sound;
+	private float[] soundTiming;
+	private String[] soundSkill;
+	private float[] soundTimingSkill;
+
 
 	public void convertBase() {
-		String[] animaArr = StringUtils.split(animationsString, "#");
-		animations = new String[animaArr.length];
-		for (int i = 0; i < animaArr.length; i++) {
-			animations[i] = animaArr[i];
-		}
+		spineHit = convertToStringArr(spineHitString);
+		sound = convertToStringArr(soundString);
+		spineSkillHit = convertToStringArr(spineSkillHitString);
+		soundSkill = convertToStringArr(soundSkillString);
+		hitTiming = convertToFloatArr(hitTimingString);
+		skillTiming = convertToFloatArr(skillTimingString);
+		soundTiming = convertToFloatArr(soundTimingString);
+		soundTimingSkill = convertToFloatArr(soundTimingSkillString);
+	}
 
-		String[] spineHitArr = StringUtils.split(spineHitString, "#");
-		spineHit = new String[spineHitArr.length];
-		for (int i = 0; i < spineHitArr.length; i++) {
-			spineHit[i] = spineHitArr[i];
-		}
 
-		if (StringUtils.isNotBlank(spineSkillHitString)) {
-			String[] spineSkillHitArr = StringUtils.split(spineSkillHitString, "#");
-			spineSkillHit = new String[spineSkillHitArr.length];
-			for (int i = 0; i < spineSkillHitArr.length; i++) {
-				spineSkillHit[i] = spineSkillHitArr[i];
+	private float[] convertToFloatArr(String value) {
+		if (StringUtils.isNotBlank(value)) {
+			String[] split = StringUtils.split(value, "#");
+			float[] result = new float[split.length];
+			for (int i = 0; i < split.length; i++) {
+				result[i] = Float.parseFloat(split[i]);
 			}
+			return result;
 		}
 
-		String[] hitTimingArr = StringUtils.split(hitTimingString, "#");
-		hitTiming = new float[hitTimingArr.length];
-		for (int i = 0; i < hitTimingArr.length; i++) {
-			hitTiming[i] = Float.parseFloat(hitTimingArr[i]);
-		}
+		return null;
+	}
 
-		if (StringUtils.isNotBlank(skillTimingString)) {
-			String[] skillTimingArr = StringUtils.split(skillTimingString, "#");
-			skillTiming = new float[skillTimingArr.length];
-			for (int i = 0; i < skillTimingArr.length; i++) {
-				skillTiming[i] = Float.parseFloat(skillTimingArr[i]);
-			}
-		}
+
+	private String[] convertToStringArr(String value) {
+		if (StringUtils.isNotBlank(value))
+			return StringUtils.split(value, "#");
+		return null;
 	}
 
 
@@ -91,16 +103,6 @@ public class Asset {
 
 	public void setResChar(String resChar) {
 		this.resChar = resChar;
-	}
-
-
-	public String getAnimationsString() {
-		return animationsString;
-	}
-
-
-	public void setAnimationsString(String animationsString) {
-		this.animationsString = animationsString;
 	}
 
 
@@ -141,16 +143,6 @@ public class Asset {
 
 	public void setSpineSkillHitString(String spineSkillHitString) {
 		this.spineSkillHitString = spineSkillHitString;
-	}
-
-
-	public String[] getAnimations() {
-		return animations;
-	}
-
-
-	public void setAnimations(String[] animations) {
-		this.animations = animations;
 	}
 
 
@@ -201,6 +193,56 @@ public class Asset {
 
 	public void setSkillTiming(float[] skillTiming) {
 		this.skillTiming = skillTiming;
+	}
+
+
+	public String getSoundString() {
+		return soundString;
+	}
+
+
+	public String getSoundTimingString() {
+		return soundTimingString;
+	}
+
+
+	public String getSoundHurt() {
+		return soundHurt;
+	}
+
+
+	public String getSkillAnimations() {
+		return skillAnimations;
+	}
+
+
+	public String getSoundSkillString() {
+		return soundSkillString;
+	}
+
+
+	public String getSoundTimingSkillString() {
+		return soundTimingSkillString;
+	}
+
+
+	public String[] getSound() {
+		return sound;
+	}
+
+
+	public float[] getSoundTiming() {
+		return soundTiming;
+	}
+
+
+	public String[] getSoundSkill() {
+		return soundSkill;
+	}
+
+
+	public float[] getSoundTimingSkill() {
+		return soundTimingSkill;
 	}
 
 }

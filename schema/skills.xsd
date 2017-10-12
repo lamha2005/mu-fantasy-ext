@@ -20,9 +20,9 @@
              <xs:attribute name="TargetType" type="xs:string"/>
              <xs:attribute name="Affects" type="xs:string"/>
              <xs:attribute name="Damage" type="xs:int"/>
-             <xs:attribute name="EffectIndex" type="xs:int"/>
-             <xs:attribute name="EffectValue" type="xs:int"/>
-             <xs:attribute name="Durations" type="xs:int"/>
+             <xs:attribute name="EffectIndex" type="xs:string"/>
+             <xs:attribute name="EffectValue" type="xs:string"/>
+             <xs:attribute name="Durations" type="xs:string"/>
              <xs:attribute name="BattlePower" type="xs:int"/>
              <xs:attribute name="Icon" type="xs:string"/>
              <xs:attribute name="StatusImage" type="xs:string"/>

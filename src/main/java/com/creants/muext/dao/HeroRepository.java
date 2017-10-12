@@ -4,7 +4,6 @@ import java.util.List;
 
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
-import org.springframework.data.domain.Sort;
 import org.springframework.data.mongodb.repository.MongoRepository;
 import org.springframework.stereotype.Repository;
 
@@ -23,5 +22,5 @@ public interface HeroRepository extends MongoRepository<HeroClass, Long> {
 	Page<HeroClass> findHeroesByGameHeroId(String gameHeroId, Pageable page);
 
 
-	List<HeroClass> findHeroesByGameHeroId(String gameHeroId, Sort sort);
+	List<HeroClass> findHeroesByGameHeroId(String gameHeroId, Pageable page, boolean reqNew);
 }

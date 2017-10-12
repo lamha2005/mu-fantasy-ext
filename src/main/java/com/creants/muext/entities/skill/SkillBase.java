@@ -1,7 +1,9 @@
 package com.creants.muext.entities.skill;
 
+import org.apache.commons.lang.StringUtils;
 import org.springframework.data.annotation.Transient;
 
+import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import com.fasterxml.jackson.annotation.JsonInclude;
 import com.fasterxml.jackson.annotation.JsonInclude.Include;
 import com.fasterxml.jackson.dataformat.xml.annotation.JacksonXmlProperty;
@@ -11,6 +13,7 @@ import com.fasterxml.jackson.dataformat.xml.annotation.JacksonXmlProperty;
  *
  */
 @JsonInclude(Include.NON_NULL)
+@JsonIgnoreProperties({ "durationsString", "effectIndexString", "effectValueString" })
 public class SkillBase {
 	@JacksonXmlProperty(localName = "Index", isAttribute = true)
 	private int index;
@@ -37,11 +40,11 @@ public class SkillBase {
 	@JacksonXmlProperty(localName = "Damage", isAttribute = true)
 	private int damage;
 	@JacksonXmlProperty(localName = "Durations", isAttribute = true)
-	private int durations;
+	private String durationsString;
 	@JacksonXmlProperty(localName = "EffectIndex", isAttribute = true)
-	private int effectIndex;
+	private String effectIndexString;
 	@JacksonXmlProperty(localName = "EffectValue", isAttribute = true)
-	private int effectValue;
+	private String effectValueString;
 	@JacksonXmlProperty(localName = "BattlePower", isAttribute = true)
 	private int battlePower;
 	@JacksonXmlProperty(localName = "StatusImage", isAttribute = true)
@@ -55,8 +58,37 @@ public class SkillBase {
 	@JacksonXmlProperty(localName = "Icon", isAttribute = true)
 	private String icon;
 
+	private int[] effectIndex;
+	private float[] effectValue;
+	private int[] durations;
+
 
 	public void convertBaseInfo() {
+		effectIndex = convertToIntArray(effectIndexString);
+		durations = convertToIntArray(durationsString);
+		effectValue = convertToFloatArray(effectValueString);
+
+	}
+
+
+	// TODO move to util
+	private int[] convertToIntArray(String value) {
+		String[] items = StringUtils.split(value, "#");
+		int[] result = new int[items.length];
+		for (int i = 0; i < items.length; i++) {
+			result[i] = Integer.parseInt(items[i]);
+		}
+		return result;
+	}
+
+
+	private float[] convertToFloatArray(String value) {
+		String[] items = StringUtils.split(value, "#");
+		float[] result = new float[items.length];
+		for (int i = 0; i < items.length; i++) {
+			result[i] = Float.parseFloat(items[i]);
+		}
+		return result;
 	}
 
 
@@ -140,16 +172,6 @@ public class SkillBase {
 	}
 
 
-	public int getDurations() {
-		return durations;
-	}
-
-
-	public void setDurations(int durations) {
-		this.durations = durations;
-	}
-
-
 	public int getBattlePower() {
 		return battlePower;
 	}
@@ -230,23 +252,63 @@ public class SkillBase {
 	}
 
 
-	public int getEffectIndex() {
+	public String getEffectIndexString() {
+		return effectIndexString;
+	}
+
+
+	public void setEffectIndexString(String effectIndexString) {
+		this.effectIndexString = effectIndexString;
+	}
+
+
+	public int[] getEffectIndex() {
 		return effectIndex;
 	}
 
 
-	public void setEffectIndex(int effectIndex) {
+	public void setEffectIndex(int[] effectIndex) {
 		this.effectIndex = effectIndex;
 	}
 
 
-	public int getEffectValue() {
+	public String getDurationsString() {
+		return durationsString;
+	}
+
+
+	public void setDurationsString(String durationsString) {
+		this.durationsString = durationsString;
+	}
+
+
+	public String getEffectValueString() {
+		return effectValueString;
+	}
+
+
+	public void setEffectValueString(String effectValueString) {
+		this.effectValueString = effectValueString;
+	}
+
+
+	public float[] getEffectValue() {
 		return effectValue;
 	}
 
 
-	public void setEffectValue(int effectValue) {
+	public void setEffectValue(float[] effectValue) {
 		this.effectValue = effectValue;
+	}
+
+
+	public int[] getDurations() {
+		return durations;
+	}
+
+
+	public void setDurations(int[] durations) {
+		this.durations = durations;
 	}
 
 

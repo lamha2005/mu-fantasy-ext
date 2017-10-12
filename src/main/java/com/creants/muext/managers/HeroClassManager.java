@@ -9,6 +9,7 @@ import org.springframework.beans.factory.InitializingBean;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Service;
 
 import com.creants.creants_2x.core.util.QAntTracer;
@@ -28,6 +29,7 @@ import com.creants.muext.services.AutoIncrementService;
 @Service
 public class HeroClassManager implements InitializingBean {
 	private static final int MAX_HERO_PER_PAGE = 20;
+
 	private static final HeroClassConfig heroConfig = HeroClassConfig.getInstance();
 	@Autowired
 	private AutoIncrementService autoIncrService;
@@ -42,10 +44,12 @@ public class HeroClassManager implements InitializingBean {
 	@Override
 	public void afterPropertiesSet() throws Exception {
 		// TODO remove
-		 endowHero("mus1#326", HeroClassType.GREAT_DARK_KNIGHT);
-		// for (int i = 0; i < 25; i++) {
-		// addHero("mus1#329");
+		// for (int i = 0; i < 3; i++) {
+		// endowHero("mus1#31", HeroClassType.GREAT_DARK_KNIGHT);
 		// }
+
+		List<HeroClass> topDamHero = getTopDamHero("mus1#323");
+		System.out.println("test");
 	}
 
 
@@ -64,9 +68,21 @@ public class HeroClassManager implements InitializingBean {
 		// List<HeroClass> heroes =
 		// heroRepository.findHeroesByGameHeroId(gameHeroId, new
 		// Sort(Sort.Direction.ASC));
+
 		List<HeroClass> heroes = heroRepository.findHeroesByGameHeroId(gameHeroId);
 		for (HeroClass heroClass : heroes) {
 			heroClass.setHeroBase(getHeroBase(heroClass.getIndex()));
+		}
+		return heroes;
+	}
+
+
+	public List<HeroClass> getTopDamHero(String gameHeroId) {
+		List<HeroClass> heroes = heroRepository.findHeroesByGameHeroId(gameHeroId,
+				new PageRequest(0, 3, new Sort(Sort.Direction.DESC, "level")), true);
+		for (HeroClass heroClass : heroes) {
+			heroClass.setHeroBase(getHeroBase(heroClass.getIndex()));
+			heroClass.setEquipments(itemManager.getTakeOnEquipments(heroClass.getId()));
 		}
 		return heroes;
 	}
@@ -88,6 +104,12 @@ public class HeroClassManager implements InitializingBean {
 	}
 
 
+	/**
+	 * lấy danh sách hero bao gồm cả vũ khí
+	 * 
+	 * @param heroIds
+	 * @return
+	 */
 	public List<HeroClass> findHeroesFullInfo(Collection<Long> heroIds) {
 		List<HeroClass> heroes = new ArrayList<>();
 		Iterable<HeroClass> heroIter = heroRepository.findAll(heroIds);

@@ -1,7 +1,6 @@
 package com.creants.muext.entities.chaos;
 
 import org.springframework.data.annotation.Id;
-import org.springframework.data.mongodb.core.mapping.DBRef;
 import org.springframework.data.mongodb.core.mapping.Document;
 
 import com.creants.creants_2x.socket.gate.protocol.serialization.SerializableQAntType;
@@ -19,11 +18,6 @@ public class ChaosCastleInfo implements SerializableQAntType {
 	public int chaosPoint;
 	private transient long beginTime;
 	private transient int completedNo;
-	private transient int lastStageFinish;
-	public ChaosCastleStage stage;
-
-	@DBRef(db = "chaos-castle-power")
-	private ChaosCastlePower chaosCastlePower;
 
 
 	public String getGameHeroId() {
@@ -66,26 +60,6 @@ public class ChaosCastleInfo implements SerializableQAntType {
 	}
 
 
-	public ChaosCastleStage getStage() {
-		return stage;
-	}
-
-
-	public void setStage(ChaosCastleStage stage) {
-		this.stage = stage;
-	}
-
-
-	public int getLastStageFinish() {
-		return lastStageFinish;
-	}
-
-
-	public void setLastStageFinish(int lastStageFinish) {
-		this.lastStageFinish = lastStageFinish;
-	}
-
-
 	public String getRank() {
 		return rank;
 	}
@@ -103,16 +77,6 @@ public class ChaosCastleInfo implements SerializableQAntType {
 
 	public void setCompletedNo(int completedNo) {
 		this.completedNo = completedNo;
-	}
-
-
-	public ChaosCastlePower getChaosCastlePower() {
-		return chaosCastlePower;
-	}
-
-
-	public void setChaosCastlePower(ChaosCastlePower chaosCastlePower) {
-		this.chaosCastlePower = chaosCastlePower;
 	}
 
 }
