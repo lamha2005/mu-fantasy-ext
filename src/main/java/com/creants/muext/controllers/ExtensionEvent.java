@@ -8,7 +8,6 @@ public class ExtensionEvent {
 	public static final String CMD_CHAT = "cmd_chat";
 	public static final String CMD_JOIN_GAME = "cmd_join_game";
 	public static final String CMD_CREATE_ROOM = "cmd_create_room";
-	public static final String CMD_GET_QUESTS = "cmd_get_quests";
 	public static final String CMD_JOIN_STAGE = "cmd_join_stage";
 	public static final String CMD_STAGE_FINISH = "cmd_stage_finish";
 	public static final String CMD_JOIN_CHAPTER = "cmd_join_chapter";

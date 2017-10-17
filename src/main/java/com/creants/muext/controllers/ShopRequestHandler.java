@@ -63,7 +63,7 @@ public class ShopRequestHandler extends BaseClientRequestHandler {
 
 
 	private void getPackageList(QAntUser user, IQAntObject params) {
-		String categoryId = params.getUtfString("cat_id");
+		// String categoryId = params.getUtfString("cat_id");
 		IQAntArray arr = QAntArray.newInstance();
 		List<ShopPackage> packages = shopConfig.getPackages();
 		for (ShopPackage shopPackage : packages) {

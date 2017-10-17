@@ -11,7 +11,6 @@ import com.creants.creants_2x.socket.gate.entities.IQAntObject;
  *
  */
 public class LoginEventHandler extends BaseServerEventHandler {
-	private static final String NEW_LOGIN_NAME = "$FS_NEW_LOGIN_NAME";
 	private static final String NAME_BY_SERVER = "$FS_NAME_BY_SERVER";
 
 

@@ -18,7 +18,6 @@ import com.creants.muext.controllers.ChatRequestHandler;
 import com.creants.muext.controllers.CreateRoomRequestHandler;
 import com.creants.muext.controllers.DisconnectEventHandler;
 import com.creants.muext.controllers.ExtensionEvent;
-import com.creants.muext.controllers.GetQuestListRequestHandler;
 import com.creants.muext.controllers.HeroRequestHandler;
 import com.creants.muext.controllers.ItemRequestHandler;
 import com.creants.muext.controllers.JoinChapterRequestHandler;
@@ -68,7 +67,6 @@ public class MuFantasyExtension extends QAntExtension {
 		addRequestHandler(ExtensionEvent.CMD_CHAT, ChatRequestHandler.class);
 		addRequestHandler(ExtensionEvent.CMD_JOIN_GAME, JoinGameRequestHandler.class);
 		addRequestHandler(ExtensionEvent.CMD_CREATE_ROOM, CreateRoomRequestHandler.class);
-		addRequestHandler(ExtensionEvent.CMD_GET_QUESTS, GetQuestListRequestHandler.class);
 		addRequestHandler(ExtensionEvent.CMD_JOIN_STAGE, StageRequestHandler.class);
 		addRequestHandler(ExtensionEvent.CMD_STAGE_FINISH, StageFinishRequestHandler.class);
 		addRequestHandler(ExtensionEvent.CMD_JOIN_CHAPTER, JoinChapterRequestHandler.class);
