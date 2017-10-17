@@ -20,7 +20,10 @@ public class HeroQuest implements SerializableQAntType {
 	public transient boolean finish;
 	public transient long createTime;
 	public boolean claim;
+	public boolean seen;
 	public int taskType;
+	public int count;
+	@Indexed
 	public String groupId;
 
 
@@ -101,6 +104,26 @@ public class HeroQuest implements SerializableQAntType {
 
 	public void setTaskType(int taskType) {
 		this.taskType = taskType;
+	}
+
+
+	public boolean isSeen() {
+		return seen;
+	}
+
+
+	public void setSeen(boolean seen) {
+		this.seen = seen;
+	}
+
+
+	public int getCount() {
+		return count;
+	}
+
+
+	public void setCount(int count) {
+		this.count = count;
 	}
 
 }

@@ -48,8 +48,8 @@ public class HeroClassManager implements InitializingBean {
 		// endowHero("mus1#31", HeroClassType.GREAT_DARK_KNIGHT);
 		// }
 
-		List<HeroClass> topDamHero = getTopDamHero("mus1#323");
-		System.out.println("test");
+		// List<HeroClass> topDamHero = getTopDamHero("mus1#323");
+		// System.out.println("test");
 	}
 
 
@@ -143,12 +143,24 @@ public class HeroClassManager implements InitializingBean {
 	}
 
 
-	public List<HeroClass> summon(String gameHeroId) {
+	public List<HeroClass> summonX1(String gameHeroId) {
 		HeroClass createNewHero = createNewHero(gameHeroId, heroConfig.getRandomHero(100));
 		save(createNewHero);
 
 		List<HeroClass> heroList = new ArrayList<>();
 		heroList.add(createNewHero);
+		return heroList;
+	}
+
+
+	public List<HeroClass> summonX10(String gameHeroId) {
+		List<HeroClass> heroList = new ArrayList<>();
+		for (int i = 0; i < 10; i++) {
+			HeroClass createNewHero = createNewHero(gameHeroId, heroConfig.getRandomHero(100));
+			heroList.add(createNewHero);
+		}
+
+		save(heroList);
 		return heroList;
 	}
 

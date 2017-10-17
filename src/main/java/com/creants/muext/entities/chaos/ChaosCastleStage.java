@@ -22,6 +22,7 @@ public class ChaosCastleStage implements SerializableQAntType {
 	public int stageIndex;
 	public String rank;
 	public boolean clamed;
+	private boolean win;
 	@Transient
 	public ChaosCastlePower opponent;
 
@@ -82,6 +83,16 @@ public class ChaosCastleStage implements SerializableQAntType {
 
 	public ChaosCastlePower getOpponent() {
 		return opponent;
+	}
+
+
+	public boolean isWin() {
+		return win;
+	}
+
+
+	public void setWin(boolean win) {
+		this.win = win;
 	}
 
 

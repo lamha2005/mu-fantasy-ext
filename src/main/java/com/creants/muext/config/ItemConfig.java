@@ -231,7 +231,7 @@ public class ItemConfig {
 				// trường hợp là consumable item nhưng không overlap
 				int no = ir[1];
 				ConsumeableItemBase consItemBase = (ConsumeableItemBase) itemBase;
-				if (consItemBase.getOverlap() > 1 || no <= 1) {
+				if (consItemBase.getOverlap() != 1 || no <= 1) {
 					itemList.add(createHeroConsumableItem(consItemBase, no));
 					continue;
 				}

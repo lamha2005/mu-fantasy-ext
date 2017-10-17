@@ -275,6 +275,9 @@ public class HeroClass implements SerializableQAntType {
 
 
 	public void levelUp(int value) {
+		if (level == 100)
+			return;
+
 		level += value;
 		this.skillPoint++;
 		updateBaseStats();

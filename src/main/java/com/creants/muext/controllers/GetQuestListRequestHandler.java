@@ -1,12 +1,7 @@
 package com.creants.muext.controllers;
 
 import java.util.ArrayList;
-import java.util.Calendar;
-import java.util.Date;
 import java.util.List;
-
-import org.apache.commons.lang.time.DateUtils;
-import org.springframework.beans.factory.annotation.Autowired;
 
 import com.creants.creants_2x.core.annotations.Instantiation;
 import com.creants.creants_2x.core.extension.BaseClientRequestHandler;
@@ -16,7 +11,6 @@ import com.creants.creants_2x.socket.gate.entities.QAntArray;
 import com.creants.creants_2x.socket.gate.entities.QAntObject;
 import com.creants.creants_2x.socket.gate.wood.QAntUser;
 import com.creants.muext.Creants2XApplication;
-import com.creants.muext.dao.QuestStatsRepository;
 import com.creants.muext.entities.quest.HeroQuest;
 import com.creants.muext.services.QuestManager;
 
@@ -27,29 +21,28 @@ import com.creants.muext.services.QuestManager;
 @Instantiation(Instantiation.InstantiationMode.SINGLE_INSTANCE)
 public class GetQuestListRequestHandler extends BaseClientRequestHandler {
 
-	@Autowired
-	private QuestStatsRepository questStateRepository;
+	private QuestManager questManager;
 
 
 	public GetQuestListRequestHandler() {
-		questStateRepository = Creants2XApplication.getBean(QuestStatsRepository.class);
+		questManager = Creants2XApplication.getBean(QuestManager.class);
 	}
 
 
 	@Override
 	public void handleClientRequest(QAntUser user, IQAntObject params) {
 
-		Integer groupId = params.getInt("gid");
+		String groupId = params.getUtfString("group");
 		if (groupId == null) {
-			groupId = QuestManager.GROUP_MAIN_QUEST;
+			groupId = QuestManager.GROUP_WORLD_QUEST;
 		}
 
 		String gameHeroId = user.getName();
 		List<HeroQuest> quests = new ArrayList<>();
-		if (groupId == QuestManager.GROUP_MAIN_QUEST) {
-			quests = questStateRepository.getQuests(gameHeroId, groupId, false);
-		} else if (groupId == QuestManager.GROUP_DAILY_QUEST) {
-			quests = questStateRepository.findDailyQuests(gameHeroId, getStartOfDateMilis(), getEndOfDateMilis());
+		if (groupId.equals(QuestManager.GROUP_WORLD_QUEST)) {
+			quests = questManager.getQuests(gameHeroId, groupId, false);
+		} else if (groupId.equals(QuestManager.GROUP_DAILY_QUEST)) {
+			quests = questManager.getDailyQuests(gameHeroId);
 		}
 
 		IQAntArray questArr = QAntArray.newInstance();
@@ -59,18 +52,8 @@ public class GetQuestListRequestHandler extends BaseClientRequestHandler {
 
 		params = new QAntObject();
 		params.putQAntArray("quests", questArr);
-		params.putInt("gid", groupId);
 
 		send(ExtensionEvent.CMD_GET_QUESTS, params, user);
 	}
 
-
-	private long getStartOfDateMilis() {
-		return DateUtils.truncate(new Date(), Calendar.DATE).getTime();
-	}
-
-
-	private long getEndOfDateMilis() {
-		return DateUtils.addMilliseconds(DateUtils.ceiling(new Date(), Calendar.DATE), -1).getTime();
-	}
 }

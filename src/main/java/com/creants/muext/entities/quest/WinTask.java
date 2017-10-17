@@ -11,11 +11,9 @@ public class WinTask extends Quest {
 	@Override
 	public void convertBase() {
 		splitReward();
+		splitStageIndex();
 
-		String taskString = getTaskString();
-		if (taskString != null) {
-			winNo = Integer.parseInt(taskString);
-		}
+		winNo = getCount();
 	}
 
 

@@ -36,4 +36,21 @@ public class GameHeroManager {
 		return repository.save(gameHero);
 	}
 
+
+	public GameHero incrBless(String gameHeroId, long bless) {
+		GameHero gameHero = repository.findOne(gameHeroId);
+		if (gameHero == null) {
+			return null;
+		}
+
+		gameHero.incrBless(bless);
+		return repository.save(gameHero);
+	}
+
+
+	public GameHero incrBless(GameHero gameHero, long bless) {
+		gameHero.incrBless(bless);
+		return repository.save(gameHero);
+	}
+
 }

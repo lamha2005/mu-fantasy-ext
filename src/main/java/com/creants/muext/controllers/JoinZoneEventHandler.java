@@ -7,6 +7,7 @@ import java.util.Arrays;
 import java.util.Calendar;
 import java.util.Collection;
 import java.util.Date;
+import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
@@ -103,28 +104,10 @@ public class JoinZoneEventHandler extends BaseServerEventHandler {
 
 		processMail(user, response, isNewAccount);
 		updateStamina(user, gameHero);
-
-		// main quest
-		List<HeroQuest> mainQuests = questManager.getQuests(gameHeroId, QuestManager.GROUP_MAIN_QUEST, false);
 		response.putQAntObject("game_hero", QAntObject.newFromObject(gameHero));
-		IQAntArray questArr = QAntArray.newInstance();
-		IQAntObject mainQuest = QAntObject.newInstance();
-		mainQuest.putInt("gid", QuestManager.GROUP_MAIN_QUEST);
-		mainQuest.putInt("no", mainQuests == null ? 0 : mainQuests.size());
-		questArr.addQAntObject(mainQuest);
 
-		// daily quest
-		List<HeroQuest> dailyQuestList = questManager.findDailyQuests(gameHeroId, getStartOfDateMilis(),
-				getEndOfDateMilis());
-		if (dailyQuestList == null || dailyQuestList.size() <= 0) {
-			dailyQuestList = questManager.resetDailyQuest(gameHero);
-		}
-
-		IQAntObject dailyQuest = QAntObject.newInstance();
-		dailyQuest.putInt("gid", QuestManager.GROUP_DAILY_QUEST);
-		dailyQuest.putInt("no", dailyQuestList.size());
-		questArr.addQAntObject(dailyQuest);
-		response.putQAntArray("quests", questArr);
+		// quest
+		response.putQAntArray("quests", countNewQuest(gameHeroId));
 
 		// current chapter
 		HeroStage curStage = stageRepository.findStageByHeroIdAndClearIsFalse(gameHeroId);
@@ -157,6 +140,31 @@ public class JoinZoneEventHandler extends BaseServerEventHandler {
 
 		adminManager.incrAndNotifyCCU();
 		return;
+	}
+
+
+	private IQAntArray countNewQuest(String gameHeroId) {
+		List<HeroQuest> newQuests = questManager.getNewQuests(gameHeroId);
+		Map<String, Integer> countMap = new HashMap<>();
+		countMap.put(QuestManager.GROUP_WORLD_QUEST, 0);
+		countMap.put(QuestManager.GROUP_DAILY_QUEST, 0);
+
+		for (HeroQuest heroQuest : newQuests) {
+			String groupId = heroQuest.getGroupId();
+			Integer count = countMap.get(groupId);
+			count++;
+			countMap.put(groupId, count);
+		}
+
+		IQAntArray questArr = QAntArray.newInstance();
+		for (String groupId : countMap.keySet()) {
+			IQAntObject quest = QAntObject.newInstance();
+			quest.putUtfString("group", groupId);
+			quest.putInt("no", countMap.get(groupId));
+			questArr.addQAntObject(quest);
+		}
+
+		return questArr;
 	}
 
 
@@ -333,16 +341,6 @@ public class JoinZoneEventHandler extends BaseServerEventHandler {
 		heroStage.setUnlock(true);
 		stageRepository.save(heroStage);
 		return gameHero;
-	}
-
-
-	private long getStartOfDateMilis() {
-		return DateUtils.truncate(new Date(), Calendar.DATE).getTime();
-	}
-
-
-	private long getEndOfDateMilis() {
-		return DateUtils.addMilliseconds(DateUtils.ceiling(new Date(), Calendar.DATE), -1).getTime();
 	}
 
 }

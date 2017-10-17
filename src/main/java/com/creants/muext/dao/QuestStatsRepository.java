@@ -32,16 +32,28 @@ public interface QuestStatsRepository extends MongoRepository<HeroQuest, Long> {
 
 
 	@Query("{'gameHeroId' : ?0, 'groupId' : ?1, 'finish' : ?2}")
-	List<HeroQuest> getQuests(String gameHeroId, int groupId, boolean isFinish);
+	List<HeroQuest> getQuests(String gameHeroId, String groupId, boolean isFinish);
 
 
-	List<HeroQuest> findByGameHeroIdAndGroupId(String gameHeroId, int groupId);
+	@Query("{'gameHeroId' : ?0, 'groupId' : ?1, 'finish' : ?2, 'seen': ?3}")
+	List<HeroQuest> getQuests(String gameHeroId, String groupId, boolean isFinish, boolean seen);
 
 
-	@Query("{'gameHeroId' : ?0, 'groupId' : 2, 'createTime' : {'$lt' : ?1}}")
+	@Query("{'gameHeroId' : ?0,$or: [{seen: {$exists: false}}, {seen: false}]}")
+	List<HeroQuest> getNewQuests(String gameHeroId);
+
+
+	List<HeroQuest> findByGameHeroIdAndGroupId(String gameHeroId, String groupId);
+
+
+	@Query("{'gameHeroId' : ?0, 'groupId' : 'daily', 'createTime' : {'$lt' : ?1}}")
 	List<HeroQuest> findDailyQuestNeedRemove(String gameHeroId, long startOfDateMili);
 
 
-	@Query("{'gameHeroId' : ?0, 'groupId' : 2, 'createTime' : {'$gte' : ?1, '$lte' : ?2}}")
+	@Query("{'gameHeroId' : ?0, 'groupId' : 'daily', 'createTime' : {'$gte' : ?1, '$lte' : ?2}}")
 	List<HeroQuest> findDailyQuests(String gameHeroId, long startOfDateMili, long endOfDateMili);
+
+
+	@Query("{'gameHeroId' : ?0, 'groupId' : 'daily', 'createTime' : {'$gte' : ?1, '$lte' : ?2}, 'seen' : ?3}")
+	List<HeroQuest> findDailyQuests(String gameHeroId, long startOfDateMili, long endOfDateMili, boolean seen);
 }

@@ -14,6 +14,8 @@ import java.util.TreeMap;
 import javax.xml.stream.XMLInputFactory;
 import javax.xml.stream.XMLStreamReader;
 
+import com.creants.muext.entities.quest.CompleteQuest;
+import com.creants.muext.entities.quest.CompleteTask;
 import com.creants.muext.entities.quest.HeroQuest;
 import com.creants.muext.entities.quest.KillMonsterQuest;
 import com.creants.muext.entities.quest.MonsterKillTask;
@@ -29,10 +31,16 @@ import com.fasterxml.jackson.dataformat.xml.XmlMapper;
  */
 public class QuestConfig {
 	public static final String QUEST_GROUP_DAILY = "daily";
-	public static final String QUEST_GROUP_NORMAL = "normal";
+	public static final String QUEST_GROUP_WORLD = "world";
 
 	public static final int MONSTER_KILL = 1;
 	public static final int WIN_TASK = 2;
+	public static final int COMPLETE_TASK1 = 3;
+	public static final int COMPLETE_TASK2 = 4;
+	public static final int COMPLETE_TASK3 = 5;
+	public static final int COMPLETE_TASK4 = 6;
+	public static final int COMPLETE_TASK5 = 7;
+	public static final int COMPLETE_TASK6 = 8;
 
 	private static final String QUEST_CONFIG = "resources/quests.xml";
 	private static final XMLInputFactory f = XMLInputFactory.newFactory();
@@ -40,7 +48,7 @@ public class QuestConfig {
 	private static QuestConfig instance;
 	private Map<Integer, Quest> questMap;
 	private Map<Integer, HeroQuest> dailyQuestMap;
-	private Map<Integer, HeroQuest> normalQuestMap;
+	private Map<Integer, HeroQuest> worldQuestMap;
 	// Monster có trong các nhiệm vụ
 	private Map<Integer, Set<Integer>> monsterInQuest;
 
@@ -57,7 +65,7 @@ public class QuestConfig {
 		monsterInQuest = new HashMap<>();
 		questMap = new HashMap<>();
 		dailyQuestMap = new TreeMap<>();
-		normalQuestMap = new TreeMap<>();
+		worldQuestMap = new TreeMap<>();
 		loadQuest();
 	}
 
@@ -98,7 +106,17 @@ public class QuestConfig {
 						winQuest.setNo(winTask.getWinNo());
 						heroQuest = winQuest;
 						break;
-
+					case COMPLETE_TASK1:
+					case COMPLETE_TASK2:
+					case COMPLETE_TASK3:
+					case COMPLETE_TASK4:
+					case COMPLETE_TASK5:
+					case COMPLETE_TASK6:
+						CompleteTask completeTask = mapper.readValue(sr, CompleteTask.class);
+						quest = completeTask;
+						CompleteQuest completeQuest = new CompleteQuest();
+						heroQuest = completeQuest;
+						break;
 					default:
 						quest = null;
 						sr.next();
@@ -114,8 +132,8 @@ public class QuestConfig {
 
 				questMap.put(quest.getIndex(), quest);
 				switch (quest.getGroupId()) {
-					case QUEST_GROUP_NORMAL:
-						normalQuestMap.put(quest.getIndex(), heroQuest);
+					case QUEST_GROUP_WORLD:
+						worldQuestMap.put(quest.getIndex(), heroQuest);
 						break;
 					case QUEST_GROUP_DAILY:
 						dailyQuestMap.put(quest.getIndex(), heroQuest);
@@ -170,7 +188,7 @@ public class QuestConfig {
 
 
 	public List<HeroQuest> getNormalQuestList() {
-		return new ArrayList<>(normalQuestMap.values());
+		return new ArrayList<>(worldQuestMap.values());
 	}
 
 

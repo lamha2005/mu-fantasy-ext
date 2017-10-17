@@ -1,13 +1,18 @@
-<?xml version="1.0" encoding="UTF-8"?>
+<?xml version="1.0" encoding="UTF-8" standalone="yes"?>
 <QuestList>
-	<Quest Index="0" Group="normal" TaskType="1" Name="Bull Hunter" Description="Hunt Bull Fighter in Loren" Task="1003/10" ZenReward="1000" ExpReward="50" ItemReward="11012/2#11011/1"/>
-	<Quest Index="1" Group="normal" TaskType="1" Name="Yeti Hunter" Description="Hunt Yeti" Task="1004/10" ZenReward="1000" ExpReward="50" ItemReward="11012/2#11011/1"/>
-	
-	<Quest Index="100" Group="daily" TaskType="2" Name="Chaos Castle Master" Description="Join and win the Chaos Castle event" Task="2" ZenReward="1000" ExpReward="50" ItemReward="11012/2#11011/1"/>
-	<Quest Index="200" Group="daily" TaskType="2" Name="Win Campain" Description="Người cần chơi chiến thắng Campain" Task="5" ZenReward="1000" ExpReward="50" ItemReward="11012/2#11011/1"/>
-	<Quest Index="201" Group="daily" TaskType="2" Name="Win Chaos" Description="Người chơi chiến thắng Chaos" Task="5" ZenReward="1000" ExpReward="50" ItemReward="11012/2#11011/1"/>
-	
-	<Quest Index="300" Group="3" TaskType="8" Name="Online liên tục" Description="Online nhận quà giá trị" Task="1" ZenReward="1000" ExpReward="50" ItemReward="11012/2#11011/1"/>
+	<Quest Index="0" Group="world" StageIndex="101#102#103#104#105" TaskType="1" Name="Bull Hunter" Description="Hunt Bull Fighter in Loren" Task="1003" Count="10" ItemReward="11012/2#11011/1"/>
+	<Quest Index="1" Group="world" StageIndex="103#105#108" TaskType="1" Name="Yeti Hunter" Description="Hunt 5 Yeti in Devias" Task="1004" Count="10" ItemReward="11012/2#11011/1"/>
+	<Quest Index="2" Group="world" TaskType="2" Name="Team building" Description="Enter battle with a Water hero" Count="1"/>
+	<Quest Index="3" Group="world" TaskType="3" Name="Go for Level 5" Description="Your team is ready to grow stronger! Reach level 5!" Count="1"/>
+	<Quest Index="4" Group="world" TaskType="4" Name="The More, the Better" Description="There's strength in numbers! You'll feel it once you build a 4 member team! Build a team of 4 heroes!" Count="1"/>
+	<Quest Index="5" Group="world" TaskType="5" Name="Everything's Annoying..." Description="We understand pressing skill buttons gets boring for you. Win a battle by using Auto Battle." Count="1"/>
+	<Quest Index="6" Group="world" TaskType="6" Name="Sociability Check" Description="Battle 2 times with a Helper." Count="1"/>
+	<Quest Index="7" Group="world" TaskType="7" Name="Go for level 10" Description="It's always excited to learn something new! Reach level 10!" Count="1"/>
+	<Quest Index="8" Group="world" TaskType="8" Name="Watch Out for Ice Swords" Description="This Assassin slashes horrible ice sword to freeeze! Defeat 10 Assassins!" Count="1"/>
+	<Quest Index="100" Group="daily" TaskType="3" Name="Clear Stages" Description="Clear Stages 5 times" Task="1" Count="1" ZenReward="10000" ExpReward="10" ItemReward="11012/2#11011/1"/>
+	<Quest Index="101" Group="daily" TaskType="3" Name="Chaos Castle Master" Description="Join and win the Chaos Castle event" Task="1" Count="1" ZenReward="10000" ExpReward="10" ItemReward="11012/2#11011/1"/>
+	<Quest Index="102" Group="daily" TaskType="3" Name="Recharge Stamina" Description="Recharge Stamina 1 time" Task="1" Count="1" ZenReward="10000" ExpReward="10" ItemReward="11012/2#11011/1"/>
+	<Quest Index="103" Group="daily" TaskType="3" Name="Powerful Heroes" Description="Level up Heroes 5 times" Task="1" Count="1" ZenReward="10000" ExpReward="10" ItemReward="11012/2#11011/1"/>
+	<Quest Index="104" Group="daily" TaskType="3" Name="Arena" Description="Battle 3 times in Arena" Task="1" Count="1" ZenReward="10000" ExpReward="10" ItemReward="11012/2#11011/1"/>
+	<Quest Index="105" Group="daily" TaskType="3" Name="Chaos Castle Master" Description="Join and win the Chaos Castle event" Task="1" Count="1" ZenReward="10000" ExpReward="10" ItemReward="11012/2#11011/1"/>
 </QuestList>
-
- 

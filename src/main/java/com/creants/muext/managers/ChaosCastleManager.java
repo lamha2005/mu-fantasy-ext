@@ -10,7 +10,6 @@ import org.springframework.stereotype.Service;
 import com.creants.creants_2x.core.util.QAntTracer;
 import com.creants.muext.config.ChaosCastleConfig;
 import com.creants.muext.config.HeroClassConfig;
-import com.creants.muext.config.ItemConfig;
 import com.creants.muext.dao.BattleTeamRepository;
 import com.creants.muext.dao.ChaosCastlePowerRepository;
 import com.creants.muext.dao.ChaosCastleRepository;
@@ -55,8 +54,6 @@ public class ChaosCastleManager implements InitializingBean {
 
 	@Autowired
 	private AutoIncrementService autoIncrService;
-
-	private static final ItemConfig itemConfig = ItemConfig.getInstance();
 
 
 	@Override
@@ -171,34 +168,30 @@ public class ChaosCastleManager implements InitializingBean {
 
 
 	public ChaosCastleStage getNextStage(ChaosCastleStage stage) {
-		// ChaosCastlePower chaosCastlePower = chaosInfo.getChaosCastlePower();
-		// ChaosCastleStage curStage = chaosInfo.getStage();
-		// ChaosStageBase stageBase =
-		// ChaosCastleConfig.getInstance().getStage(stage.getStageIndex() + 1);
-		// if (curStage.getId() >= MAX_STAGE) {
-		// chaosInfo.setRank(getNextRank(chaosInfo.getRank()));
-		// }
-		//
-		// ChaosCastleStage stage = new ChaosCastleStage();
-		// stage.setId(stageBase.getIndex());
-		// ChaosCastlePower opponent =
-		// findOpponent(chaosCastlePower.getMaxPower(), stageBase);
-		// GameHero gameHero = npcManager.getGameHero(opponent.getGameHeroId());
-		// stage.setAccName(gameHero.getName());
-		// stage.setLevel(gameHero.getLevel());
-		// List<HeroClass> heroes = gameHero.getHeroes();
-		// List<OpponentHeroClass> chaosHeroes = new ArrayList<>(heroes.size());
-		// int teamPower = 0;
-		// for (HeroClass heroClass : heroes) {
-		// chaosHeroes.add(new OpponentHeroClass(heroClass));
-		// teamPower += heroClass.getPower();
-		// }
-		// stage.setHeroes(chaosHeroes);
-		// stage.setTeamPower(teamPower);
-		//
-		// // thông tin reward
-		// stage.setReward(itemConfig.splitItem(stageBase.getFullReward(chaosInfo.getRank())));
-		// chaosRepository.save(chaosInfo);
+		int stageIndex = stage.getStageIndex() + 1;
+		if (stageIndex >= MAX_STAGE) {
+			stage.setRank(getNextRank(stage.getRank()));
+			stageIndex = 0;
+		}
+
+		stage.setClamed(false);
+		stage.setWin(false);
+		stage.setStageIndex(stageIndex);
+
+		ChaosStageBase nextStageBase = ChaosCastleConfig.getInstance().getStage(stageIndex);
+
+		ChaosCastlePower chaosCastlePower = chaosPowerRepository.findOne(stage.getGameHeroId());
+		ChaosCastlePower opponent = findOpponent(chaosCastlePower.getMaxPower(), nextStageBase, 1);
+
+		if (opponent == null) {
+			QAntTracer.warn(this.getClass(), "Can not found opponent for maxPower = " + chaosCastlePower.getMaxPower());
+			return null;
+		}
+
+		stage.setOpponentId(opponent.getGameHeroId());
+		stage.setOpponent(opponent);
+		chaosStageRepository.save(stage);
+
 		return stage;
 	}
 

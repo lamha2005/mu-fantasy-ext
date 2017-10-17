@@ -13,12 +13,14 @@ import com.creants.creants_2x.socket.gate.wood.QAntUser;
 import com.creants.muext.Creants2XApplication;
 import com.creants.muext.config.ChaosCastleConfig;
 import com.creants.muext.config.ItemConfig;
+import com.creants.muext.entities.GameHero;
 import com.creants.muext.entities.chaos.ChaosCastleInfo;
 import com.creants.muext.entities.chaos.ChaosCastleStage;
 import com.creants.muext.entities.chaos.ChaosStageBase;
 import com.creants.muext.entities.item.HeroConsumeableItem;
 import com.creants.muext.entities.item.HeroItem;
 import com.creants.muext.managers.ChaosCastleManager;
+import com.creants.muext.managers.GameHeroManager;
 import com.creants.muext.managers.HeroItemManager;
 import com.creants.muext.util.UserHelper;
 
@@ -30,14 +32,17 @@ public class ChaosCastleRequestHandler extends BaseClientRequestHandler {
 	private static final int JOIN = 1;
 	private static final int FINISH = 2;
 	private static final int UPDATE_BATTLE_TEAM = 3;
+	private static final int UNLOCK_STAGE = 4;
 
 	private ChaosCastleManager chaosCastleManager;
 	private HeroItemManager heroItemManager;
+	private GameHeroManager gameHeroManager;
 
 
 	public ChaosCastleRequestHandler() {
 		chaosCastleManager = Creants2XApplication.getBean(ChaosCastleManager.class);
 		heroItemManager = Creants2XApplication.getBean(HeroItemManager.class);
+		gameHeroManager = Creants2XApplication.getBean(GameHeroManager.class);
 	}
 
 
@@ -106,22 +111,19 @@ public class ChaosCastleRequestHandler extends BaseClientRequestHandler {
 			return;
 		}
 
-		params.removeElement("use_items");
-		ChaosCastleStage stage = chaosCastleManager.getChaosCastleStage(user.getName());
+		ChaosCastleStage stage = chaosCastleManager.getChaosCastleStage(gameHeroId);
 		processReward(params, user, stage);
-		processNextStage(user, stage);
 		send(ExtensionEvent.CMD_CHAOS_CASTLE, params, user);
+
+		processNextStage(user, stage);
 	}
 
 
 	private void processNextStage(QAntUser user, ChaosCastleStage stage) {
-		QAntObject response = QAntObject.newInstance();
-		response.putInt("type", 2);
-		IQAntObject data = QAntObject.newInstance();
-		data.putQAntObject("next_stage", QAntObject.newFromObject(chaosCastleManager.getNextStage(stage)));
-		data.putUtfString("rank", stage.getRank());
-		response.putQAntObject("data", data);
-		send(ExtensionEvent.CMD_NTF_UNLOCK, response, user);
+		IQAntObject response = QAntObject.newInstance();
+		response.putQAntObject("stage", QAntObject.newFromObject(chaosCastleManager.getNextStage(stage)));
+		response.putInt("act", UNLOCK_STAGE);
+		send(ExtensionEvent.CMD_CHAOS_CASTLE, response, user);
 	}
 
 
@@ -134,7 +136,8 @@ public class ChaosCastleRequestHandler extends BaseClientRequestHandler {
 		reward.putQAntArray("items", instance.buildShortItemInfo(rewardItems));
 		params.putQAntObject("reward", reward);
 
-		List<HeroItem> addItems = heroItemManager.addItems(user.getName(), rewardItems);
+		String chestRewardString = stage.getChestRewardString();
+		List<HeroItem> addItems = heroItemManager.addItems(user.getName(), chestRewardString);
 		QAntObject updateObj = QAntObject.newInstance();
 		QAntArray itemArr = QAntArray.newInstance();
 		for (HeroItem heroItem : addItems) {
@@ -142,6 +145,21 @@ public class ChaosCastleRequestHandler extends BaseClientRequestHandler {
 		}
 		updateObj.putQAntArray("items", itemArr);
 		params.putQAntObject("update", updateObj);
+
+		notifyAssetChange(user, stage, unlockStage.getRank());
+	}
+
+
+	private void notifyAssetChange(QAntUser user, ChaosStageBase stage, String rank) {
+		GameHero gameHero = gameHeroManager.getHero(user.getName());
+		IQAntObject assets = QAntObject.newInstance();
+
+		gameHero.incrZen(stage.getTotalRewardZen(rank));
+		assets.putLong("zen", gameHero.getZen());
+		assets.putLong("chaos_point", stage.getChaosPointReward());
+
+		send(ExtensionEvent.CMD_NTF_ASSETS_CHANGE, assets, user);
+		gameHeroManager.update(gameHero);
 	}
 
 

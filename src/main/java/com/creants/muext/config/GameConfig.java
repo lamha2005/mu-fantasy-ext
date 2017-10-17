@@ -141,7 +141,7 @@ public class GameConfig {
 	public void writeToJsonFile() {
 		try {
 			ObjectMapper mapper = new ObjectMapper();
-			mapper.writeValue(new File("export/upgrade_system_test.json"), upgradeSystem);
+			mapper.writeValue(new File("export/upgrade_system.json"), upgradeSystem);
 		} catch (Exception e) {
 			e.printStackTrace();
 		}

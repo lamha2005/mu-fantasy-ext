@@ -2,6 +2,7 @@ package com.creants.muext.services;
 
 import java.util.ArrayList;
 import java.util.Calendar;
+import java.util.Collection;
 import java.util.Date;
 import java.util.List;
 import java.util.Set;
@@ -27,14 +28,15 @@ import com.creants.muext.entities.quest.Quest;
  */
 @Service
 public class QuestManager implements InitializingBean {
-	public static final int GROUP_MAIN_QUEST = 1;
-	public static final int GROUP_DAILY_QUEST = 2;
+	public static final String GROUP_WORLD_QUEST = "world";
+	public static final String GROUP_DAILY_QUEST = "daily";
 	@Autowired
 	private GameHeroRepository heroRepository;
 	@Autowired
 	private QuestStatsRepository questStatsRespository;
 	@Autowired
 	private QuestRepository questRepository;
+
 	@Autowired
 	private AutoIncrementService autoIncrService;
 
@@ -58,9 +60,9 @@ public class QuestManager implements InitializingBean {
 	}
 
 
-	public List<HeroQuest> getQuests(String gameHeroId, int groupId) {
+	public List<HeroQuest> getQuests(String gameHeroId, String groupId) {
 		List<HeroQuest> quests = questStatsRespository.findByGameHeroIdAndGroupId(gameHeroId, groupId);
-		if (groupId == GROUP_MAIN_QUEST) {
+		if (groupId.equals(GROUP_WORLD_QUEST)) {
 			GameHero hero = heroRepository.findOne(gameHeroId);
 			int level = hero.getLevel();
 			List<Quest> newQuests = questRepository.getQuests(level);
@@ -70,6 +72,18 @@ public class QuestManager implements InitializingBean {
 		}
 
 		return quests;
+	}
+
+
+	public List<HeroQuest> getQuests(Collection<Long> ids) {
+		List<HeroQuest> quests = new ArrayList<>();
+		questStatsRespository.findAll(ids).forEach(quests::add);
+		return quests;
+	}
+
+
+	public HeroQuest getQuest(String gameHeroId, long questId) {
+		return questStatsRespository.findOne(questId);
 	}
 
 
@@ -88,6 +102,16 @@ public class QuestManager implements InitializingBean {
 	}
 
 
+	public void saveQuests(List<HeroQuest> quests) {
+		questStatsRespository.save(quests);
+	}
+
+
+	public void save(HeroQuest heroQuest) {
+		questStatsRespository.save(heroQuest);
+	}
+
+
 	public void registerQuestsFromHero(GameHero gameHero) {
 		List<HeroQuest> quests = new ArrayList<HeroQuest>();
 		quests.addAll(questConfig.getNormalQuestList());
@@ -100,7 +124,6 @@ public class QuestManager implements InitializingBean {
 		}
 
 		questStatsRespository.save(quests);
-
 	}
 
 
@@ -121,8 +144,33 @@ public class QuestManager implements InitializingBean {
 	}
 
 
-	public List<HeroQuest> getQuests(String heroId, int groupId, boolean isFinish) {
+	public List<HeroQuest> getQuests(String heroId, String groupId, boolean isFinish) {
 		return questStatsRespository.getQuests(heroId, groupId, isFinish);
+	}
+
+
+	public List<HeroQuest> getNewQuests(String gameHeroId) {
+		return questStatsRespository.getNewQuests(gameHeroId);
+	}
+
+
+	public List<HeroQuest> getQuests(String heroId, String groupId, boolean isFinish, boolean seen) {
+		return questStatsRespository.getQuests(heroId, groupId, isFinish, seen);
+	}
+
+
+	public List<HeroQuest> getNewDailyQuests(String gameHeroId) {
+		return questStatsRespository.findDailyQuests(gameHeroId, getStartOfDateMilis(), getEndOfDateMilis());
+	}
+
+
+	public List<HeroQuest> getDailyQuests(String gameHeroId) {
+		return questStatsRespository.findDailyQuests(gameHeroId, getStartOfDateMilis(), getEndOfDateMilis());
+	}
+
+
+	public List<HeroQuest> getDailyQuests(String gameHeroId, boolean seen) {
+		return questStatsRespository.findDailyQuests(gameHeroId, getStartOfDateMilis(), getEndOfDateMilis(), seen);
 	}
 
 
@@ -131,8 +179,8 @@ public class QuestManager implements InitializingBean {
 	}
 
 
-	public List<HeroQuest> findDailyQuests(String gameHeroId, long startOfDateMilis, long endOfDateMilis) {
-		return questStatsRespository.findDailyQuests(gameHeroId, startOfDateMilis, endOfDateMilis);
+	private long getEndOfDateMilis() {
+		return DateUtils.addMilliseconds(DateUtils.ceiling(new Date(), Calendar.DATE), -1).getTime();
 	}
 
 }

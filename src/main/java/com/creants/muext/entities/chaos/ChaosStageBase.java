@@ -66,6 +66,11 @@ public class ChaosStageBase {
 	}
 
 
+	public int getTotalRewardZen(String rank) {
+		return zenReward + bonusZenMap.get(rank);
+	}
+
+
 	public int getIndex() {
 		return index;
 	}

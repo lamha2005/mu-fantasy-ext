@@ -21,6 +21,7 @@ public class KillMonsterQuest extends HeroQuest {
 
 
 	public boolean killMonster(Map<Integer, Integer> monsterMap) {
+		int count = getCount();
 		int clearCount = monsters.size();
 		for (Integer monsterIndex : monsterMap.keySet()) {
 			Integer monsterNo = monsters.get(monsterIndex);
@@ -32,10 +33,12 @@ public class KillMonsterQuest extends HeroQuest {
 				remain = 0;
 				clearCount--;
 			}
+
+			count = remain;
 			monsters.put(monsterIndex, remain);
 		}
 
-		return clearCount <= 0;
+		return count <= 0;
 	}
 
 }

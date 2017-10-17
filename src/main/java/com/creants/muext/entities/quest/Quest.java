@@ -2,6 +2,8 @@ package com.creants.muext.entities.quest;
 
 import java.util.List;
 
+import org.apache.commons.lang.StringUtils;
+
 import com.creants.muext.config.ItemConfig;
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import com.fasterxml.jackson.annotation.JsonInclude;
@@ -13,12 +15,14 @@ import com.fasterxml.jackson.dataformat.xml.annotation.JacksonXmlProperty;
  *
  */
 @JsonInclude(Include.NON_NULL)
-@JsonIgnoreProperties({ "itemRewardString", "taskString" })
+@JsonIgnoreProperties({ "itemRewardString", "stageIndexString" })
 public abstract class Quest {
 	@JacksonXmlProperty(localName = "Index", isAttribute = true)
 	private int index;
 	@JacksonXmlProperty(localName = "Group", isAttribute = true)
 	private String groupId;
+	@JacksonXmlProperty(localName = "StageIndex", isAttribute = true)
+	private String stageIndexString;
 	@JacksonXmlProperty(localName = "TaskType", isAttribute = true)
 	private int taskType;
 	@JacksonXmlProperty(localName = "Name", isAttribute = true)
@@ -26,7 +30,9 @@ public abstract class Quest {
 	@JacksonXmlProperty(localName = "Description", isAttribute = true)
 	private String desc;
 	@JacksonXmlProperty(localName = "Task", isAttribute = true)
-	private String taskString;
+	private int task;
+	@JacksonXmlProperty(localName = "Count", isAttribute = true)
+	private int count;
 
 	@JacksonXmlProperty(localName = "ZenReward", isAttribute = true)
 	private int zenReward;
@@ -36,6 +42,7 @@ public abstract class Quest {
 	private String itemRewardString;
 
 	private List<String> itemReward;
+	private int[] stageIndexes;
 
 
 	public abstract void convertBase();
@@ -43,6 +50,27 @@ public abstract class Quest {
 
 	void splitReward() {
 		itemReward = ItemConfig.getInstance().splitRewardString(itemRewardString);
+	}
+
+
+	void splitStageIndex() {
+		if (stageIndexString != null) {
+			String[] items = StringUtils.split(stageIndexString, "#");
+			stageIndexes = new int[items.length];
+			for (int i = 0; i < items.length; i++) {
+				stageIndexes[i] = Integer.parseInt(items[i]);
+			}
+		}
+	}
+
+
+	public int[] getStageIndexes() {
+		return stageIndexes;
+	}
+
+
+	public void setStageIndexes(int[] stageIndexes) {
+		this.stageIndexes = stageIndexes;
 	}
 
 
@@ -116,6 +144,26 @@ public abstract class Quest {
 	}
 
 
+	public int getTask() {
+		return task;
+	}
+
+
+	public void setTask(int task) {
+		this.task = task;
+	}
+
+
+	public int getCount() {
+		return count;
+	}
+
+
+	public void setCount(int count) {
+		this.count = count;
+	}
+
+
 	public String getGroupId() {
 		return groupId;
 	}
@@ -136,13 +184,13 @@ public abstract class Quest {
 	}
 
 
-	public String getTaskString() {
-		return taskString;
+	public String getStageIndexString() {
+		return stageIndexString;
 	}
 
 
-	public void setTaskString(String taskString) {
-		this.taskString = taskString;
+	public void setStageIndexString(String stageIndexString) {
+		this.stageIndexString = stageIndexString;
 	}
 
 }

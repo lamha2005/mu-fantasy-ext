@@ -1,5 +1,6 @@
 package com.creants.muext.config;
 
+import java.io.File;
 import java.io.FileInputStream;
 import java.util.ArrayList;
 import java.util.Collection;
@@ -14,6 +15,7 @@ import javax.xml.stream.XMLStreamReader;
 import com.creants.muext.entities.HeroBase;
 import com.creants.muext.entities.HeroClass;
 import com.creants.muext.entities.skill.Skill;
+import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.dataformat.xml.XmlMapper;
 
 /**
@@ -174,4 +176,18 @@ public class HeroClassConfig {
 		}
 	}
 
+
+	public void writeToJsonFile() {
+		try {
+			ObjectMapper mapper = new ObjectMapper();
+			mapper.writeValue(new File("export/heroes.json"), getHeroes());
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
+	}
+
+
+	public static void main(String[] args) {
+		HeroClassConfig.getInstance().writeToJsonFile();
+	}
 }

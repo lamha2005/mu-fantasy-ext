@@ -25,6 +25,19 @@
 		<LevelUpHeroByItem Materials="11017" SameElementals="4000" DifferentElementals="3000" SuccessRatePercent="100"/>
 		<LevelUpHeroByItem Materials="11018" SameElementals="50000" DifferentElementals="37500" SuccessRatePercent="100"/>
 		<LevelUpHeroByItem Materials="11019" SameElementals="300000" DifferentElementals="225000" SuccessRatePercent="100"/>
+		<LevelUpHeroByItem Materials="11019" SameElementals="300000" DifferentElementals="225000" SuccessRatePercent="100"/>
+		<LevelUpHeroByItem Materials="11020" SameElementals="300000" DifferentElementals="225000" SuccessRatePercent="100"/>
+		<LevelUpHeroByItem Materials="11021" SameElementals="300000" DifferentElementals="225000" SuccessRatePercent="100"/>
+		<LevelUpHeroByItem Materials="11022" SameElementals="300000" DifferentElementals="225000" SuccessRatePercent="100"/>
+		<LevelUpHeroByItem Materials="11023" SameElementals="300000" DifferentElementals="225000" SuccessRatePercent="100"/>
+		<LevelUpHeroByItem Materials="11024" SameElementals="300000" DifferentElementals="225000" SuccessRatePercent="100"/>
+		<LevelUpHeroByItem Materials="11025" SameElementals="300000" DifferentElementals="225000" SuccessRatePercent="100"/>
+		<LevelUpHeroByItem Materials="11026" SameElementals="300000" DifferentElementals="225000" SuccessRatePercent="100"/>
+		<LevelUpHeroByItem Materials="11027" SameElementals="300000" DifferentElementals="225000" SuccessRatePercent="100"/>
+		<LevelUpHeroByItem Materials="11028" SameElementals="300000" DifferentElementals="225000" SuccessRatePercent="100"/>
+		<LevelUpHeroByItem Materials="11029" SameElementals="300000" DifferentElementals="225000" SuccessRatePercent="100"/>
+		<LevelUpHeroByItem Materials="11030" SameElementals="300000" DifferentElementals="225000" SuccessRatePercent="100"/>
+		<LevelUpHeroByItem Materials="11031" SameElementals="300000" DifferentElementals="225000" SuccessRatePercent="100"/>
 	</LevelUpHeroByItems>
 	<LevelUpEquipmentsLT3>
 		<LevelUpEquipment Level="2" ZenCost="500" SuccessRatePercent="100"/>
