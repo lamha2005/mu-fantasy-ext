@@ -44,8 +44,6 @@ public class UpdateBattleTeamRequestHandler extends BaseClientRequestHandler {
 		if (teamArr == null)
 			return;
 
-		checkQuest(user, teamArr.size());
-
 		// TODO check có sở hữu các hero đó ko
 		BattleTeam battleTeam = new BattleTeam();
 		battleTeam.setGameHeroId(user.getName());
@@ -92,6 +90,8 @@ public class UpdateBattleTeamRequestHandler extends BaseClientRequestHandler {
 		params.putQAntArray("teams", teamArr);
 
 		send(ExtensionEvent.CMD_UPD_BATTLE_TEAM, params, user);
+		
+		checkQuest(user, teamArr.size());
 	}
 
 
