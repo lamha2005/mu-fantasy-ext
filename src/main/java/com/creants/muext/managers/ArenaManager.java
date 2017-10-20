@@ -2,6 +2,8 @@ package com.creants.muext.managers;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Map;
+import java.util.concurrent.ConcurrentHashMap;
 
 import org.springframework.beans.factory.InitializingBean;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -25,11 +27,14 @@ public class ArenaManager implements InitializingBean {
 	@Autowired
 	private NPCManager npcManager;
 
+	private Map<String, String> battleMap;
+
 
 	@Override
 	public void afterPropertiesSet() throws Exception {
 		// TODO chỉ load lần đầu
 		loadNPC();
+		battleMap = new ConcurrentHashMap<>();
 	}
 
 
@@ -64,6 +69,16 @@ public class ArenaManager implements InitializingBean {
 		arenaPowerRepository.save(powerList);
 		QAntTracer.info(this.getClass(),
 				"loadNPC in ArenaManager: " + (System.currentTimeMillis() - startTime) / 1000 + "s");
+	}
+
+
+	private boolean checkInBattle(String gameHeroId) {
+		return battleMap.containsKey(gameHeroId);
+	}
+
+
+	private String getOpponent(String gameHeroId) {
+		return battleMap.get(gameHeroId);
 	}
 
 }

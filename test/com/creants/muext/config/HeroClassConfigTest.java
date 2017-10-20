@@ -13,15 +13,17 @@ import com.creants.muext.entities.HeroClass;
  */
 public class HeroClassConfigTest {
 	private HeroClassConfig heroClassConfig;
+	private GameConfig gameConfig;
 
 
 	@Before
 	public void init() {
 		heroClassConfig = HeroClassConfig.getInstance();
+		gameConfig = GameConfig.getInstance();
 	}
 
 
-	@Test
+//	@Test
 	public void genBattleTeamTest() {
 		List<HeroClass> genNPC = heroClassConfig.genNPC(58881, 200, 30);
 		int totalPower = 0;
@@ -32,7 +34,12 @@ public class HeroClassConfigTest {
 		}
 
 		System.out.println(totalPower);
-
+	}
+	
+	@Test
+	public void testIncrExp(){
+		int expFromHero = gameConfig.getExpFromHero(3, true);
+		System.out.println(expFromHero);
 	}
 
 }

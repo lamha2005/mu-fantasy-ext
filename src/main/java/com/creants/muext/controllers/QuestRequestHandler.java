@@ -2,9 +2,10 @@ package com.creants.muext.controllers;
 
 import java.util.ArrayList;
 import java.util.Calendar;
-import java.util.Collection;
 import java.util.Date;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 import org.apache.commons.lang.StringUtils;
 import org.apache.commons.lang.time.DateFormatUtils;
@@ -21,9 +22,11 @@ import com.creants.muext.Creants2XApplication;
 import com.creants.muext.config.QuestConfig;
 import com.creants.muext.dao.GameHeroRepository;
 import com.creants.muext.entities.GameHero;
+import com.creants.muext.entities.item.HeroItem;
 import com.creants.muext.entities.quest.HeroQuest;
-import com.creants.muext.entities.quest.Quest;
+import com.creants.muext.entities.quest.QuestBase;
 import com.creants.muext.managers.HeroItemManager;
+import com.creants.muext.services.MessageFactory;
 import com.creants.muext.services.QuestManager;
 
 /**
@@ -34,7 +37,8 @@ public class QuestRequestHandler extends BaseClientRequestHandler {
 	private static final QuestConfig questConfig = QuestConfig.getInstance();
 	private static final int GET_LIST = 1;
 	private static final int CLAIM = 2;
-	private static final int SEEN = 3;
+	private static final int FINISH = 3;
+	private static final int SEEN_GROUP = 4;
 	private GameHeroRepository repository;
 	private HeroItemManager heroItemManager;
 	private QuestManager questManager;
@@ -63,8 +67,13 @@ public class QuestRequestHandler extends BaseClientRequestHandler {
 				claimReward(user, params);
 				break;
 
-			case SEEN:
-				seenQuest(user, params);
+			case FINISH:
+				finishQuest(user, params);
+				break;
+
+			case SEEN_GROUP:
+				notifyQuestNotSeenAndNotClaimYet(user, params);
+				break;
 
 			default:
 				break;
@@ -73,14 +82,48 @@ public class QuestRequestHandler extends BaseClientRequestHandler {
 	}
 
 
-	private void seenQuest(QAntUser user, IQAntObject params) {
-		Collection<Long> ids = params.getLongArray("ids");
-		List<HeroQuest> quests = questManager.getQuests(ids);
+	private void notifyQuestNotSeenAndNotClaimYet(QAntUser user, IQAntObject params) {
+		String groupId = params.getUtfString("group");
+		List<HeroQuest> quests = questManager.getNewQuests(user.getName(), groupId);
+		if (quests == null || quests.size() <= 0) {
+			return;
+		}
+
 		for (HeroQuest heroQuest : quests) {
 			heroQuest.setSeen(true);
 		}
 		questManager.saveQuests(quests);
-		send(ExtensionEvent.CMD_QUEST, params, user);
+
+		Map<String, Integer> countMap = new HashMap<>();
+		countMap.put(groupId, 0);
+
+		send(ExtensionEvent.CMD_NOTIFICATION, MessageFactory.buildNotificationCountQuest(countMap), user);
+	}
+
+
+	private void finishQuest(QAntUser user, IQAntObject params) {
+		Long questId = params.getLong("qid");
+		if (questId == null)
+			return;
+
+		HeroQuest quest = questManager.getQuest(user.getName(), questId);
+		if (quest == null || !quest.isClaim() || quest.isFinish())
+			return;
+
+		Integer no = params.getInt("value");
+		if (no == null)
+			no = 1;
+
+		boolean isFinish = quest.incr(no);
+		if (isFinish) {
+			quest.setClaim(true);
+		}
+
+		questManager.save(quest);
+		IQAntObject response = MessageFactory.buildNotification(ExtensionEvent.NTF_GROUP_QUEST,
+				ExtensionEvent.NTF_TYPE_FINISH);
+		response.putQAntObject("quest", QAntObject.newFromObject(quest));
+		send(ExtensionEvent.CMD_NOTIFICATION, response, user);
 	}
 
 
@@ -105,27 +148,30 @@ public class QuestRequestHandler extends BaseClientRequestHandler {
 
 		params.putQAntArray("quests", questArr);
 		send(ExtensionEvent.CMD_QUEST, params, user);
+		
+		notifyQuestNotSeenAndNotClaimYet(user, params);
 	}
 
 
 	private void claimReward(QAntUser user, IQAntObject params) {
-		Long questId = Long.parseLong(params.getUtfString("qid"));
+		Long questId = params.getLong("qid");
 		HeroQuest heroQuest = questManager.getQuest(user.getName(), questId);
 		if (!heroQuest.isFinish() && heroQuest.isClaim()) {
-			Quest quest = questConfig.getQuest(heroQuest.getQuestIndex());
+			QuestBase quest = questConfig.getQuest(heroQuest.getQuestIndex());
 			GameHero gameHero = repository.findOne(user.getName());
-			processReward(user, quest, gameHero);
-			params.putQAntObject("game_hero", QAntObject.newFromObject(gameHero));
-			heroQuest.setFinish(true);
-			questManager.save(heroQuest);
+			processReward(user, quest, gameHero, params);
+			questManager.delete(heroQuest);
 			send(ExtensionEvent.CMD_QUEST, params, user);
+
+			params.putUtfString("group", heroQuest.getGroupId());
+			notifyQuestNotSeenAndNotClaimYet(user, params);
 		} else {
 			QAntTracer.warn(this.getClass(), "Bad request! gameHeroId:" + user.getName());
 		}
 	}
 
 
-	private void processReward(QAntUser user, Quest quest, GameHero gameHero) {
+	private void processReward(QAntUser user, QuestBase quest, GameHero gameHero, IQAntObject params) {
 		IQAntObject assets = QAntObject.newInstance();
 		int exp = quest.getZenReward();
 		if (exp > 0) {
@@ -138,7 +184,14 @@ public class QuestRequestHandler extends BaseClientRequestHandler {
 		}
 
 		if (StringUtils.isBlank(quest.getItemRewardString())) {
-			heroItemManager.addItems(user.getName(), quest.getItemRewardString());
+			List<HeroItem> addItems = heroItemManager.addItems(user.getName(), quest.getItemRewardString());
+			QAntObject updateObj = QAntObject.newInstance();
+			QAntArray itemArr = QAntArray.newInstance();
+			for (HeroItem heroItem : addItems) {
+				itemArr.addQAntObject(QAntObject.newFromObject(heroItem));
+			}
+			updateObj.putQAntArray("items", itemArr);
+			params.putQAntObject("update", updateObj);
 		}
 
 		gameHero.incrZen(quest.getZenReward());

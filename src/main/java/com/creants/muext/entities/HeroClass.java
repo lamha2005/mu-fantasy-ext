@@ -30,6 +30,8 @@ public class HeroClass implements SerializableQAntType {
 	public int index;
 	public int classGroup;
 	public int rank;
+	@Transient
+	public int maxRank;
 	public String element;
 
 	@Transient
@@ -85,6 +87,7 @@ public class HeroClass implements SerializableQAntType {
 		name = heroBase.getName();
 		index = heroBase.getIndex();
 		rank = heroBase.getRank();
+		maxRank = heroBase.getMaxRank();
 		classGroup = heroBase.getClassGroup();
 		maxMp = heroBase.getMaxMp();
 		mpRec = heroBase.getMpRec();
@@ -219,6 +222,16 @@ public class HeroClass implements SerializableQAntType {
 	}
 
 
+	public int getMaxRank() {
+		return maxRank;
+	}
+
+
+	public void setMaxRank(int maxRank) {
+		this.maxRank = maxRank;
+	}
+
+
 	public List<Skill> getSkillList() {
 		return skillList;
 	}
@@ -313,8 +326,6 @@ public class HeroClass implements SerializableQAntType {
 			exp -= maxExp;
 			levelUp(1);
 			isLevelUp = true;
-
-			// System.out.println(this);
 		}
 
 		return isLevelUp;

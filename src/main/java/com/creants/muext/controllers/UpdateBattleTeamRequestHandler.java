@@ -8,6 +8,7 @@ import java.util.List;
 import org.apache.commons.lang.StringUtils;
 
 import com.creants.creants_2x.core.extension.BaseClientRequestHandler;
+import com.creants.creants_2x.core.util.QAntTracer;
 import com.creants.creants_2x.socket.gate.entities.IQAntArray;
 import com.creants.creants_2x.socket.gate.entities.IQAntObject;
 import com.creants.creants_2x.socket.gate.entities.QAntArray;
@@ -16,7 +17,11 @@ import com.creants.creants_2x.socket.gate.wood.QAntUser;
 import com.creants.muext.Creants2XApplication;
 import com.creants.muext.dao.BattleTeamRepository;
 import com.creants.muext.entities.BattleTeam;
+import com.creants.muext.entities.NetworkConstant;
 import com.creants.muext.entities.Team;
+import com.creants.muext.entities.quest.HeroQuest;
+import com.creants.muext.services.MessageFactory;
+import com.creants.muext.services.QuestManager;
 
 /**
  * @author LamHM
@@ -24,10 +29,12 @@ import com.creants.muext.entities.Team;
  */
 public class UpdateBattleTeamRequestHandler extends BaseClientRequestHandler {
 	private BattleTeamRepository battleTeamRep;
+	private QuestManager questManager;
 
 
 	public UpdateBattleTeamRequestHandler() {
 		battleTeamRep = Creants2XApplication.getBean(BattleTeamRepository.class);
+		questManager = Creants2XApplication.getBean(QuestManager.class);
 	}
 
 
@@ -36,6 +43,8 @@ public class UpdateBattleTeamRequestHandler extends BaseClientRequestHandler {
 		IQAntArray teamArr = params.getCASArray("teams");
 		if (teamArr == null)
 			return;
+
+		checkQuest(user, teamArr.size());
 
 		// TODO check có sở hữu các hero đó ko
 		BattleTeam battleTeam = new BattleTeam();
@@ -65,7 +74,6 @@ public class UpdateBattleTeamRequestHandler extends BaseClientRequestHandler {
 			team.setLeaderIndex(leaderIndex);
 
 			battleTeam.addTeam(team);
-			System.out.println("Update team:" + name + ", " + Arrays.toString(heroArr));
 		}
 
 		battleTeamRep.save(battleTeam);
@@ -85,7 +93,36 @@ public class UpdateBattleTeamRequestHandler extends BaseClientRequestHandler {
 
 		send(ExtensionEvent.CMD_UPD_BATTLE_TEAM, params, user);
 	}
-	
-	
+
+
+	private void checkQuest(QAntUser user, int size) {
+		String gameHeroId = user.getName();
+		List<Long> questIds = questManager.containQuestType(gameHeroId, NetworkConstant.TASK_8);
+		if (questIds == null || questIds.size() <= 0)
+			return;
+
+		List<HeroQuest> quests = questManager.getQuests(questIds);
+		if (quests == null || quests.size() <= 0) {
+			QAntTracer.warn(this.getClass(), "check quest fail!");
+			return;
+		}
+
+		Collection<Long> finishQuestIds = new ArrayList<>();
+		for (HeroQuest heroQuest : quests) {
+			if (heroQuest.getTargetCount() >= size) {
+				if (heroQuest.incr(1)) {
+					heroQuest.setClaim(true);
+					finishQuestIds.add(heroQuest.getId());
+				}
+			}
+		}
+
+		if (finishQuestIds.size() > 0) {
+			questManager.finishQuest(gameHeroId, finishQuestIds);
+			send(ExtensionEvent.CMD_NOTIFICATION, MessageFactory.buildNotiFinishQuest(finishQuestIds), user);
+		}
+
+		questManager.save(quests);
+	}
 
 }

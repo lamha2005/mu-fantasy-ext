@@ -28,6 +28,7 @@ import com.creants.muext.Creants2XApplication;
 import com.creants.muext.admin.managers.AdminManager;
 import com.creants.muext.config.GiftEventConfig;
 import com.creants.muext.config.MailConfig;
+import com.creants.muext.config.QuestConfig;
 import com.creants.muext.config.StageConfig;
 import com.creants.muext.dao.BattleTeamRepository;
 import com.creants.muext.dao.GameHeroRepository;
@@ -60,6 +61,7 @@ public class JoinZoneEventHandler extends BaseServerEventHandler {
 	public static final int STAMINA_REHI_TIME_MILI = 60000;
 	public static final int STAMINA_REHI_VALUE = 1;
 	public static final GiftEventConfig giftEventConfig = GiftEventConfig.getInstance();
+	private static final QuestConfig questConfig = QuestConfig.getInstance();
 
 	private GameHeroRepository gameHeroRep;
 	private QuestManager questManager;
@@ -96,10 +98,13 @@ public class JoinZoneEventHandler extends BaseServerEventHandler {
 		GameHero gameHero = gameHeroRep.findOne(gameHeroId);
 		if (gameHero == null) {
 			gameHero = createNewGameHero(gameHeroId, creantsUserId);
+			String fullName = user.getFullName();
+			if (fullName != null) {
+				gameHero.setName(fullName);
+			}
 			isNewAccount = true;
 		}
 
-		gameHero.setName(user.getFullName());
 		UserHelper.setGameHeroName(user, gameHero.getName());
 
 		processMail(user, response, isNewAccount);
@@ -131,7 +136,6 @@ public class JoinZoneEventHandler extends BaseServerEventHandler {
 		response.putQAntArray("teams", teamArr);
 
 		// event
-		response.putInt("event_no", 10);
 		response.putLong("login_time", user.getLoginTime());
 
 		// process gift
@@ -144,27 +148,7 @@ public class JoinZoneEventHandler extends BaseServerEventHandler {
 
 
 	private IQAntArray countNewQuest(String gameHeroId) {
-		List<HeroQuest> newQuests = questManager.getNewQuests(gameHeroId);
-		Map<String, Integer> countMap = new HashMap<>();
-		countMap.put(QuestManager.GROUP_WORLD_QUEST, 0);
-		countMap.put(QuestManager.GROUP_DAILY_QUEST, 0);
-
-		for (HeroQuest heroQuest : newQuests) {
-			String groupId = heroQuest.getGroupId();
-			Integer count = countMap.get(groupId);
-			count++;
-			countMap.put(groupId, count);
-		}
-
-		IQAntArray questArr = QAntArray.newInstance();
-		for (String groupId : countMap.keySet()) {
-			IQAntObject quest = QAntObject.newInstance();
-			quest.putUtfString("group", groupId);
-			quest.putInt("no", countMap.get(groupId));
-			questArr.addQAntObject(quest);
-		}
-
-		return questArr;
+		return questManager.countNewQuest(gameHeroId);
 	}
 
 
@@ -330,9 +314,6 @@ public class JoinZoneEventHandler extends BaseServerEventHandler {
 		}
 		battleTeamRepository.save(battleTeam);
 
-		// tạo nhiệm vụ cho hero
-		questManager.registerQuestsFromHero(gameHero);
-
 		// mở world, chapter, stage, mission
 		Stage firstStage = StageConfig.getInstance().getFirstStage();
 		HeroStage heroStage = new HeroStage(firstStage);
@@ -340,6 +321,12 @@ public class JoinZoneEventHandler extends BaseServerEventHandler {
 		heroStage.setId(autoIncrementService.genHeroStageId());
 		heroStage.setUnlock(true);
 		stageRepository.save(heroStage);
+
+		// tạo nhiệm vụ cho hero
+		List<HeroQuest> quests = new ArrayList<>();
+		quests.addAll(questConfig.getDailyQuestList());
+		quests.addAll(questConfig.getQuestList(firstStage.getChapterIndex()));
+		questManager.registerQuests(gameHeroId, quests);
 		return gameHero;
 	}
 

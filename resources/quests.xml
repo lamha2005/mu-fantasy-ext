@@ -1,18 +1,26 @@
 <?xml version="1.0" encoding="UTF-8" standalone="yes"?>
 <QuestList>
-	<Quest Index="0" Group="world" StageIndex="101#102#103#104#105" TaskType="1" Name="Bull Hunter" Description="Hunt Bull Fighter in Loren" Task="1003" Count="10" ItemReward="11012/2#11011/1"/>
-	<Quest Index="1" Group="world" StageIndex="103#105#108" TaskType="1" Name="Yeti Hunter" Description="Hunt 5 Yeti in Devias" Task="1004" Count="10" ItemReward="11012/2#11011/1"/>
-	<Quest Index="2" Group="world" TaskType="2" Name="Team building" Description="Enter battle with a Water hero" Count="1"/>
-	<Quest Index="3" Group="world" TaskType="3" Name="Go for Level 5" Description="Your team is ready to grow stronger! Reach level 5!" Count="1"/>
-	<Quest Index="4" Group="world" TaskType="4" Name="The More, the Better" Description="There's strength in numbers! You'll feel it once you build a 4 member team! Build a team of 4 heroes!" Count="1"/>
-	<Quest Index="5" Group="world" TaskType="5" Name="Everything's Annoying..." Description="We understand pressing skill buttons gets boring for you. Win a battle by using Auto Battle." Count="1"/>
-	<Quest Index="6" Group="world" TaskType="6" Name="Sociability Check" Description="Battle 2 times with a Helper." Count="1"/>
-	<Quest Index="7" Group="world" TaskType="7" Name="Go for level 10" Description="It's always excited to learn something new! Reach level 10!" Count="1"/>
-	<Quest Index="8" Group="world" TaskType="8" Name="Watch Out for Ice Swords" Description="This Assassin slashes horrible ice sword to freeeze! Defeat 10 Assassins!" Count="1"/>
-	<Quest Index="100" Group="daily" TaskType="3" Name="Clear Stages" Description="Clear Stages 5 times" Task="1" Count="1" ZenReward="10000" ExpReward="10" ItemReward="11012/2#11011/1"/>
-	<Quest Index="101" Group="daily" TaskType="3" Name="Chaos Castle Master" Description="Join and win the Chaos Castle event" Task="1" Count="1" ZenReward="10000" ExpReward="10" ItemReward="11012/2#11011/1"/>
-	<Quest Index="102" Group="daily" TaskType="3" Name="Recharge Stamina" Description="Recharge Stamina 1 time" Task="1" Count="1" ZenReward="10000" ExpReward="10" ItemReward="11012/2#11011/1"/>
-	<Quest Index="103" Group="daily" TaskType="3" Name="Powerful Heroes" Description="Level up Heroes 5 times" Task="1" Count="1" ZenReward="10000" ExpReward="10" ItemReward="11012/2#11011/1"/>
-	<Quest Index="104" Group="daily" TaskType="3" Name="Arena" Description="Battle 3 times in Arena" Task="1" Count="1" ZenReward="10000" ExpReward="10" ItemReward="11012/2#11011/1"/>
-	<Quest Index="105" Group="daily" TaskType="3" Name="Chaos Castle Master" Description="Join and win the Chaos Castle event" Task="1" Count="1" ZenReward="10000" ExpReward="10" ItemReward="11012/2#11011/1"/>
+	<Quest Index="0" Group="world" Chapter="0" StageIndex="101#102#103#104#105" TaskType="1" Name="Bull Hunter" Description="Hunt 5 Bull Fighter in Loren" Task="1003" Count="5" ZenReward="10000" ExpReward="2" ItemReward="11012/1" Goto="stage#106"/>
+	<Quest Index="1" Group="world" Chapter="0" StageIndex="103#105#108" TaskType="1" Name="Yeti Hunter" Description="Hunt 5 Yeti in Devias" Task="1004" Count="5" ZenReward="10000" ExpReward="2" ItemReward="11012/1" Goto="map#2"/>
+	<Quest Index="2" Group="world" Chapter="0" TaskType="1" Name="Spider Hunter" Description="Hunt 5 Spider in Loren" Task="1009" Count="5" ZenReward="10000" ExpReward="2"/>
+	<Quest Index="3" Group="world" Chapter="0" TaskType="1" Name="Goblin Hunter" Description="Hunt 5 Goblin in Noria" Task="1014" Count="5" ZenReward="10000" ExpReward="2"/>
+	<Quest Index="4" Group="world" Chapter="0" TaskType="1" Name="Watch Out for Ice Swords" Description="Hunt 10 Assassins in Devias" Task="1021" Count="10" ZenReward="10000" ExpReward="2"/>
+	<Quest Index="8" Group="world" Chapter="0" TaskType="2" Name="Team building" Description="Enter battle with a Water hero" Count="1" ZenReward="10000" ExpReward="2"/>
+	<Quest Index="9" Group="world" Chapter="0" TaskType="7" Name="Go for Level 5" Description="Ready to grow stronger! Reach level 5!" Count="10" ZenReward="10000" ExpReward="2"/>
+	<Quest Index="10" Group="world" Chapter="0" TaskType="8" Name="The More, the Better" Description="There's strength in numbers! Build a team of 4 heroes!" Count="1" ZenReward="10000" ExpReward="2"/>
+	<Quest Index="11" Group="world" Chapter="0" TaskType="9" Name="Everything's Annoying..." Description="Buttons is boring! Win a battle by using Auto Battle." Count="1" ZenReward="10000" ExpReward="2"/>
+	<Quest Index="12" Group="world" Chapter="0" TaskType="10" Name="Sociability Check" Description="Battle 2 times with a Helper." Count="2" ZenReward="10000" ExpReward="2"/>
+	<Quest Index="13" Group="world" Chapter="0" TaskType="7" Name="Go for level 10" Description="It's always excited to learn something new! Reach level 10!" Count="1" ZenReward="10000" ExpReward="2"/>
+	<Quest Index="14" Group="world" Chapter="0" TaskType="8" Name="Skill Brawl!" Description="Use your skill 10 times in a stage!" Count="10" ZenReward="10000" ExpReward="2"/>
+	<Quest Index="15" Group="world" Chapter="0" TaskType="9" Name="Train Again" Description="Once is never enough. Try to level up 10 times." Count="10" ZenReward="10000" ExpReward="2"/>
+	<Quest Index="16" Group="world" Chapter="0" TaskType="10" Name="I Will Be Rich!" Description="Collect 10000 zens by clearing the stage!" Count="1" ZenReward="10000" ExpReward="2"/>
+	<Quest Index="17" Group="world" Chapter="0" TaskType="11" Name="Perfect Game!" Description="Clear a stage without losing a team member!" Count="1"/>
+	<Quest Index="18" Group="world" Chapter="0" TaskType="12" Name="More Challenging!" Description="Clear Hard Mode stage once!" Count="1"/>
+	<Quest Index="19" Group="world" Chapter="0" TaskType="14" Name="Recruit Heroes" Description="Recruit a hero once!" Count="1"/>
+	<Quest Index="100" Group="daily" TaskType="15" Name="Clear Stages" Description="Clear Stages 5 times" Task="1" Count="1" ZenReward="10000" ExpReward="2" ItemReward="11012/1" Goto="map01"/>
+	<Quest Index="101" Group="daily" TaskType="16" Name="Blood Castle Master" Description="Join and win the Chaos Castle event" Task="1" Count="1" ZenReward="10000" ExpReward="2" ItemReward="11012/1" Goto="formation"/>
+	<Quest Index="102" Group="daily" TaskType="17" Name="Recharge Stamina" Description="Recharge Stamina 1 time" Task="1" Count="1" ZenReward="10000" ExpReward="2" ItemReward="11012/1" Goto="chaoscastle"/>
+	<Quest Index="103" Group="daily" TaskType="18" Name="Powerful Heroes" Description="Level up Heroes 5 times" Task="1" Count="1" ZenReward="10000" ExpReward="2" ItemReward="11012/1" Goto="bloodcastle"/>
+	<Quest Index="104" Group="daily" TaskType="19" Name="Arena" Description="Battle 3 times in Arena" Task="1" Count="1" ZenReward="10000" ExpReward="2" ItemReward="11012/1" Goto="arena"/>
+	<Quest Index="105" Group="daily" TaskType="20" Name="Chaos Castle Master" Description="Join and win the Chaos Castle event" Task="1" Count="1" ZenReward="10000" ExpReward="2" ItemReward="11012/1" Goto="stage#109"/>
 </QuestList>

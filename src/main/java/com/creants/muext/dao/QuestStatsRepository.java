@@ -7,7 +7,6 @@ import org.springframework.data.mongodb.repository.Query;
 import org.springframework.stereotype.Repository;
 
 import com.creants.muext.entities.quest.HeroQuest;
-import com.creants.muext.entities.quest.KillMonsterQuest;
 
 /**
  * @author LamHM
@@ -27,23 +26,47 @@ public interface QuestStatsRepository extends MongoRepository<HeroQuest, Long> {
 	List<HeroQuest> getQuests(String gameHeroId, Integer[] questIds);
 
 
-	@Query("{'gameHeroId' : ?0, 'questIndex' : {'$in' : ?1}}")
-	List<KillMonsterQuest> getKillMonsterQuest(String gameHeroId, Integer[] questIds);
+	/**
+	 * Lấy danh sách quest chưa hoàn thành theo group
+	 * 
+	 * @param gameHeroId
+	 * @param groupId
+	 *            group cần lấy
+	 * @return
+	 */
+	@Query("{'gameHeroId' : ?0, 'groupId' : ?1, 'finish' : false}")
+	List<HeroQuest> getQuests(String gameHeroId, String groupId);
 
 
-	@Query("{'gameHeroId' : ?0, 'groupId' : ?1, 'finish' : ?2}")
-	List<HeroQuest> getQuests(String gameHeroId, String groupId, boolean isFinish);
+	/**
+	 * Lấy danh sách quest chưa hoàn thành
+	 * 
+	 * @param gameHeroId
+	 * @return
+	 */
+	@Query("{'gameHeroId' : ?0, 'finish' : false}")
+	List<HeroQuest> getQuests(String gameHeroId);
 
 
-	@Query("{'gameHeroId' : ?0, 'groupId' : ?1, 'finish' : ?2, 'seen': ?3}")
-	List<HeroQuest> getQuests(String gameHeroId, String groupId, boolean isFinish, boolean seen);
-
-
-	@Query("{'gameHeroId' : ?0,$or: [{seen: {$exists: false}}, {seen: false}]}")
+	/**
+	 * Lấy danh sách quest mới bao gồm quest đã hoàn thành
+	 * 
+	 * @param gameHeroId
+	 * @return
+	 */
+	@Query("{'gameHeroId' : ?0, $or: [{seen: {$exists: false}}, {seen: false}, {claim:true}]}")
 	List<HeroQuest> getNewQuests(String gameHeroId);
 
 
-	List<HeroQuest> findByGameHeroIdAndGroupId(String gameHeroId, String groupId);
+	/**
+	 * Lấy danh sách quest mới bao gồm quest đã hoàn thành theo group
+	 * 
+	 * @param gameHeroId
+	 * @param groupId
+	 * @return
+	 */
+	@Query("{'gameHeroId' : ?0, 'groupId' : ?1, $or: [{seen: {$exists: false}}, {seen: false}, {claim:true}]}")
+	List<HeroQuest> getNewQuests(String gameHeroId, String groupId);
 
 
 	@Query("{'gameHeroId' : ?0, 'groupId' : 'daily', 'createTime' : {'$lt' : ?1}}")

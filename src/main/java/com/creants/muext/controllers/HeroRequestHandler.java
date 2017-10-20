@@ -105,20 +105,20 @@ public class HeroRequestHandler extends BaseClientRequestHandler {
 	private void getNextRank(QAntUser user, IQAntObject params) {
 		Long heroId = params.getLong("heroId");
 		if (heroId == null) {
-			responseError(user, GameErrorCode.CAN_NOT_FIND_HERO);
+			responseError(user, GameErrorCode.CAN_NOT_FIND_HERO, NEXT_RANK);
 			return;
 		}
 
 		HeroClass hero = heroClassManager.findHeroById(heroId);
 		if (hero == null || !hero.getGameHeroId().equals(user.getName())) {
-			responseError(user, GameErrorCode.CAN_NOT_UPGRADE_ITEM);
+			responseError(user, GameErrorCode.CAN_NOT_UPGRADE_ITEM, NEXT_RANK);
 			warn("upgradeRank hero is not owned: " + user.getName() + "/heroId:" + heroId);
 			return;
 		}
 
 		HeroBase heroBase = hero.getHeroBase();
 		if (heroBase.getEvolveTo() == null) {
-			responseError(user, GameErrorCode.CAN_NOT_UPGRADE_ITEM);
+			responseError(user, GameErrorCode.CAN_NOT_UPGRADE_ITEM, NEXT_RANK);
 			warn("upgradeRank hero can not upgrade: " + user.getName() + "/heroId:" + heroId + "/heroIndex:"
 					+ heroBase.getIndex());
 			return;
@@ -190,13 +190,13 @@ public class HeroRequestHandler extends BaseClientRequestHandler {
 	private void getHeroDetail(QAntUser user, IQAntObject params) {
 		Long heroId = params.getLong("heroId");
 		if (heroId == null) {
-			responseError(user, GameErrorCode.LACK_OF_INFOMATION);
+			responseError(user, GameErrorCode.LACK_OF_INFOMATION, HERO_DETAIL);
 			return;
 		}
 
 		HeroClass hero = heroClassManager.findHeroById(heroId);
 		if (hero == null) {
-			responseError(user, GameErrorCode.CAN_NOT_FIND_HERO);
+			responseError(user, GameErrorCode.CAN_NOT_FIND_HERO, HERO_DETAIL);
 			return;
 		}
 
@@ -226,21 +226,21 @@ public class HeroRequestHandler extends BaseClientRequestHandler {
 			public void doInLock() {
 				Long heroId = params.getLong("heroId");
 				if (heroId == null) {
-					responseError(user, GameErrorCode.CAN_NOT_FIND_HERO);
+					responseError(user, GameErrorCode.CAN_NOT_FIND_HERO, UPGRADE_RANK);
 					return;
 				}
 
 				HeroClass hero = heroClassManager.findHeroById(heroId);
 				String gameHeroId = user.getName();
 				if (hero == null || !hero.getGameHeroId().equals(gameHeroId)) {
-					responseError(user, GameErrorCode.CAN_NOT_UPGRADE_HERO);
+					responseError(user, GameErrorCode.CAN_NOT_UPGRADE_HERO, UPGRADE_RANK);
 					warn("upgradeRank hero is not owned: " + gameHeroId + "/heroId:" + heroId);
 					return;
 				}
 
 				HeroBase heroBase = hero.getHeroBase();
 				if (heroBase.getEvolveTo() == null) {
-					responseError(user, GameErrorCode.CAN_NOT_UPGRADE_HERO);
+					responseError(user, GameErrorCode.CAN_NOT_UPGRADE_HERO, UPGRADE_RANK);
 					warn("upgradeRank hero can not upgrade: " + gameHeroId + "/heroId:" + heroId);
 					return;
 				}
@@ -251,20 +251,20 @@ public class HeroRequestHandler extends BaseClientRequestHandler {
 				String evolveId = UpgradeSystem.genEvolveKey(hero.getClassGroup(), hero.nextRank());
 				EvolveHero evolveHero = GameConfig.getInstance().getEvolveHero(evolveId);
 				if (evolveHero == null) {
-					responseError(user, GameErrorCode.CAN_NOT_UPGRADE_HERO);
+					responseError(user, GameErrorCode.CAN_NOT_UPGRADE_HERO, UPGRADE_RANK);
 					warn("upgradeRank hero can not upgrade: " + gameHeroId + "/evolveId:" + evolveId);
 					return;
 				}
 
 				if (evolveHero.getZenCost() > gameHero.getZen()) {
-					responseError(user, GameErrorCode.NOT_ENOUGH_ZEN);
+					responseError(user, GameErrorCode.NOT_ENOUGH_ZEN, UPGRADE_RANK);
 					warn("upgradeRank hero can not upgrade: " + gameHeroId + "/heroId:" + heroId);
 					return;
 				}
 
 				IQAntArray itemArr = params.getCASArray("items");
 				if (itemArr == null || itemArr.size() <= 0) {
-					responseError(user, GameErrorCode.LACK_OF_INFOMATION);
+					responseError(user, GameErrorCode.LACK_OF_INFOMATION, UPGRADE_RANK);
 					warn("upgradeRank hero can not upgrade. Items empty: " + gameHeroId + "/heroId:" + heroId);
 					return;
 				}
@@ -302,8 +302,10 @@ public class HeroRequestHandler extends BaseClientRequestHandler {
 	}
 
 
-	private void responseError(QAntUser user, GameErrorCode error) {
-		sendError(MessageFactory.createErrorMsg(ExtensionEvent.CMD_HERO, error), user);
+	private void responseError(QAntUser user, GameErrorCode error, int act) {
+		IQAntObject createErrorMsg = MessageFactory.createErrorMsg(ExtensionEvent.CMD_HERO, error);
+		createErrorMsg.putInt("act", act);
+		sendError(createErrorMsg, user);
 	}
 
 
@@ -322,18 +324,16 @@ public class HeroRequestHandler extends BaseClientRequestHandler {
 				int exp = 0;
 				Long heroId = params.getLong("heroId");
 				if (heroId == null) {
-					responseError(user, GameErrorCode.CAN_NOT_FIND_HERO);
+					responseError(user, GameErrorCode.CAN_NOT_FIND_HERO, UPGRADE_LEVEL);
 					return;
 				}
 
 				// hero cần upgrade
 				HeroClass hero = heroClassManager.findHeroById(heroId);
 				if (hero == null) {
-					responseError(user, GameErrorCode.CAN_NOT_FIND_HERO);
+					responseError(user, GameErrorCode.CAN_NOT_FIND_HERO, UPGRADE_LEVEL);
 					return;
 				}
-
-				exp += hero.getExp();
 
 				// cắn hero
 				// TODO kiểm tra mấy con hero này có nằm trong battle team ko,
@@ -343,7 +343,7 @@ public class HeroRequestHandler extends BaseClientRequestHandler {
 				if (consumHeroIds != null && consumHeroIds.size() > 0) {
 					consumHeroes = heroClassManager.findHeroes(consumHeroIds);
 					if (consumHeroes.size() != consumHeroIds.size()) {
-						responseError(user, GameErrorCode.CAN_NOT_FIND_HERO);
+						responseError(user, GameErrorCode.CAN_NOT_FIND_HERO, UPGRADE_LEVEL);
 						return;
 					}
 
@@ -354,7 +354,7 @@ public class HeroRequestHandler extends BaseClientRequestHandler {
 								hero.getElement().equals(heroClass.getElement()));
 
 						if (incrExp < 0) {
-							responseError(user, GameErrorCode.MATERIAL_CAN_NOT_USE);
+							responseError(user, GameErrorCode.MATERIAL_CAN_NOT_USE, UPGRADE_LEVEL);
 							warn("Can not use hero rank: " + heroClass.getRank() + "/gameHeroId:" + gameHeroId);
 							return;
 						}
@@ -401,7 +401,7 @@ public class HeroRequestHandler extends BaseClientRequestHandler {
 						int incrExp = GameConfig.getInstance().getExpFromItem(heroItem.getIndex(),
 								hero.getElement().equals(heroItem.getElement()));
 						if (incrExp < 0) {
-							responseError(user, GameErrorCode.MATERIAL_CAN_NOT_USE);
+							responseError(user, GameErrorCode.MATERIAL_CAN_NOT_USE, UPGRADE_LEVEL);
 							return;
 						}
 
@@ -412,7 +412,13 @@ public class HeroRequestHandler extends BaseClientRequestHandler {
 				}
 
 				if (fee == 0) {
-					responseError(user, GameErrorCode.FEE_NULL);
+					responseError(user, GameErrorCode.FEE_NULL, UPGRADE_LEVEL);
+					return;
+				}
+
+				GameHero gameHero = gameHeroManager.getHero(gameHeroId);
+				if (gameHero.getZen() < fee) {
+					responseError(user, GameErrorCode.NOT_ENOUGH_ZEN, UPGRADE_LEVEL);
 					return;
 				}
 
@@ -434,7 +440,8 @@ public class HeroRequestHandler extends BaseClientRequestHandler {
 					}
 				}
 
-				GameHero gameHero = gameHeroManager.incrZen(gameHeroId, -fee);
+				gameHero.incrZen(-fee);
+				gameHeroManager.update(gameHero);
 				Map<String, Object> assetMap = new HashMap<>();
 				assetMap.put("zen", gameHero.getZen());
 				send(ExtensionEvent.CMD_NTF_ASSETS_CHANGE, MessageFactory.buildAssetsChange(assetMap), user);

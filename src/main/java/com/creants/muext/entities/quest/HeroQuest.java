@@ -21,10 +21,25 @@ public class HeroQuest implements SerializableQAntType {
 	public transient long createTime;
 	public boolean claim;
 	public boolean seen;
+	public String task;
 	public int taskType;
 	public int count;
+	private int targetCount;
 	@Indexed
 	public String groupId;
+
+
+	public HeroQuest() {
+	}
+
+
+	public HeroQuest(QuestBase quest) {
+		questIndex = quest.getIndex();
+		groupId = quest.getGroupId();
+		task = quest.getTask();
+		taskType = quest.getTaskType();
+		targetCount = quest.getCount();
+	}
 
 
 	public long getId() {
@@ -122,8 +137,36 @@ public class HeroQuest implements SerializableQAntType {
 	}
 
 
+	public int getTargetCount() {
+		return targetCount;
+	}
+
+
+	public void setTargetCount(int targetCount) {
+		this.targetCount = targetCount;
+	}
+
+
+	public boolean incr(Integer value) {
+		if (value == null || value <= 0)
+			return false;
+		count += value;
+		return count >= targetCount;
+	}
+
+
 	public void setCount(int count) {
 		this.count = count;
+	}
+
+
+	public String getTask() {
+		return task;
+	}
+
+
+	public void setTask(String task) {
+		this.task = task;
 	}
 
 }

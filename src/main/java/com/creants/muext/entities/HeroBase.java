@@ -49,6 +49,8 @@ public class HeroBase {
 
 	@JacksonXmlProperty(localName = "CharRank", isAttribute = true)
 	private int rank;
+	@JacksonXmlProperty(localName = "MaxRank", isAttribute = true)
+	private int maxRank;
 	@JacksonXmlProperty(localName = "EvolveTo", isAttribute = true)
 	private Integer evolveTo;
 
@@ -79,6 +81,16 @@ public class HeroBase {
 
 	public void setRank(int rank) {
 		this.rank = rank;
+	}
+
+
+	public int getMaxRank() {
+		return maxRank;
+	}
+
+
+	public void setMaxRank(int maxRank) {
+		this.maxRank = maxRank;
 	}
 
 

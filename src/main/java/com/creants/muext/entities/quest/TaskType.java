@@ -5,7 +5,14 @@ package com.creants.muext.entities.quest;
  *
  */
 public enum TaskType {
-	MonsterKill(1), WinCampain(2), WinChaos(3), TargetLevel(4), CollectItem(5), UpgradeVip(6), ConsumingGem(7), OnlineTime(8);
+	MonsterKill(1),
+	WinCampain(2),
+	WinChaos(3),
+	TargetLevel(4),
+	CollectItem(5),
+	UpgradeVip(6),
+	ConsumingGem(7),
+	OnlineTime(8);
 
 	int id;
 

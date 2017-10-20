@@ -28,6 +28,7 @@
              <xs:attribute name="SkillIndex" type="xs:string"/>
              <xs:attribute name="LeaderSkill" type="xs:string"/>
              <xs:attribute name="EvolveTo" type="xs:string"/>
+             <xs:attribute name="MaxRank" type="xs:int"/>
         </xs:complexType>
     </xs:element>
 </xs:schema>

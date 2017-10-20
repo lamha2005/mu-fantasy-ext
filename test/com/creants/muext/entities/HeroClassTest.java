@@ -37,12 +37,19 @@ public class HeroClassTest {
 
 	@Test
 	public void levelUpTest() {
-		int fromLevel = 4;
-		int incrExp = 37500;
+		int fromLevel = 41;
+		int incrExp = 10000;
 		HeroClass hero = new HeroClass(heroConfig.getRandomHero(100), fromLevel);
+		hero.setExp(38750);
 		hero.incrExp(incrExp);
 		System.out.println("[DEBUG]" + hero);
+	}
 
+
+	@Test
+	public void testLevel() {
+		HeroClass heroClass = new HeroClass(heroConfig.getHeroBase(200), 7);
+		System.out.println("Test");
 	}
 
 }

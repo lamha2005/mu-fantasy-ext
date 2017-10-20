@@ -24,7 +24,7 @@ import com.creants.muext.entities.GameHero;
 import com.creants.muext.entities.HeroClass;
 import com.creants.muext.entities.item.HeroConsumeableItem;
 import com.creants.muext.entities.item.HeroItem;
-import com.creants.muext.entities.quest.KillMonsterQuest;
+import com.creants.muext.entities.quest.HeroQuest;
 import com.creants.muext.entities.world.HeroStage;
 import com.creants.muext.entities.world.Stage;
 import com.creants.muext.managers.GameHeroManager;
@@ -32,6 +32,7 @@ import com.creants.muext.managers.HeroClassManager;
 import com.creants.muext.managers.HeroItemManager;
 import com.creants.muext.managers.MatchManager;
 import com.creants.muext.services.AutoIncrementService;
+import com.creants.muext.services.MessageFactory;
 import com.creants.muext.services.QuestManager;
 
 /**
@@ -141,7 +142,15 @@ public class StageFinishRequestHandler extends BaseClientRequestHandler {
 			response.putInt("stage_index", newStage.getIndex());
 			if (nextStage.getChapterIndex() > heroStage.getChapterIndex()) {
 				QAntTracer.debug(this.getClass(), "----------------------------->> Mo chuong moi: " + gameHeroId);
-				response.putInt("chapter_index", newStage.getChapterIndex());
+				int chapterIndex = newStage.getChapterIndex();
+				response.putInt("chapter_index", chapterIndex);
+				boolean registerQuests = questManager.registerQuests(gameHeroId, chapterIndex);
+				if (registerQuests) {
+					List<HeroQuest> quests = questManager.getNewQuests(gameHeroId, QuestManager.GROUP_WORLD_QUEST);
+					Map<String, Integer> countMap = new HashMap<>();
+					countMap.put(QuestManager.GROUP_WORLD_QUEST, quests.size());
+					send(ExtensionEvent.CMD_NOTIFICATION, MessageFactory.buildNotificationCountQuest(countMap), user);
+				}
 			}
 
 			send(ExtensionEvent.CMD_NTF_UNLOCK, response, user);
@@ -241,25 +250,24 @@ public class StageFinishRequestHandler extends BaseClientRequestHandler {
 		}
 
 		Integer[] array = questIds.toArray(new Integer[questIds.size()]);
-		List<KillMonsterQuest> quests = questManager.getKillMonsterQuest(gameHeroId, array);
+		List<HeroQuest> quests = questManager.getKillMonsterQuest(gameHeroId, array);
 		if (quests == null || quests.isEmpty())
 			return;
 
 		try {
 			Collection<Long> questFinishList = new ArrayList<>();
-			for (KillMonsterQuest heroQuest : quests) {
-				boolean isFinish = heroQuest.killMonster(monsterMap);
-				if (isFinish) {
+			for (HeroQuest heroQuest : quests) {
+				int monsterIndex = Integer.parseInt(heroQuest.getTask());
+				Integer count = monsterMap.get(monsterIndex);
+				if (heroQuest.incr(count)) {
 					heroQuest.setClaim(true);
 					questFinishList.add(heroQuest.getId());
 				}
 			}
 
 			if (questFinishList.size() > 0) {
-				IQAntObject response = QAntObject.newInstance();
-				response.putUtfString("type", ExtensionEvent.NTF_VIEW_QUEST_TYPE);
-				response.putLongArray("ids", questFinishList);
-				send(ExtensionEvent.CMD_NTF_VIEW, response, user);
+				questManager.finishQuest(gameHeroId, questFinishList);
+				send(ExtensionEvent.CMD_NOTIFICATION, MessageFactory.buildNotiFinishQuest(questFinishList), user);
 			}
 
 			questManager.save(quests);

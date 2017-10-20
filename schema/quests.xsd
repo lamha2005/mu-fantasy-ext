@@ -11,6 +11,7 @@
         <xs:complexType>
              <xs:attribute name="Index" type="xs:int"/>
              <xs:attribute name="Group" type="xs:string"/>
+             <xs:attribute name="Chapter" type="xs:int"/>
              <xs:attribute name="StageIndex" type="xs:string"/>
              <xs:attribute name="TaskType" type="xs:int"/>
              <xs:attribute name="Name" type="xs:string"/>
@@ -20,6 +21,7 @@
              <xs:attribute name="ZenReward" type="xs:int"/>
              <xs:attribute name="ExpReward" type="xs:int"/>
              <xs:attribute name="ItemReward" type="xs:string"/>
+             <xs:attribute name="Goto" type="xs:string"/>
         </xs:complexType>
     </xs:element>
 </xs:schema>

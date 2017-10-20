@@ -16,11 +16,13 @@ import com.fasterxml.jackson.dataformat.xml.annotation.JacksonXmlProperty;
  */
 @JsonInclude(Include.NON_NULL)
 @JsonIgnoreProperties({ "itemRewardString", "stageIndexString" })
-public abstract class Quest {
+public class QuestBase {
 	@JacksonXmlProperty(localName = "Index", isAttribute = true)
 	private int index;
 	@JacksonXmlProperty(localName = "Group", isAttribute = true)
 	private String groupId;
+	@JacksonXmlProperty(localName = "Chapter", isAttribute = true)
+	private Integer chapter;
 	@JacksonXmlProperty(localName = "StageIndex", isAttribute = true)
 	private String stageIndexString;
 	@JacksonXmlProperty(localName = "TaskType", isAttribute = true)
@@ -30,7 +32,7 @@ public abstract class Quest {
 	@JacksonXmlProperty(localName = "Description", isAttribute = true)
 	private String desc;
 	@JacksonXmlProperty(localName = "Task", isAttribute = true)
-	private int task;
+	private String task;
 	@JacksonXmlProperty(localName = "Count", isAttribute = true)
 	private int count;
 
@@ -40,20 +42,25 @@ public abstract class Quest {
 	private int expReward;
 	@JacksonXmlProperty(localName = "ItemReward", isAttribute = true)
 	private String itemRewardString;
+	@JacksonXmlProperty(localName = "Goto", isAttribute = true)
+	private String goTo;
 
 	private List<String> itemReward;
 	private int[] stageIndexes;
 
 
-	public abstract void convertBase();
+	public void convertBase() {
+		splitReward();
+		splitStageIndex();
+	}
 
 
-	void splitReward() {
+	private void splitReward() {
 		itemReward = ItemConfig.getInstance().splitRewardString(itemRewardString);
 	}
 
 
-	void splitStageIndex() {
+	private void splitStageIndex() {
 		if (stageIndexString != null) {
 			String[] items = StringUtils.split(stageIndexString, "#");
 			stageIndexes = new int[items.length];
@@ -144,12 +151,12 @@ public abstract class Quest {
 	}
 
 
-	public int getTask() {
+	public String getTask() {
 		return task;
 	}
 
 
-	public void setTask(int task) {
+	public void setTask(String task) {
 		this.task = task;
 	}
 
@@ -184,6 +191,16 @@ public abstract class Quest {
 	}
 
 
+	public Integer getChapter() {
+		return chapter;
+	}
+
+
+	public void setChapter(Integer chapter) {
+		this.chapter = chapter;
+	}
+
+
 	public String getStageIndexString() {
 		return stageIndexString;
 	}
@@ -191,6 +208,16 @@ public abstract class Quest {
 
 	public void setStageIndexString(String stageIndexString) {
 		this.stageIndexString = stageIndexString;
+	}
+
+
+	public String getGoTo() {
+		return goTo;
+	}
+
+
+	public void setGoTo(String goTo) {
+		this.goTo = goTo;
 	}
 
 }
