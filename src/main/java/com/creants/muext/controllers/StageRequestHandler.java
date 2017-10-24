@@ -65,14 +65,13 @@ public class StageRequestHandler extends BaseClientRequestHandler {
 		GameHero gameHero = repository.findOne(gameHeroId);
 		rehiStamina(gameHero);
 		// trừ stamina khi vào bàn chơi
-		int stamina = gameHero.getStamina() - stage.getStaminaCost();
-		gameHero.setStamina(stamina > 0 ? stamina : 0);
+		gameHero.decrStamina(stage.getStaminaCost());
 
 		repository.save(gameHero);
 
 		// gửi thông tin stamina thay đổi
 		IQAntObject assets = QAntObject.newInstance();
-		assets.putInt("stamina", stamina);
+		assets.putInt("stamina", gameHero.getStamina());
 		send(ExtensionEvent.CMD_NTF_ASSETS_CHANGE, assets, user);
 
 		List<Integer[]> roundList = stage.getRoundList();

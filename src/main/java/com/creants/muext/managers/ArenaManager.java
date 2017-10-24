@@ -61,9 +61,8 @@ public class ArenaManager implements InitializingBean {
 		});
 
 		powerList.sort((ArenaPower o1, ArenaPower o2) -> o2.getTeamPower() - o1.getTeamPower());
-		int rank = 1;
 		for (ArenaPower arenaPower : powerList) {
-			arenaPower.setRank(rank++);
+			arenaPower.setRank("A");
 		}
 
 		arenaPowerRepository.save(powerList);

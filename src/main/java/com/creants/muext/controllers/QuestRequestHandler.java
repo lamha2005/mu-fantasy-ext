@@ -19,6 +19,7 @@ import com.creants.creants_2x.socket.gate.entities.QAntArray;
 import com.creants.creants_2x.socket.gate.entities.QAntObject;
 import com.creants.creants_2x.socket.gate.wood.QAntUser;
 import com.creants.muext.Creants2XApplication;
+import com.creants.muext.config.ItemConfig;
 import com.creants.muext.config.QuestConfig;
 import com.creants.muext.dao.GameHeroRepository;
 import com.creants.muext.entities.GameHero;
@@ -139,6 +140,10 @@ public class QuestRequestHandler extends BaseClientRequestHandler {
 			quests = questManager.getQuests(gameHeroId, groupId, false);
 		} else if (groupId.equals(QuestManager.GROUP_DAILY_QUEST)) {
 			quests = questManager.getDailyQuests(gameHeroId);
+			if (quests == null || quests.size() <= 0) {
+				quests = questConfig.getDailyQuestList();
+				questManager.registerQuests(gameHeroId, quests);
+			}
 		}
 
 		IQAntArray questArr = QAntArray.newInstance();
@@ -148,7 +153,7 @@ public class QuestRequestHandler extends BaseClientRequestHandler {
 
 		params.putQAntArray("quests", questArr);
 		send(ExtensionEvent.CMD_QUEST, params, user);
-		
+
 		notifyQuestNotSeenAndNotClaimYet(user, params);
 	}
 
@@ -160,7 +165,13 @@ public class QuestRequestHandler extends BaseClientRequestHandler {
 			QuestBase quest = questConfig.getQuest(heroQuest.getQuestIndex());
 			GameHero gameHero = repository.findOne(user.getName());
 			processReward(user, quest, gameHero, params);
-			questManager.delete(heroQuest);
+			if (heroQuest.getGroupId().equals(QuestManager.GROUP_DAILY_QUEST)) {
+				heroQuest.setClaim(false);
+				heroQuest.setFinish(true);
+				questManager.save(heroQuest);
+			} else {
+				questManager.delete(heroQuest);
+			}
 			send(ExtensionEvent.CMD_QUEST, params, user);
 
 			params.putUtfString("group", heroQuest.getGroupId());
@@ -173,18 +184,20 @@ public class QuestRequestHandler extends BaseClientRequestHandler {
 
 	private void processReward(QAntUser user, QuestBase quest, GameHero gameHero, IQAntObject params) {
 		IQAntObject assets = QAntObject.newInstance();
-		int exp = quest.getZenReward();
+		int exp = quest.getExpReward();
 		if (exp > 0) {
-			boolean isLevelUp = gameHero.incrExp(exp);
 			assets.putInt("exp", gameHero.getExp());
-			if (isLevelUp) {
+			if (gameHero.incrExp(exp)) {
 				assets.putInt("maxExp", gameHero.getMaxExp());
 				assets.putInt("level", gameHero.getLevel());
 			}
 		}
 
 		if (StringUtils.isBlank(quest.getItemRewardString())) {
+			QAntTracer.debug(this.getClass(),
+					"Quest reward: {user:" + user.getName() + ", rewardItem:" + quest.getItemRewardString() + "}");
 			List<HeroItem> addItems = heroItemManager.addItems(user.getName(), quest.getItemRewardString());
+			QAntTracer.debug(this.getClass(), "size: " + addItems.size());
 			QAntObject updateObj = QAntObject.newInstance();
 			QAntArray itemArr = QAntArray.newInstance();
 			for (HeroItem heroItem : addItems) {
@@ -192,6 +205,10 @@ public class QuestRequestHandler extends BaseClientRequestHandler {
 			}
 			updateObj.putQAntArray("items", itemArr);
 			params.putQAntObject("update", updateObj);
+
+			IQAntObject reward = QAntObject.newInstance();
+			reward.putQAntArray("items", ItemConfig.getInstance().buildShortItemInfo(quest.getFullReward()));
+			params.putQAntObject("reward", reward);
 		}
 
 		gameHero.incrZen(quest.getZenReward());

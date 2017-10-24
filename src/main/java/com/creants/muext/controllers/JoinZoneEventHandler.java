@@ -7,7 +7,6 @@ import java.util.Arrays;
 import java.util.Calendar;
 import java.util.Collection;
 import java.util.Date;
-import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
@@ -288,8 +287,9 @@ public class JoinZoneEventHandler extends BaseServerEventHandler {
 		gameHero.setExp(0);
 		gameHero.setLevel(1);
 		gameHero.setSoul(10);
+		gameHero.setBless(10);
 		gameHero.setStamina(100);
-		gameHero.setZen(20000);
+		gameHero.setZen(200000);
 		gameHero.setMaxExp(10000);
 		gameHero.setVipLevel(1);
 		gameHero.setVipPoint(0);

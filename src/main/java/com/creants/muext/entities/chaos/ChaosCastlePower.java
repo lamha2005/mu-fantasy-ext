@@ -1,5 +1,6 @@
 package com.creants.muext.entities.chaos;
 
+import java.util.ArrayList;
 import java.util.Collection;
 import java.util.List;
 
@@ -158,6 +159,15 @@ public class ChaosCastlePower implements SerializableQAntType {
 		}
 
 		return level;
+	}
+
+
+	public List<Long> getFormation() {
+		List<Long> heroIds = new ArrayList<>();
+		for (int i = 0; i < battleTeam.length; i++) {
+			heroIds.add(battleTeam[i]);
+		}
+		return heroIds;
 	}
 
 }

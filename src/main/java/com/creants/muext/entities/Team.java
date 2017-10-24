@@ -83,6 +83,15 @@ public class Team implements SerializableQAntType {
 	}
 
 
+	public List<Long> getFormation() {
+		List<Long> heroIds = new ArrayList<>();
+		for (int i = 0; i < heroes.length; i++) {
+			heroIds.add(heroes[i]);
+		}
+		return heroIds;
+	}
+
+
 	public int getLeaderIndex() {
 		return leaderIndex;
 	}

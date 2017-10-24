@@ -55,6 +55,11 @@ public class QuestBase {
 	}
 
 
+	public String getFullReward() {
+		return ItemConfig.getInstance().combineToItemString(itemRewardString, zenReward, null);
+	}
+
+
 	private void splitReward() {
 		itemReward = ItemConfig.getInstance().splitRewardString(itemRewardString);
 	}

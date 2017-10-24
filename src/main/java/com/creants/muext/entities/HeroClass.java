@@ -313,6 +313,15 @@ public class HeroClass implements SerializableQAntType {
 		def = (int) (heroBase.getDef() + (level - 1) * heroBase.getLvUpDEF());
 		rec = (int) (heroBase.getRec() + (level - 1) * heroBase.getLvUpREC());
 		maxExp = GameConfig.getInstance().getMaxExp(level + 1);
+
+		if (equipments.size() > 0) {
+			for (HeroEquipment heroEquipment : equipments) {
+				atk += heroEquipment.getAtk();
+				hp += heroEquipment.getHp();
+				rec += heroEquipment.getRec();
+				def += heroEquipment.getDef();
+			}
+		}
 	}
 
 

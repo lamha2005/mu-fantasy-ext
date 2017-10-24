@@ -119,6 +119,13 @@ public class GameHero implements SerializableQAntType {
 	}
 
 
+	public void decrStamina(int value) {
+		stamina -= value;
+		if (stamina < 0)
+			stamina = 0;
+	}
+
+
 	public int getMaxStamina() {
 		return maxStamina;
 	}

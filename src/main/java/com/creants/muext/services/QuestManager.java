@@ -41,6 +41,7 @@ public class QuestManager implements InitializingBean {
 
 	private QuestConfig questConfig;
 
+	// gameHeroId, questId, questType
 	private Map<String, Map<Long, Integer>> heroQuestMap;
 
 

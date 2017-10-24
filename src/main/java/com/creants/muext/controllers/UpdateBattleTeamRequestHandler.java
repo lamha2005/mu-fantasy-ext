@@ -90,7 +90,7 @@ public class UpdateBattleTeamRequestHandler extends BaseClientRequestHandler {
 		params.putQAntArray("teams", teamArr);
 
 		send(ExtensionEvent.CMD_UPD_BATTLE_TEAM, params, user);
-		
+
 		checkQuest(user, teamArr.size());
 	}
 
